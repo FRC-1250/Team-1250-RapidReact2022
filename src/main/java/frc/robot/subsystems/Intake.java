@@ -12,13 +12,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-  WPI_TalonFX intakeRoller= new WPI_TalonFX(Constants.intakeRoller_CAN_ID); 
-  CANSparkMax intakeDeployRight= new CANSparkMax(Constants.intakeDeployRight_CAN_ID,MotorType.kBrushless);
-  CANSparkMax intakeDeployLeft = new CANSparkMax(Constants.intakeDeployLeft_CAN_ID,MotorType.kBrushless);
+  WPI_TalonFX intakeRoller = new WPI_TalonFX(Constants.intakeRoller_CAN_ID);
+  CANSparkMax intakeDeployRight = new CANSparkMax(Constants.intakeDeployRight_CAN_ID, MotorType.kBrushless);
+  CANSparkMax intakeDeployLeft = new CANSparkMax(Constants.intakeDeployLeft_CAN_ID, MotorType.kBrushless);
 
-  
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake() {
+  }
+
+  public void SetIntakeRollerspeed(double speed) {
+    intakeRoller.set(speed);
+  }
 
   @Override
   public void periodic() {
