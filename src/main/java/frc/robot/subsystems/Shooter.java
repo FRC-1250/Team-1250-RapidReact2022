@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -17,7 +18,19 @@ public class Shooter extends SubsystemBase {
   WPI_TalonFX shooterBottom = new WPI_TalonFX(Constants.shooterBottom_CAN_ID);
 
   /** Creates a new Shooter. */
-  public Shooter() {}
+  public Shooter() {
+    shooterTop.follow(shooterBottom);
+    shooterTop.setInverted(InvertType.OpposeMaster);
+
+    shooterTop.configPeakOutputReverse(0);
+    shooterBottom.configPeakOutputReverse(0); 
+
+    shooterBottom.config_kP(0,Constants.shooter_P);
+    shooterBottom.config_kI(0,Constants.shooter_I);
+    shooterBottom.config_kD(0,Constants.shooter_D);
+    shooterBottom.config_kF(0,Constants.shooter_F);
+
+  }
 
   @Override
   public void periodic() {
