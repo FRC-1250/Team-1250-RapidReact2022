@@ -12,4 +12,26 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {}
+public final class Constants {
+    public static final int DRIVETRAIN_FRONT_LEFT_CAN_ID = 0;
+    public static final int DRIVETRAIN_BACK_LEFT_CAN_ID = 1;
+    public static final int DRIVETRAIN_FRONT_RIGHT_CAN_ID = 2;
+    public static final int DRIVETRAIN_BACK_RIGHT_CAN_ID = 3;
+    public static final int DRIVETRAIN_PIGEON_CAN_ID = 4;
+
+    public static final int intakeRoller_CAN_ID = 5;
+    public static final int intakeDeployRight_CAN_ID = 6;
+    public static final int intakeDeployLeft_CAN_ID = 7;
+
+    public static final int uptakeConveyor_CAN_ID = 8;
+    public static final int shooterTop_CAN_ID = 9;
+    public static final int shooterBottom_CAN_ID = 10;
+
+    public static final int sorter_CAN_ID = 11;
+    public static final int sorterCollect_CAN_ID = 12;
+
+    public static final double shooter_P = 1; 
+    public static final double shooter_I = 0; 
+    public static final double shooter_D = 0; 
+    public static final double shooter_F = 0.05115; 
+}   
