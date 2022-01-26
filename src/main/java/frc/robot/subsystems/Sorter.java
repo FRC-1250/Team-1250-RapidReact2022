@@ -11,10 +11,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Sorter extends SubsystemBase {
-  CANSparkMax sorter = new CANSparkMax(Constants.sorter_CAN_ID,MotorType.kBrushless);
-  CANSparkMax sorterCollect = new CANSparkMax(Constants.sorterCollect_CAN_ID,MotorType.kBrushless);
+  CANSparkMax sorter = new CANSparkMax(Constants.sorter_CAN_ID, MotorType.kBrushless);
+  CANSparkMax sorterCollect = new CANSparkMax(Constants.sorterCollect_CAN_ID, MotorType.kBrushless);
+
   /** Creates a new Sorter. */
-  public Sorter() {}
+  public Sorter() {
+  }
+
+  public void Setsortercollectspeed(double speed) {
+    sorterCollect.set(speed);
+  }
+
+  public void Setsorterspeed(double speed) {
+    sorter.set(speed);
+  }
 
   @Override
   public void periodic() {
