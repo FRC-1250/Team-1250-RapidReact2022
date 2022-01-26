@@ -14,7 +14,7 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
   WPI_TalonFX intakeRoller= new WPI_TalonFX(Constants.intakeRoller_CAN_ID); 
   CANSparkMax intakeDeployRight= new CANSparkMax(Constants.intakeDeployRight_CAN_ID,MotorType.kBrushless);
-  CANSparkMax intakeDeployRights = new CANSparkMax(Constants.intakeDeployLeft_CAN_ID,MotorType.kBrushless);
+  CANSparkMax intakeDeployLeft = new CANSparkMax(Constants.intakeDeployLeft_CAN_ID,MotorType.kBrushless);
 
   
   /** Creates a new Intake. */
