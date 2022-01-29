@@ -11,9 +11,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Limelight extends SubsystemBase {
 
   private final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  private double tx, ty, tv = -1;
+
+  /*
+   * tv Whether the limelight has any valid targets (0 or 1)
+   * tx Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
+   * ty Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
+   * ta Target Area (0% of image to 100% of image)
+   */
+  private double tx, ty, tv, ta = -1;
 
   public Limelight() {
+    setLEDMode(1);
   }
 
   public double getXOffset() {
@@ -22,6 +30,16 @@ public class Limelight extends SubsystemBase {
 
   public double getYOffset() {
     return ty;
+  }
+
+  public double getTargetAreaPercent() {
+    return ta;
+  }
+
+  public void setLEDMode(int value) {
+    if (value > 3 || value < 0)
+      value = 0;
+    table.getEntry("ledMode").setNumber(value);
   }
 
   public boolean isTargetSeen() {
