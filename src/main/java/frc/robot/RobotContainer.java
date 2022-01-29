@@ -37,7 +37,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
   }
 
   /**
@@ -49,7 +48,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    cross.whileActiveContinuous(new Sortball(m_sorter));
+    cross.whileActiveOnce(new Sortball(m_sorter));
   }
 
   /**

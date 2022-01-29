@@ -27,8 +27,8 @@ public final class Constants {
     public static final int shooterTop_CAN_ID = 9;
     public static final int shooterBottom_CAN_ID = 10;
 
-    public static final int sorter_CAN_ID = 22;
-    public static final int sorterCollect_CAN_ID = 21;
+    public static final int sorter_CAN_ID = 21;
+    public static final int sorterCollect_CAN_ID = 20;
 
     public static final double shooter_P = 1; 
     public static final double shooter_I = 0; 
