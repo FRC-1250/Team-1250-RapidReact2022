@@ -13,6 +13,10 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final int CANDLE_CAN_ID = 50;
+    public static final int CANDLE_LED_COUNT = 100;
+    public static final int CANDLE_EXPECTED_DEVICES_COUNT = 15;
+
     public static final int DRIVETRAIN_FRONT_LEFT_CAN_ID = 0;
     public static final int DRIVETRAIN_BACK_LEFT_CAN_ID = 1;
     public static final int DRIVETRAIN_FRONT_RIGHT_CAN_ID = 2;
