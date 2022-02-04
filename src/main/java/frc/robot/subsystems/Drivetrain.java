@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
@@ -15,12 +14,12 @@ import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
 
-  WPI_Pigeon2 pigeonGyro = new WPI_Pigeon2(Constants.DRIVETRAIN_PIGEON_CAN_ID);
-  WPI_TalonFX leftFrontDriveMotor = new WPI_TalonFX(Constants.DRIVETRAIN_FRONT_LEFT_CAN_ID);
-  WPI_TalonFX leftBackDriveMotor = new WPI_TalonFX(Constants.DRIVETRAIN_BACK_LEFT_CAN_ID);
-  WPI_TalonFX rightFrontDriveMotor = new WPI_TalonFX(Constants.DRIVETRAIN_FRONT_RIGHT_CAN_ID);
-  WPI_TalonFX rightBackDriveMotor = new WPI_TalonFX(Constants.DRIVETRAIN_BACK_RIGHT_CAN_ID);
-  DifferentialDrive drive = new DifferentialDrive(leftFrontDriveMotor, rightFrontDriveMotor);
+  private final WPI_Pigeon2 pigeonGyro = new WPI_Pigeon2(Constants.DRIVETRAIN_PIGEON_CAN_ID);
+  private final WPI_TalonFX leftFrontDriveMotor = new WPI_TalonFX(Constants.DRIVETRAIN_FRONT_LEFT_CAN_ID);
+  private final WPI_TalonFX leftBackDriveMotor = new WPI_TalonFX(Constants.DRIVETRAIN_BACK_LEFT_CAN_ID);
+  private final WPI_TalonFX rightFrontDriveMotor = new WPI_TalonFX(Constants.DRIVETRAIN_FRONT_RIGHT_CAN_ID);
+  private final WPI_TalonFX rightBackDriveMotor = new WPI_TalonFX(Constants.DRIVETRAIN_BACK_RIGHT_CAN_ID);
+  private final DifferentialDrive drive = new DifferentialDrive(leftFrontDriveMotor, rightFrontDriveMotor);
 
   public Drivetrain() {
     leftFrontDriveMotor.setInverted(false);
@@ -36,12 +35,29 @@ public class Drivetrain extends SubsystemBase {
     rightBackDriveMotor.follow(rightFrontDriveMotor);
   }
 
-  public void DriveToPosition(double distanceInTicks) {
-    leftFrontDriveMotor.set(TalonFXControlMode.Position, distanceInTicks);
+  public void driveTank(double leftSpeed, double rightSpeed) {
+    drive.tankDrive(leftSpeed, rightSpeed);
   }
 
-  public void DriveTank(double leftSpeed, double rightSpeed) {
-    drive.tankDrive(leftSpeed, rightSpeed);
+  public void driveArcade(double xSpeed, double zRotation) {
+    drive.arcadeDrive(xSpeed, zRotation);
+  }
+
+  public double getEncoderPosition() {
+    return (leftFrontDriveMotor.getSelectedSensorPosition() + rightFrontDriveMotor.getSelectedSensorPosition()) / 2.0;
+  }
+
+  public void resetEncoders() {
+    leftFrontDriveMotor.setSelectedSensorPosition(0);
+    rightFrontDriveMotor.setSelectedSensorPosition(0);
+  }
+
+  public double getHeading() {
+    return pigeonGyro.getAngle();
+  }
+
+  public void resetHeading() {
+    pigeonGyro.reset();
   }
 
   @Override
