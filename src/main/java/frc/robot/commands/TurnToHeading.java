@@ -11,10 +11,10 @@ import frc.robot.subsystems.Drivetrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TurnDegrees extends PIDCommand {
+public class TurnToHeading extends PIDCommand {
   private final Drivetrain m_drivetrain;
 
-  public TurnDegrees(Drivetrain drivetrain, double degrees) {
+  public TurnToHeading(Drivetrain drivetrain, double degrees) {
     super(
         // The controller that the command will use
         new PIDController(4, 0, 0),
@@ -37,7 +37,7 @@ public class TurnDegrees extends PIDCommand {
   @Override
   public void initialize() {
     // Get everything in a safe starting state.
-    m_drivetrain.resetDistance();
+    m_drivetrain.resetEncoders();
     m_drivetrain.resetHeading();
     super.initialize();
   }

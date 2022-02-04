@@ -35,8 +35,21 @@ public class Drivetrain extends SubsystemBase {
     rightBackDriveMotor.follow(rightFrontDriveMotor);
   }
 
-  public double getDistanceForwardBack() {
+  public void driveTank(double leftSpeed, double rightSpeed) {
+    drive.tankDrive(leftSpeed, rightSpeed);
+  }
+
+  public void driveArcade(double xSpeed, double zRotation) {
+    drive.arcadeDrive(xSpeed, zRotation);
+  }
+
+  public double getEncoderPosition() {
     return (leftFrontDriveMotor.getSelectedSensorPosition() + rightFrontDriveMotor.getSelectedSensorPosition()) / 2.0;
+  }
+
+  public void resetEncoders() {
+    leftFrontDriveMotor.setSelectedSensorPosition(0);
+    rightFrontDriveMotor.setSelectedSensorPosition(0);
   }
 
   public double getHeading() {
@@ -45,19 +58,6 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetHeading() {
     pigeonGyro.reset();
-  }
-
-  public void resetDistance() {
-    leftFrontDriveMotor.setSelectedSensorPosition(0);
-    rightFrontDriveMotor.setSelectedSensorPosition(0);
-  }
-
-  public void driveTank(double leftSpeed, double rightSpeed) {
-    drive.tankDrive(leftSpeed, rightSpeed);
-  }
-
-  public void driveArcade(double xSpeed, double zRotation) {
-    drive.arcadeDrive(xSpeed, zRotation);
   }
 
   @Override

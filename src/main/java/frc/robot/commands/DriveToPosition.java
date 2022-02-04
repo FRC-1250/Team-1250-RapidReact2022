@@ -6,7 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.utility.RobotHelper;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,9 +23,9 @@ public class DriveToPosition extends PIDCommand {
         // The controller that the command will use
         new PIDController(4, 0, 0),
         // This should return the measurement
-        drivetrain::getDistanceForwardBack,
+        drivetrain::getEncoderPosition,
         // This should return the setpoint (can also be a constant)
-        distance,
+        RobotHelper.ConvertInchesToMotorRevolutions(Constants.DRIVETRAIN_GEAR_RATIO, distance, 3, false),
         // This uses the output
         output -> {
           drivetrain.driveArcade(output, -drivetrain.getHeading());
@@ -38,7 +40,7 @@ public class DriveToPosition extends PIDCommand {
   @Override
   public void initialize() {
     // Get everything in a safe starting state.
-    m_drivetrain.resetDistance();
+    m_drivetrain.resetEncoders();
     m_drivetrain.resetHeading();
     super.initialize();
   }

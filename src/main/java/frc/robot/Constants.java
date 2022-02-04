@@ -18,6 +18,7 @@ public final class Constants {
     public static final int DRIVETRAIN_FRONT_RIGHT_CAN_ID = 2;
     public static final int DRIVETRAIN_BACK_RIGHT_CAN_ID = 3;
     public static final int DRIVETRAIN_PIGEON_CAN_ID = 4;
+    public static final double DRIVETRAIN_GEAR_RATIO = 3/2;
 
     public static final int intakeRoller_CAN_ID = 5;
     public static final int intakeDeployRight_CAN_ID = 6;
