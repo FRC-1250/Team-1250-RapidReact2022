@@ -13,6 +13,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
+
+  /**
+   * TODO: 
+   * 2 servos (left and right) for shooter position - https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/servos.html?highlight=servo#
+   * A method to control the servos angle
+   * A method to control the servos speed
+   * A nethod to get the current servo angle
+   * 
+   * A method to run the uptake conveyor based on speed controller inputs
+   * A method to run flywheel based on speed controler speed inputs
+   * A method to run flywheel based on velocity (RPM) input
+   * A method to get flywheel RPM 
+   */
+
   CANSparkMax UptakeConveyor= new CANSparkMax(Constants.uptakeConveyor_CAN_ID,MotorType.kBrushless);
   WPI_TalonFX shooterTop = new WPI_TalonFX(Constants.shooterTop_CAN_ID);
   WPI_TalonFX shooterBottom = new WPI_TalonFX(Constants.shooterBottom_CAN_ID);

@@ -22,6 +22,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Sorter extends SubsystemBase {
+
+  /**
+   * TODO:
+   * Improve sorter color detection commands / methods. Sometimes colors are detected incorrectly for 1 loop but then are detected fine.
+   */
+
   CANSparkMax sorter = new CANSparkMax(Constants.sorter_CAN_ID, MotorType.kBrushless);
   CANSparkMax sorterCollect = new CANSparkMax(Constants.sorterCollect_CAN_ID, MotorType.kBrushless);
 
@@ -46,11 +52,6 @@ public class Sorter extends SubsystemBase {
     alliance = DriverStation.getAlliance();
     m_colorMatcher.addColorMatch(kBlueTarget);
     m_colorMatcher.addColorMatch(kRedTarget);
-
-    // TODO: Test by using true blue and red as closest matches for the color sensor
-    // m_colorMatcher.addColorMatch(Color.kBlue);
-    // m_colorMatcher.addColorMatch(Color.kRed);
-
     sorterTab = Shuffleboard.getTab("Sorter");
     sortSpeedNT = sorterTab.add("SortSpeed", 0).getEntry();
     conveySpeedNT = sorterTab.add("ConveyorSpeed", 0).getEntry();
