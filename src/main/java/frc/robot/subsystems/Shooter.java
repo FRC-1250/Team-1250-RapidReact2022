@@ -24,7 +24,9 @@ public class Shooter extends SubsystemBase {
    * A method to run the uptake conveyor based on speed controller inputs
    * A method to run flywheel based on speed controler speed inputs
    * A method to run flywheel based on velocity (RPM) input
-   * A method to get flywheel RPM 
+   * A method to get flywheel RPM
+   * 
+   * Add light sensor 
    */
 
   CANSparkMax UptakeConveyor= new CANSparkMax(Constants.uptakeConveyor_CAN_ID,MotorType.kBrushless);
