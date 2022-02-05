@@ -25,7 +25,7 @@ public class DriveToPosition extends PIDCommand {
         // This should return the measurement
         drivetrain::getEncoderPosition,
         // This should return the setpoint (can also be a constant)
-        RobotHelper.ConvertInchesToMotorRevolutions(Constants.DRIVETRAIN_GEAR_RATIO, distance, 3, false),
+        RobotHelper.ConvertInchesToMotorTicks(Constants.DRIVETRAIN_GEAR_RATIO, distance, 3, 2048,false),
         // This uses the output
         output -> {
           drivetrain.driveArcade(output, -drivetrain.getHeading());

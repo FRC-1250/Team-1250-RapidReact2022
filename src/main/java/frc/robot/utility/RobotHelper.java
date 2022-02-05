@@ -35,9 +35,9 @@ public class RobotHelper {
     public static double ConvertInchesToMotorTicks(double gearRatio, double distance, double radiusOfOutputWheel,
             double tickRatio, boolean invertOutput) {
         if (invertOutput) {
-            return distance / (gearRatio * tickRatio * (2 * Math.PI * radiusOfOutputWheel));
+            return tickRatio * (distance / (gearRatio * (2 * Math.PI * radiusOfOutputWheel)));
         } else {
-            return distance / (gearRatio * tickRatio * (2 * Math.PI * radiusOfOutputWheel));
+            return -tickRatio * (distance / (gearRatio * (2 * Math.PI * radiusOfOutputWheel)));
         }
     }
 
