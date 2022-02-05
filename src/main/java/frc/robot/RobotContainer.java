@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.FireLED;
 import frc.robot.commands.Sortball;
+import frc.robot.subsystems.LEDS;
 import frc.robot.subsystems.Sorter;
 
 /**
@@ -27,9 +29,10 @@ public class RobotContainer {
   JoystickButton triangle = new JoystickButton(driveGamepad, PS4Controller.Button.kTriangle.value);
   JoystickButton circle = new JoystickButton(driveGamepad, PS4Controller.Button.kCircle.value);
   JoystickButton square = new JoystickButton(driveGamepad, PS4Controller.Button.kSquare.value);
-
+  JoystickButton r1 = new JoystickButton (driveGamepad, PS4Controller.Button.kR1.value);
   // The robot's subsystems and commands are defined here...
   private final Sorter m_sorter = new Sorter();
+  private final LEDS m_leds = new LEDS();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -49,6 +52,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     cross.whileActiveOnce(new Sortball(m_sorter));
+    r1.whileActiveOnce(new FireLED(m_leds));
   }
 
   /**

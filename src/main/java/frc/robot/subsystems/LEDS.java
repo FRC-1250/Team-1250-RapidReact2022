@@ -30,13 +30,11 @@ public class LEDS extends SubsystemBase {
   }
 
   private final CANdle candle = new CANdle(Constants.CANDLE_CAN_ID);
-  private Animation animation = null;
+  private Animation animation = new FireAnimation(0.5, 0.7, Constants.CANDLE_LED_COUNT, 0.7, 0.5);
 
   public LEDS() {
     CANdleConfiguration configAll = new CANdleConfiguration();
-    configAll.statusLedOffWhenActive = true;
     configAll.disableWhenLOS = false;
-    configAll.stripType = LEDStripType.GRB;
     configAll.brightnessScalar = 0.1;
     configAll.vBatOutputMode = VBatOutputMode.Modulated;
     candle.configAllSettings(configAll, 100);
@@ -80,6 +78,7 @@ public class LEDS extends SubsystemBase {
 
   @Override
   public void periodic() {
-    candle.animate(animation);
+   // candle.animate(animation);
+    candle.setLEDs(10, 200, 40);
   }
 }
