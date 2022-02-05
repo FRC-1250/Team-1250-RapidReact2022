@@ -4,7 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
 
@@ -25,8 +29,16 @@ public class Climber extends SubsystemBase {
    */
   
   /** Creates a new Climber. */
+  Servo ratchetServo= new Servo(Constants.ratchetServo_CAN_ID);
+  WPI_TalonFX climberHook = new WPI_TalonFX(Constants.climberHook_CAN_ID);  
   public Climber() {}
-
+  
+  public void ratchetSpeed(double speed){
+    ratchetServo.set(speed);
+  }
+  public void ratchetAngle(double angle){
+    ratchetServo.setAngle(angle);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
