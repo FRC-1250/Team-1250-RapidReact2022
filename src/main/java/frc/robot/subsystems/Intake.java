@@ -7,20 +7,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-
-  /**
-   * TODO: 
-   * Add method to check the current positon of the intake
-   * Add method to move the intake speed controller inputs
-   * A method to detect if the home limit switch is triggered - https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/servos.html?highlight=servo#
-   * Add the gear ratio of the intake to CONSTANTS
-   */
-  
 
   WPI_TalonFX intakeRoller = new WPI_TalonFX(Constants.intakeRoller_CAN_ID);
   CANSparkMax intakeDeployRight = new CANSparkMax(Constants.intakeDeployRight_CAN_ID, MotorType.kBrushless);
@@ -28,10 +20,40 @@ public class Intake extends SubsystemBase {
 
   /** Creates a new Intake. */
   public Intake() {
+    intakeDeployLeft.setInverted(true);
   }
 
   public void SetIntakeRollerspeed(double speed) {
     intakeRoller.set(speed);
+  }
+
+  public void setIntakeDeploySpeed(double speed) {
+    intakeDeployLeft.set(speed);
+    intakeDeployRight.set(speed);
+  }
+
+  public double getIntakeDeployLeftPosition() {
+    return intakeDeployLeft.getEncoder().getPosition();
+  }
+
+  public double getIntakeDeployRightPosition() {
+    return intakeDeployRight.getEncoder().getPosition();
+  }
+
+  public boolean isLeftForwardLimitSwitchPressed() {
+    return intakeDeployLeft.getForwardLimitSwitch(Type.kNormallyOpen).isPressed();
+  }
+
+  public boolean isRightForwardLimitSwitchPressed() {
+    return intakeDeployRight.getForwardLimitSwitch(Type.kNormallyOpen).isPressed();
+  }
+
+  public boolean isLeftReverseLimitSwitchPressed() {
+    return intakeDeployLeft.getReverseLimitSwitch(Type.kNormallyOpen).isPressed();
+  }
+
+  public boolean isRightReverseLimitSwitchPressed() {
+    return intakeDeployRight.getReverseLimitSwitch(Type.kNormallyOpen).isPressed();
   }
 
   @Override

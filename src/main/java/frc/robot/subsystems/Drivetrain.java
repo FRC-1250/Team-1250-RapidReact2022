@@ -14,7 +14,7 @@ import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
 
-  private final WPI_Pigeon2 pigeonGyro = new WPI_Pigeon2(Constants.DRIVETRAIN_PIGEON_CAN_ID);
+  private final WPI_Pigeon2 pigeonGyro = new WPI_Pigeon2(Constants.PIGEON_CAN_ID);
   private final WPI_TalonFX leftFrontDriveMotor = new WPI_TalonFX(Constants.DRIVETRAIN_FRONT_LEFT_CAN_ID);
   private final WPI_TalonFX leftBackDriveMotor = new WPI_TalonFX(Constants.DRIVETRAIN_BACK_LEFT_CAN_ID);
   private final WPI_TalonFX rightFrontDriveMotor = new WPI_TalonFX(Constants.DRIVETRAIN_FRONT_RIGHT_CAN_ID);

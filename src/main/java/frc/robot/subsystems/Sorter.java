@@ -23,11 +23,6 @@ import frc.robot.Constants;
 
 public class Sorter extends SubsystemBase {
 
-  /**
-   * TODO:
-   * Improve sorter color detection commands / methods. Sometimes colors are detected incorrectly for 1 loop but then are detected fine.
-   */
-
   CANSparkMax sorter = new CANSparkMax(Constants.sorter_CAN_ID, MotorType.kBrushless);
   CANSparkMax sorterCollect = new CANSparkMax(Constants.sorterCollect_CAN_ID, MotorType.kBrushless);
 

@@ -12,33 +12,36 @@ import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
 
-  /**
-   * TODO: 
-   * 1 servo for climber ratchet - https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/servos.html?highlight=servo#
-   * A method to control the servos angle
-   * A method to control the servos speed
-   * A nethod to get the current servo angle
-   * 
-   * 1 TalonFX for the climber hook
-   * A method to set the speed of the climber talonFX
-   * A method to get the current position of the climber talonFX 
-   * A method to reset the current position of the climber talonFX
-   * A method to detect if the home limit switch is triggered - https://docs.wpilib.org/en/stable/docs/software/hardware-apis/motors/servos.html?highlight=servo#
-   * 
-   * Add the gear ratio of the climber to CONSTANTS
-   */
-  
-  /** Creates a new Climber. */
-  Servo ratchetServo= new Servo(Constants.ratchetServo_CAN_ID);
-  WPI_TalonFX climberHook = new WPI_TalonFX(Constants.climberHook_CAN_ID);  
-  public Climber() {}
-  
-  public void ratchetSpeed(double speed){
+  Servo ratchetServo = new Servo(Constants.ratchetServo_PWM_ID);
+  WPI_TalonFX climberHook = new WPI_TalonFX(Constants.climberHook_CAN_ID);
+
+  public Climber() {
+  }
+
+  public void ratchetSpeed(double speed) {
     ratchetServo.set(speed);
   }
-  public void ratchetAngle(double angle){
+
+  public void ratchetAngle(double angle) {
     ratchetServo.setAngle(angle);
   }
+
+  public double getRatchetServoAngle() {
+    return ratchetServo.getAngle();
+  }
+
+  public void setClimberHookSpeed(double speed) {
+    climberHook.set(speed);
+  }
+
+  public void resetClimberHookPositon() {
+    climberHook.setSelectedSensorPosition(0);
+  }
+
+  public double getClimberHookPosition() {
+    return climberHook.getSelectedSensorPosition();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
