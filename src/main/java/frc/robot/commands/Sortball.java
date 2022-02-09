@@ -33,15 +33,18 @@ public class Sortball extends CommandBase {
   public void execute() {
     if (sorter.m_colorSensor.getProximity() > 250) {
       detectedColor = sorter.m_colorSensor.getColor();
-      matchedColor = sorter.m_colorMatcher.matchClosestColor(detectedColor);
-      if ((matchedColor.color == sorter.kBlueTarget && Alliance.Blue == sorter.alliance)
-          || (matchedColor.color == sorter.kRedTarget && Alliance.Red == sorter.alliance)) {
-        sorter.Setsorterspeed(-sorter.sortSpeedNT.getDouble(0));
-      } else if ((matchedColor.color == sorter.kRedTarget && Alliance.Blue == sorter.alliance)
-          || (matchedColor.color == sorter.kBlueTarget && Alliance.Red == sorter.alliance)) {
-        sorter.Setsorterspeed(sorter.sortSpeedNT.getDouble(0));
+      matchedColor = sorter.m_colorMatcher.matchColor(detectedColor);
+      if (matchedColor != null) {
+        if ((matchedColor.color == sorter.kBlueTarget && Alliance.Blue == sorter.alliance)
+            || (matchedColor.color == sorter.kRedTarget && Alliance.Red == sorter.alliance)) {
+          sorter.Setsorterspeed(-sorter.sortSpeedNT.getDouble(0));
+        } else if ((matchedColor.color == sorter.kRedTarget && Alliance.Blue == sorter.alliance)
+            || (matchedColor.color == sorter.kBlueTarget && Alliance.Red == sorter.alliance)) {
+          sorter.Setsorterspeed(sorter.sortSpeedNT.getDouble(0));
+        }
       }
       sorter.Setsortercollectspeed(0);
+
     } else {
       sorter.Setsorterspeed(0);
       sorter.Setsortercollectspeed(sorter.conveySpeedNT.getDouble(0));
