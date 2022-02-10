@@ -32,19 +32,19 @@ public class Sortball extends CommandBase {
   @Override
   public void execute() {
     if (sorter.m_colorSensor.getProximity() > 250) {
+      sorter.Setsortercollectspeed(0);
       detectedColor = sorter.m_colorSensor.getColor();
       matchedColor = sorter.m_colorMatcher.matchColor(detectedColor);
       if (matchedColor != null) {
         if ((matchedColor.color == sorter.kBlueTarget && Alliance.Blue == sorter.alliance)
             || (matchedColor.color == sorter.kRedTarget && Alliance.Red == sorter.alliance)) {
+              // If shooter uptake is not tripped, otherwise hold ball 
           sorter.Setsorterspeed(-sorter.sortSpeedNT.getDouble(0));
         } else if ((matchedColor.color == sorter.kRedTarget && Alliance.Blue == sorter.alliance)
             || (matchedColor.color == sorter.kBlueTarget && Alliance.Red == sorter.alliance)) {
           sorter.Setsorterspeed(sorter.sortSpeedNT.getDouble(0));
         }
       }
-      sorter.Setsortercollectspeed(0);
-
     } else {
       sorter.Setsorterspeed(0);
       sorter.Setsortercollectspeed(sorter.conveySpeedNT.getDouble(0));
