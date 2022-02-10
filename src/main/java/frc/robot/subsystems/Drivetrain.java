@@ -60,6 +60,10 @@ public class Drivetrain extends SubsystemBase {
     pigeonGyro.reset();
   }
 
+  public double getTemperatue(WPI_TalonFX talonFX) {
+    return talonFX.getTemperature();
+  }
+
   @Override
   public void periodic() {
   }
