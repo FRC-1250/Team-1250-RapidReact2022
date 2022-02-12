@@ -13,7 +13,7 @@ import frc.robot.commands.FireLED;
 import frc.robot.commands.Sortball;
 import frc.robot.commands.Tankdrive;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.LEDS;
+import frc.robot.subsystems.Diagnostic;
 import frc.robot.subsystems.Sorter;
 
 /**
@@ -34,7 +34,7 @@ public class RobotContainer {
   JoystickButton r1 = new JoystickButton(driveGamepad, PS4Controller.Button.kR1.value);
   // The robot's subsystems and commands are defined here...
   private final Sorter m_sorter = new Sorter();
-  private final LEDS m_leds = new LEDS();
+  private final Diagnostic m_leds = new Diagnostic();
   private final Drivetrain m_drivetrain = new Drivetrain();
 
   /**

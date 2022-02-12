@@ -13,7 +13,7 @@ import com.ctre.phoenix.led.TwinkleOffAnimation.TwinkleOffPercent;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class LEDS extends SubsystemBase {
+public class Diagnostic extends SubsystemBase {
 
   public enum AnimationTypes {
     ColorFlow,
@@ -31,7 +31,7 @@ public class LEDS extends SubsystemBase {
   private final CANdle candle = new CANdle(Constants.CANDLE_CAN_ID);
   private Animation animation = new FireAnimation(0.5, 0.7, Constants.CANDLE_LED_COUNT, 0.7, 0.5);
 
-  public LEDS() {
+  public Diagnostic() {
     CANdleConfiguration configAll = new CANdleConfiguration();
     configAll.disableWhenLOS = false;
     configAll.brightnessScalar = 0.1;

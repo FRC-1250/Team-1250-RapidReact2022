@@ -5,14 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.LEDS;
+import frc.robot.subsystems.Diagnostic;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class FireLED extends InstantCommand {
-  private final LEDS leds;   
-  public FireLED(LEDS m_leds) {
+  private final Diagnostic leds;   
+  public FireLED(Diagnostic m_leds) {
     leds = m_leds;
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -20,6 +20,6 @@ public class FireLED extends InstantCommand {
   // Called whenhe  tcommand is initially scheduled.
   @Override
   public void initialize() {
-    leds. changeAnimation(LEDS.AnimationTypes.Fire);
+    leds. changeAnimation(Diagnostic.AnimationTypes.Fire);
   }
 }
