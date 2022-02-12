@@ -18,16 +18,8 @@ public class Climber extends SubsystemBase {
   public Climber() {
   }
 
-  public void ratchetSpeed(double speed) {
-    ratchetServo.set(speed);
-  }
-
-  public void ratchetAngle(double angle) {
-    ratchetServo.setAngle(angle);
-  }
-
-  public double getRatchetServoAngle() {
-    return ratchetServo.getAngle();
+  public void setRatchetPosition(double position) {
+    ratchetServo.set(position);
   }
 
   public void setClimberHookSpeed(double speed) {
