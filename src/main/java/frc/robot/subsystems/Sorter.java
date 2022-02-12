@@ -23,33 +23,35 @@ import frc.robot.Constants;
 
 public class Sorter extends SubsystemBase {
 
-  CANSparkMax sorter = new CANSparkMax(Constants.sorter_CAN_ID, MotorType.kBrushless);
-  CANSparkMax sorterCollect = new CANSparkMax(Constants.sorterCollect_CAN_ID, MotorType.kBrushless);
+  private CANSparkMax sorter = new CANSparkMax(Constants.sorter_CAN_ID, MotorType.kBrushless);
+  private CANSparkMax sorterCollect = new CANSparkMax(Constants.sorterCollect_CAN_ID, MotorType.kBrushless);
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  public final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-  public final Color kBlueTarget = new Color(0.25, 0.29, 0.45);
-  public final Color kRedTarget = new Color(0.60, 0.32, 0.07);
-  public final ColorMatch m_colorMatcher = new ColorMatch();
-  public final Alliance alliance;
-
-  public ColorMatchResult matchedColor;
+  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+  private final Color kBlueTarget = new Color(0.25, 0.29, 0.45);
+  private final Color kRedTarget = new Color(0.60, 0.32, 0.07);
+  private final Alliance alliance;
+  private final ColorMatch m_colorMatcher = new ColorMatch();
 
   private ShuffleboardTab sorterTab;
-  public NetworkTableEntry sortSpeedNT;
-  public NetworkTableEntry conveySpeedNT;
-  public NetworkTableEntry detectedColorGraphNT;
-  public NetworkTableEntry detectedColorNT;
-  public NetworkTableEntry proximityNT;
+  private NetworkTableEntry detectedColorGraphNT;
+  private NetworkTableEntry detectedColorNT;
+  private NetworkTableEntry proximityNT;
 
   /** Creates a new Sorter. */
   public Sorter() {
     alliance = DriverStation.getAlliance();
+    configureColorMatcher();
+    configureShuffleBoard();
+  }
+
+  private void configureColorMatcher() {
     m_colorMatcher.addColorMatch(kBlueTarget);
     m_colorMatcher.addColorMatch(kRedTarget);
+  }
+
+  private void configureShuffleBoard() {
     sorterTab = Shuffleboard.getTab("Sorter");
-    sortSpeedNT = sorterTab.add("SortSpeed", 0).getEntry();
-    conveySpeedNT = sorterTab.add("ConveyorSpeed", 0).getEntry();
     proximityNT = sorterTab.add("Proximity", 0).getEntry();
     detectedColorNT = sorterTab.add("DetectedColor", "").getEntry();
     detectedColorGraphNT = sorterTab.add("DetectedColorGraph", 0).withWidget(BuiltInWidgets.kGraph).getEntry();
@@ -64,21 +66,48 @@ public class Sorter extends SubsystemBase {
     sorter.set(speed);
   }
 
-  @Override
-  public void periodic() {
-    matchedColor = m_colorMatcher.matchClosestColor(m_colorSensor.getColor());
-    proximityNT.setNumber(m_colorSensor.getProximity());
-    if (m_colorSensor.getProximity() > 250) {
-      if (matchedColor.color == kRedTarget) {
-        detectedColorNT.setString("Red");
-        detectedColorGraphNT.setNumber(1);
-      } else if (matchedColor.color == kBlueTarget) {
-        detectedColorNT.setString("Blue");
-        detectedColorGraphNT.setNumber(-1);
-      }
+  public boolean isMyAllianceColor(Color color) {
+    return (color == kBlueTarget && Alliance.Blue == alliance)
+        || (color == kRedTarget && Alliance.Red == alliance);
+  }
+
+  public boolean isOpposingAllianceColor(Color color) {
+    return (color == kRedTarget && Alliance.Blue == alliance)
+        || (color == kBlueTarget && Alliance.Red == alliance);
+  }
+
+  public Color matchColor() {
+    Color detectedColor = m_colorSensor.getColor();
+    ColorMatchResult colorMatchResults = m_colorMatcher.matchColor(detectedColor);
+    if (colorMatchResults == null) {
+      return new Color(0, 0, 0);
+    } else {
+      return colorMatchResults.color;
+    }
+  }
+
+  public double getColorSensorProxmity() {
+    return m_colorSensor.getProximity();
+  }
+
+  public void sendProximityToShuffleBoard(double proximity) {
+    proximityNT.setNumber(proximity);
+  }
+
+  public void sendDetectedColorToShuffleBoard(Color color) {
+    if (color == kRedTarget) {
+      detectedColorNT.setString("Red");
+      detectedColorGraphNT.setNumber(1);
+    } else if (color == kBlueTarget) {
+      detectedColorNT.setString("Blue");
+      detectedColorGraphNT.setNumber(-1);
     } else {
       detectedColorNT.setString("Null");
       detectedColorGraphNT.setNumber(0);
     }
+  }
+
+  @Override
+  public void periodic() {
   }
 }

@@ -58,6 +58,10 @@ public class Shooter extends SubsystemBase {
     return shooterRightAngleServo.getAngle();
   }
 
+  public boolean isUptakeSensorTripped() {
+    return shooterUptakeConveyorSensor.get();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

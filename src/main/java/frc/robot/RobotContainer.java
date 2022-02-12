@@ -13,6 +13,8 @@ import frc.robot.commands.FireLED;
 import frc.robot.commands.Sortball;
 import frc.robot.commands.Tankdrive;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Diagnostic;
 import frc.robot.subsystems.Sorter;
 
@@ -36,6 +38,7 @@ public class RobotContainer {
   private final Sorter m_sorter = new Sorter();
   private final Diagnostic m_leds = new Diagnostic();
   private final Drivetrain m_drivetrain = new Drivetrain();
+  private final Shooter m_shooter = new Shooter();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -55,7 +58,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    cross.whileActiveOnce(new Sortball(m_sorter));
+    cross.whileActiveOnce(new Sortball(m_sorter, m_shooter));
     r1.whileActiveOnce(new FireLED(m_leds));
   }
 

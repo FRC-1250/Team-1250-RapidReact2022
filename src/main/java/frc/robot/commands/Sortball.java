@@ -4,50 +4,42 @@
 
 package frc.robot.commands;
 
-import com.revrobotics.ColorMatchResult;
-
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Sorter;
 
 public class Sortball extends CommandBase {
   /** Creates a new Sortball. */
   private final Sorter sorter;
-  private Color detectedColor;
-  private ColorMatchResult matchedColor;
+  private final Shooter shooter;
+  private Color matchedColor;
+  private double proximity;
 
-  public Sortball(Sorter m_sorter) {
+  public Sortball(Sorter m_sorter, Shooter m_shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_sorter);
     sorter = m_sorter;
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
+    shooter = m_shooter;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (sorter.m_colorSensor.getProximity() > 250) {
+    proximity = sorter.getColorSensorProxmity();
+    sorter.sendProximityToShuffleBoard(proximity);
+    matchedColor = sorter.matchColor();
+    sorter.sendDetectedColorToShuffleBoard(matchedColor);
+    if (proximity > 250) {
       sorter.Setsortercollectspeed(0);
-      detectedColor = sorter.m_colorSensor.getColor();
-      matchedColor = sorter.m_colorMatcher.matchColor(detectedColor);
-      if (matchedColor != null) {
-        if ((matchedColor.color == sorter.kBlueTarget && Alliance.Blue == sorter.alliance)
-            || (matchedColor.color == sorter.kRedTarget && Alliance.Red == sorter.alliance)) {
-              // If shooter uptake is not tripped, otherwise hold ball 
-          sorter.Setsorterspeed(-sorter.sortSpeedNT.getDouble(0));
-        } else if ((matchedColor.color == sorter.kRedTarget && Alliance.Blue == sorter.alliance)
-            || (matchedColor.color == sorter.kBlueTarget && Alliance.Red == sorter.alliance)) {
-          sorter.Setsorterspeed(sorter.sortSpeedNT.getDouble(0));
-        }
+      if (sorter.isMyAllianceColor(matchedColor) && !shooter.isUptakeSensorTripped()) {
+        sorter.Setsorterspeed(-0.6);
+      } else if (sorter.isOpposingAllianceColor(matchedColor)) {
+        sorter.Setsorterspeed(0.6);
       }
     } else {
       sorter.Setsorterspeed(0);
-      sorter.Setsortercollectspeed(sorter.conveySpeedNT.getDouble(0));
+      sorter.Setsortercollectspeed(1);
     }
   }
 
@@ -56,11 +48,5 @@ public class Sortball extends CommandBase {
   public void end(boolean interrupted) {
     sorter.Setsorterspeed(0);
     sorter.Setsortercollectspeed(0);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }
