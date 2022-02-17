@@ -9,6 +9,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -18,11 +21,25 @@ public class Intake extends SubsystemBase {
   CANSparkMax intakeDeployRight = new CANSparkMax(Constants.intakeDeployRight_CAN_ID, MotorType.kBrushless);
   CANSparkMax intakeDeployLeft = new CANSparkMax(Constants.intakeDeployLeft_CAN_ID, MotorType.kBrushless);
 
+  private ShuffleboardTab intaketab;
+  private NetworkTableEntry FrontRightLimitSwitch;
+  private NetworkTableEntry BackRightLimitSwitch;
+  private NetworkTableEntry FrontLeftLimitSwitch; 
+  private NetworkTableEntry BackLeftLimitSwitch;
+
+
   /** Creates a new Intake. */
   public Intake() {
     intakeDeployLeft.setInverted(true);
   }
+  public void configureShuffleBoard(){
+    intaketab = Shuffleboard.getTab("Intake");
+    FrontRightLimitSwitch = intaketab.add("FrontRightLimitSwitch",false).getEntry();
+    BackRightLimitSwitch = intaketab.add("BackRIghtLimitSwitch",false).getEntry();
+    FrontLeftLimitSwitch = intaketab.add("FrontLeftLimitSwitch",false).getEntry();
+    BackLeftLimitSwitch = intaketab.add("BackLeftLimitSwitch", false).getEntry();
 
+  }
   public void SetIntakeRollerspeed(double speed) {
     intakeRoller.set(speed);
   }
@@ -58,6 +75,10 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    FrontRightLimitSwitch.setBoolean(isRightForwardLimitSwitchPressed());
+    BackRightLimitSwitch.setBoolean(isRightReverseLimitSwitchPressed());
+    FrontLeftLimitSwitch.setBoolean(isLeftForwardLimitSwitchPressed());
+    BackLeftLimitSwitch.setBoolean(isLeftReverseLimitSwitchPressed());
     // This method will be called once per scheduler run
   }
 }

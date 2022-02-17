@@ -40,6 +40,6 @@ public class ExtendIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.isRightForwardLimitSwitchPressed();
+    return intake.isRightReverseLimitSwitchPressed();
   }
 }
