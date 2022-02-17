@@ -33,13 +33,17 @@ public class Sortball extends CommandBase {
     if (proximity > 250) {
       sorter.Setsortercollectspeed(0);
       if (sorter.isMyAllianceColor(matchedColor) && !shooter.isUptakeSensorTripped()) {
-        sorter.Setsorterspeed(-0.6);
+        sorter.Setsorterspeed(-0.6); 
+        shooter.setUptakeConveyorSpeed(.5);
       } else if (sorter.isOpposingAllianceColor(matchedColor)) {
         sorter.Setsorterspeed(0.6);
       }
     } else {
       sorter.Setsorterspeed(0);
       sorter.Setsortercollectspeed(1);
+    }
+    if (shooter.isUptakeSensorTripped()){
+      shooter.setUptakeConveyorSpeed(0);
     }
   }
 
