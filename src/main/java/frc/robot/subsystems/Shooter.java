@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -24,44 +23,44 @@ public class Shooter extends SubsystemBase {
    */
 
   CANSparkMax UptakeConveyor = new CANSparkMax(Constants.uptakeConveyor_CAN_ID, MotorType.kBrushless);
-  WPI_TalonFX shooterTop = new WPI_TalonFX(Constants.shooterTop_CAN_ID);
-  WPI_TalonFX shooterBottom = new WPI_TalonFX(Constants.shooterBottom_CAN_ID);
+  WPI_TalonFX shooterFront = new WPI_TalonFX(Constants.shooterFront_CAN_ID);
+  WPI_TalonFX shooterRear = new WPI_TalonFX(Constants.shooterRear_CAN_ID);
   Servo shooterLeftAngleServo = new Servo(Constants.SHOOTER_ANGLE_LEFT_PWN_ID);
   Servo shooterRightAngleServo = new Servo(Constants.SHOOTER_ANGLE_RIGHT_PWN_ID);
   DigitalInput shooterUptakeConveyorSensor = new DigitalInput(Constants.SHOOTER_UPTAKE_CONVEYOR_SENSOR_DIO_ID);
 
   /** Creates a new Shooter. */
   public Shooter() {
-    shooterTop.follow(shooterBottom);
-    shooterTop.setInverted(InvertType.OpposeMaster);
-
-    shooterTop.configPeakOutputReverse(0);
-    shooterBottom.configPeakOutputReverse(0);
-
-    shooterBottom.config_kP(0, Constants.shooter_P);
-    shooterBottom.config_kI(0, Constants.shooter_I);
-    shooterBottom.config_kD(0, Constants.shooter_D);
-    shooterBottom.config_kF(0, Constants.shooter_F);
+    shooterFront.follow(shooterRear);
+    shooterRear.configPeakOutputReverse(0);
+    shooterRear.config_kP(0, Constants.shooter_P);
+    shooterRear.config_kI(0, Constants.shooter_I);
+    shooterRear.config_kD(0, Constants.shooter_D);
+    shooterRear.config_kF(0, Constants.shooter_F);
   }
 
-  public void setShooterSpeed(double speed) {
-    shooterLeftAngleServo.set(speed);
-    shooterRightAngleServo.set(speed);
+  public void setShooterServoPosition(double Position) {
+    shooterLeftAngleServo.set(Position);
+    shooterRightAngleServo.set(Position);
   }
 
-  public void setShooterAngle(double degrees) {
-    shooterLeftAngleServo.setAngle(degrees);
-    shooterRightAngleServo.setAngle(degrees);
-  }
+  
 
-  public double getShooterAngle() {
-    return shooterRightAngleServo.getAngle();
+  public double getShooterServoPosition() {
+    return shooterRightAngleServo.getPosition();
   }
 
   public boolean isUptakeSensorTripped() {
     return shooterUptakeConveyorSensor.get();
   }
 
+  public void setShooterSpeed(double speed){
+    shooterFront.set(speed);
+    shooterRear.set(speed);
+  }
+  public void setUptakeConveyorSpeed(double speed){
+    UptakeConveyor.set(speed);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
