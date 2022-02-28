@@ -29,6 +29,8 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Diagnostic;
 import frc.robot.subsystems.Sorter;
+import frc.robot.subsystems.Shooter.ShooterDirection;
+import frc.robot.subsystems.Shooter.ShooterHeight;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -72,11 +74,11 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Climber m_climber = new Climber();
   private final Limelight m_limelight = new Limelight();
-  private Robotstate m_robotstate;
+  public static Robotstate m_robotstate;
   private NetworkTableEntry robotstateNT;
   private NetworkTableEntry singlePlayerNT;;
 
-  private enum Robotstate {
+  public enum Robotstate {
     INTAKE,
     CLIMB,
     SHOOT_HIGH,
@@ -105,9 +107,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    shootHigh.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, 21500, true));
+    shootHigh.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_FRONT));
     track.whileActiveOnce(new MoveToTarget(m_limelight, m_drivetrain));
-    shootLow.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, 7500, true));
+    shootLow.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_FRONT));
     extendClimber.whileActiveOnce(new ExtendClimber(m_climber));
     retractClimber.whileActiveOnce(new RetractClimber(m_climber));
     extendIntake.whenActive(new ExtendIntake(m_intake));

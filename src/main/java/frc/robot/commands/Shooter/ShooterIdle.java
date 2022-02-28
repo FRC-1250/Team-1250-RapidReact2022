@@ -5,8 +5,10 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterHeight;
 
 public class ShooterIdle extends CommandBase {
   private final Shooter shooter;
@@ -20,14 +22,22 @@ public class ShooterIdle extends CommandBase {
 
   @Override
   public void execute() {
-    if (!intake.isReverseLimitSwitchPressed()) {
+    if (intake.isReverseLimitSwitchPressed()) {
+      shooter.setUptakeConveyorSpeed(0);
+    } else {
       if (shooter.isUptakeSensorTripped()) {
         shooter.setUptakeConveyorSpeed(0);
       } else {
         shooter.setUptakeConveyorSpeed(0.5);
       }
+    }
+
+    if (RobotContainer.m_robotstate == RobotContainer.Robotstate.SHOOT_HIGH) {
+      shooter.setShooterRpm(ShooterHeight.SHOOT_HIGH.rpmInTicks);
+    } else if (RobotContainer.m_robotstate == RobotContainer.Robotstate.SHOOT_LOW) {
+      shooter.setShooterRpm(ShooterHeight.SHOOT_LOW.rpmInTicks);
     } else {
-      shooter.setUptakeConveyorSpeed(0);
+      shooter.setShooterRpm(0);
     }
   }
 }

@@ -30,18 +30,24 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry shooterTargetRpmNT;
   private NetworkTableEntry uptakeSensorNT;
 
-  public enum shooterDirection {
-    SHOOT_FRONT,
-    SHOOT_BACK
+  public enum ShooterDirection {
+    SHOOT_FRONT(0.25),
+    SHOOT_BACK(0.75);
+
+    public final double servoPosition;
+
+    ShooterDirection(double servoPosition) {
+      this.servoPosition = servoPosition;
+    }
   }
 
-  public enum shooterHeight {
-    SHOOT_HIGH(21500),
-    SHOOT_LOW(10000);
+  public enum ShooterHeight {
+    SHOOT_HIGH(21000),
+    SHOOT_LOW(7500);
 
-    double rpmInTicks;
+    public final double rpmInTicks;
 
-    shooterHeight(double rpmInTicks) {
+    ShooterHeight(double rpmInTicks) {
       this.rpmInTicks = rpmInTicks;
     }
   }
@@ -56,8 +62,8 @@ public class Shooter extends SubsystemBase {
 
   private void configureTalon(WPI_TalonFX talon, boolean inverted) {
     talon.configPeakOutputReverse(0);
-    talon.configOpenloopRamp(0.8);
-    talon.configClosedloopRamp(0.8);
+    talon.configOpenloopRamp(0.5);
+    talon.configClosedloopRamp(0.5);
     talon.config_kP(0, Constants.shooter_P);
     talon.config_kI(0, Constants.shooter_I);
     talon.config_kD(0, Constants.shooter_D);

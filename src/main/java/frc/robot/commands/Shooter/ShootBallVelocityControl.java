@@ -7,33 +7,31 @@ package frc.robot.commands.Shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Sorter;
+import frc.robot.subsystems.Shooter.ShooterDirection;
+import frc.robot.subsystems.Shooter.ShooterHeight;
 
 public class ShootBallVelocityControl extends CommandBase {
   private final Shooter shooter;
-  private final double targetSpeedInTicks;
+  private final ShooterHeight shooterHeight;
   private final Sorter sorter;
-  private final boolean shootFrontOfRobot;
+  private final ShooterDirection shooterDirection;
   private double acceptancePercentage = 0.05;
   private boolean shooterPrimed = false;
   private long shotTimerInMs = 0;
 
-  public ShootBallVelocityControl(Shooter m_shooter, Sorter m_sorter, double m_targetSpeed,
-      boolean m_shootFrontOfRobot) {
+  public ShootBallVelocityControl(Shooter m_shooter, Sorter m_sorter, ShooterHeight m_shooterHeight,
+      ShooterDirection m_shooterDirection) {
     shooter = m_shooter;
     sorter = m_sorter;
-    shootFrontOfRobot = m_shootFrontOfRobot;
-    targetSpeedInTicks = m_targetSpeed;
+    shooterHeight = m_shooterHeight;
+    shooterDirection = m_shooterDirection;
     addRequirements(m_shooter, m_sorter);
   }
 
-  public ShootBallVelocityControl(Shooter m_shooter, Sorter m_sorter, double m_targetSpeed,
-      boolean m_shootFrontOfRobot, long m_shotTimerInMs) {
-    shooter = m_shooter;
-    sorter = m_sorter;
-    shootFrontOfRobot = m_shootFrontOfRobot;
-    targetSpeedInTicks = m_targetSpeed;
+  public ShootBallVelocityControl(Shooter m_shooter, Sorter m_sorter, ShooterHeight m_shooterHeight,
+      ShooterDirection m_shooterDirection, long m_shotTimerInMs) {
+    this(m_shooter, m_sorter, m_shooterHeight, m_shooterDirection);
     shotTimerInMs = m_shotTimerInMs;
-    addRequirements(m_shooter, m_sorter);
   }
 
   @Override
@@ -45,14 +43,11 @@ public class ShootBallVelocityControl extends CommandBase {
 
   @Override
   public void execute() {
-    if (shootFrontOfRobot) {
-      shooter.setShooterServoPosition(0.25);
-    } else {
-      shooter.setShooterServoPosition(0.75);
-    }
-
-    shooter.setShooterRpm(targetSpeedInTicks);
-    shooterPrimed = shooter.getRearShooterRpm() > targetSpeedInTicks - (targetSpeedInTicks * acceptancePercentage);
+    shooter.setShooterServoPosition(shooterDirection.servoPosition);
+    shooter.setShooterRpm(shooterHeight.rpmInTicks);
+    
+    shooterPrimed = shooter.getRearShooterRpm() > shooterHeight.rpmInTicks
+        - (shooterHeight.rpmInTicks * acceptancePercentage);
 
     if (shooterPrimed && shooter.isUptakeSensorTripped()) {
       shooter.setUptakeConveyorSpeed(1);

@@ -10,17 +10,20 @@ import frc.robot.commands.Shooter.ShootBallVelocityControl;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Sorter;
+import frc.robot.subsystems.Shooter.ShooterDirection;
+import frc.robot.subsystems.Shooter.ShooterHeight;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootBallAndDriveBack extends SequentialCommandGroup {
+public class FenderShotAndDriveBack extends SequentialCommandGroup {
   /** Creates a new ShootBallAndDriveBack. */
-  public ShootBallAndDriveBack(Shooter cmd_Shooter, Drivetrain cmd_drivetrain, Sorter cmd_sorter) {
+  public FenderShotAndDriveBack(Shooter cmd_Shooter, Drivetrain cmd_drivetrain, Sorter cmd_sorter) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new DriveToPosition(cmd_drivetrain, -36),
-        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, 21500, false, 5000));
+        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_BACK,
+            5000),
+        new DriveToPosition(cmd_drivetrain, -36));
   }
 }
