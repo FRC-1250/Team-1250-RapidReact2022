@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -37,6 +40,8 @@ public final class Constants {
     public static final int sorterCollect_CAN_ID = 27;
     public static final int intakeDeployLeft_CAN_ID = 28;
     public static final double INTAKE_DEPLOY_GEAR_RATIO = 1 / 7;
+    public static final int INTAKE_RIGHT_REVERSE_LIMITSWITCH_DIO_ID = 1;
+    public static final int INTAKE_LEFT_REVERSE_LIMITSWITCH_DIO_ID = 2;
 
     // Climber
     public static final int climberHook_CAN_ID = 35;
@@ -52,7 +57,7 @@ public final class Constants {
     public static final int shooterRear_CAN_ID = 47;
     public static final int SHOOTER_ANGLE_LEFT_PWN_ID = 0;
     public static final int SHOOTER_ANGLE_RIGHT_PWN_ID = 1;
-    public static final int SHOOTER_UPTAKE_CONVEYOR_SENSOR_DIO_ID = 0;
+    public static final int SHOOTER_UPTAKE_CONVEYOR_SENSOR_DIO_ID = 9;
 
     public static final double shooter_P = 1;
     public static final double shooter_I = 0;
@@ -61,4 +66,12 @@ public final class Constants {
 
     // External intake/sorter
     public static final int intakeRoller_CAN_ID = 50;
+
+    // Shuffleboard
+    public static final ShuffleboardTab PRIMARY_TAB = Shuffleboard.getTab("Primary");
+    public static final ShuffleboardTab SORTER_TAB = Shuffleboard.getTab("Sorter");
+    //public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard.getTab("Shooter");
+    //public static final ShuffleboardTab INTAKE_TAB = Shuffleboard.getTab("Intake");
+    //public static final ShuffleboardTab CLIMBER_TAB = Shuffleboard.getTab("Climber");
+
 }

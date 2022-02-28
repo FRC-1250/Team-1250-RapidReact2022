@@ -6,12 +6,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -19,66 +20,61 @@ public class Intake extends SubsystemBase {
 
   WPI_TalonFX intakeRoller = new WPI_TalonFX(Constants.intakeRoller_CAN_ID);
   CANSparkMax intakeDeployRight = new CANSparkMax(Constants.intakeDeployRight_CAN_ID, MotorType.kBrushless);
-  CANSparkMax intakeDeployLeft = new CANSparkMax(Constants.intakeDeployLeft_CAN_ID, MotorType.kBrushless);
+  DigitalInput RightreverseLimitSwitch = new DigitalInput(Constants.INTAKE_RIGHT_REVERSE_LIMITSWITCH_DIO_ID);
+  DigitalInput LeftreverseLimtiSwitch = new DigitalInput(Constants.INTAKE_LEFT_REVERSE_LIMITSWITCH_DIO_ID);
 
-  private ShuffleboardTab intaketab;
-  private NetworkTableEntry FrontRightLimitSwitch;
-  private NetworkTableEntry BackRightLimitSwitch;
-  private NetworkTableEntry FrontLeftLimitSwitch; 
-  private NetworkTableEntry BackLeftLimitSwitch;
-
-
+  
+  private NetworkTableEntry ReverseLimitSwitch;
+  private NetworkTableEntry IntakePosition;
   /** Creates a new Intake. */
   public Intake() {
-    intakeDeployLeft.setInverted(true);
-  }
-  public void configureShuffleBoard(){
-    intaketab = Shuffleboard.getTab("Intake");
-    FrontRightLimitSwitch = intaketab.add("FrontRightLimitSwitch",false).getEntry();
-    BackRightLimitSwitch = intaketab.add("BackRIghtLimitSwitch",false).getEntry();
-    FrontLeftLimitSwitch = intaketab.add("FrontLeftLimitSwitch",false).getEntry();
-    BackLeftLimitSwitch = intaketab.add("BackLeftLimitSwitch", false).getEntry();
+    configureShuffleBoard();
+    configureSparkMax(intakeDeployRight, true);
 
+    
   }
+
+  private void configureSparkMax(CANSparkMax canSparkMax, boolean inverted) {
+    canSparkMax.setIdleMode(IdleMode.kCoast);
+    canSparkMax.setInverted(inverted);
+    canSparkMax.setSmartCurrentLimit(40);
+  }
+
+  private void configureShuffleBoard() {
+    ShuffleboardLayout layout = Constants.PRIMARY_TAB.getLayout("Intake", BuiltInLayouts.kList).withSize(2, 3);
+    layout.add("Intake command", this);
+    ReverseLimitSwitch = layout.add("RE Limit switch", false).getEntry();
+    IntakePosition = layout.add("IntakePosition",0).getEntry();
+  }
+
+  public void updateShuffleBoard() {
+   ReverseLimitSwitch.setBoolean(isReverseLimitSwitchPressed());
+   IntakePosition.setNumber(getIntakeDeployRightPosition());
+  }
+
   public void SetIntakeRollerspeed(double speed) {
     intakeRoller.set(speed);
   }
 
   public void setIntakeDeploySpeed(double speed) {
-    intakeDeployLeft.set(speed);
     intakeDeployRight.set(speed);
-  }
-
-  public double getIntakeDeployLeftPosition() {
-    return intakeDeployLeft.getEncoder().getPosition();
   }
 
   public double getIntakeDeployRightPosition() {
     return intakeDeployRight.getEncoder().getPosition();
   }
-
-  public boolean isLeftForwardLimitSwitchPressed() {
-    return intakeDeployLeft.getForwardLimitSwitch(Type.kNormallyOpen).isPressed();
+  public boolean isReverseLimitSwitchPressed() {
+    return RightreverseLimitSwitch.get() || LeftreverseLimtiSwitch.get();
+    //return intakeDeployLeft.getReverseLimitSwitch(Type.kNormallyClosed).isPressed();
   }
-
-  public boolean isRightForwardLimitSwitchPressed() {
-    return intakeDeployRight.getForwardLimitSwitch(Type.kNormallyOpen).isPressed();
-  }
-
-  public boolean isLeftReverseLimitSwitchPressed() {
-    return intakeDeployLeft.getReverseLimitSwitch(Type.kNormallyOpen).isPressed();
-  }
-
-  public boolean isRightReverseLimitSwitchPressed() {
-    return intakeDeployRight.getReverseLimitSwitch(Type.kNormallyOpen).isPressed();
-  }
+  
+  
+ 
 
   @Override
   public void periodic() {
-    FrontRightLimitSwitch.setBoolean(isRightForwardLimitSwitchPressed());
-    BackRightLimitSwitch.setBoolean(isRightReverseLimitSwitchPressed());
-    FrontLeftLimitSwitch.setBoolean(isLeftForwardLimitSwitchPressed());
-    BackLeftLimitSwitch.setBoolean(isLeftReverseLimitSwitchPressed());
-    // This method will be called once per scheduler run
+    if (isReverseLimitSwitchPressed()){
+      intakeDeployRight.getEncoder().setPosition(0);
+    }
   }
 }

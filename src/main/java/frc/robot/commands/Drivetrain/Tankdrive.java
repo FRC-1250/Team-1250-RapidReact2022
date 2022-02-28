@@ -15,6 +15,7 @@ public class Tankdrive extends CommandBase {
 
   public Tankdrive(Drivetrain drivetrain, PS4Controller Dualshock4) {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(drivetrain);
     e_Drivetrain = drivetrain;
     e_Dualshock4 = Dualshock4;
   }

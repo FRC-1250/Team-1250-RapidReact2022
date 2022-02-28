@@ -101,13 +101,12 @@ public class RobotHelper {
 
     public static double piecewiseMotorController(double upperSpeed, double lowerSpeed, double start,
             double end, double current) {
-        return piecewiseMotorController(upperSpeed, 0.7, lowerSpeed, 0.9, start, end, current);
+        return piecewiseMotorController(upperSpeed, 0.8, lowerSpeed, 0.8, start, end, current);
     }
 
     private static double piecewiseMotorController(double upperSpeed, double rampStartPercent,
             double lowerSpeed, double rampEndPercent, double start, double end, double current) {
-        double diffTotal = Math.abs(start - end);
-        double progressPercent = Math.abs((start - current) / diffTotal);
+        double progressPercent = calculateProgress(start, end, current);
         boolean isNegative = Math.signum(start - end) == -1;
         double speed = 0;
 
@@ -138,5 +137,30 @@ public class RobotHelper {
         y = slope * progressPercent + b;
 
         return y;
+    }
+
+    public static double calculateProgress(double start, double end, double current) {
+        double diffTotal = Math.abs(start - end);
+        return Math.abs((start - current) / diffTotal);
+    }
+
+    public static boolean isDoneTraveling(double start, double end, double current) {
+        double progressPercent = calculateProgress(start, end, current);
+        if (progressPercent <= 0.90) {
+            return false;
+        } else {
+            return true;
+        }
+    // progess percent was changed to 90, Increased dead zone for intake roller
+    }
+
+    public static double constantMotorController(double speed, double start,
+            double end, double current) {
+        double progressPercent = calculateProgress(start, end, current);
+        if (progressPercent <= 0.99) {
+            return speed;
+        } else {
+            return 0;
+        }
     }
 }
