@@ -17,6 +17,17 @@ public class Climber extends SubsystemBase {
   Servo ratchetServo = new Servo(Constants.ratchetServo_PWM_ID);
   WPI_TalonFX climberHook = new WPI_TalonFX(Constants.climberHook_CAN_ID);
 
+  public enum ClimbHeight {
+    CLIMB_MID_RUNG(21500),
+    CLIMB_LOW_RUNG(10000);
+
+    public final double heightInTicks;
+
+    ClimbHeight(double heightInTicks) {
+      this.heightInTicks = heightInTicks;
+    }
+  }
+
   public Climber() {
     configureShuffleBoard();
   }
