@@ -22,7 +22,13 @@ public class DriveStraight extends CommandBase {
   }
 
   @Override
+  public void initialize() {
+    e_Drivetrain.resetHeading();
+  }
+
+  @Override
   public void execute() {
-    e_Drivetrain.driveArcade(e_Dualshock4.getLeftY() * e_driveThrottle, -e_Drivetrain.getHeading());
+    e_Drivetrain.driveArcade(e_Dualshock4.getLeftY() * e_driveThrottle, 0);
+    // TODO: Why is the gyro so sensitive?
   }
 }
