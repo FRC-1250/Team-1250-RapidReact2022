@@ -8,21 +8,21 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
-public class Tankdrive extends CommandBase {
-  /** Creates a new Tankdrive. */
+public class DriveStraight extends CommandBase {
+
   private final Drivetrain e_Drivetrain;
   private final PS4Controller e_Dualshock4;
+  private final double e_driveThrottle;
 
-  public Tankdrive(Drivetrain drivetrain, PS4Controller Dualshock4) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public DriveStraight(Drivetrain drivetrain, PS4Controller Dualshock4, double driveThrottle) {
     addRequirements(drivetrain);
     e_Drivetrain = drivetrain;
     e_Dualshock4 = Dualshock4;
+    e_driveThrottle = driveThrottle;
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    e_Drivetrain.driveTank(e_Dualshock4.getLeftY(), e_Dualshock4.getRightY());
+    e_Drivetrain.driveArcade(e_Dualshock4.getLeftY() * e_driveThrottle, -e_Drivetrain.getHeading());
   }
 }

@@ -15,8 +15,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Climber.ExtendClimber;
 import frc.robot.commands.Climber.RetractClimber;
+import frc.robot.commands.Drivetrain.Drive;
+import frc.robot.commands.Drivetrain.DriveStraight;
 import frc.robot.commands.Drivetrain.MoveToTarget;
-import frc.robot.commands.Drivetrain.Tankdrive;
 import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.commands.Shooter.ShootBallVelocityControl;
@@ -59,7 +60,6 @@ public class RobotContainer {
   JoystickButton X = new JoystickButton(operatorGamepad, 1);
 
   boolean singlePlayer = false;
-  boolean tankDrive = true;
   long shuffleBoardUpdateTimer = 0;
   long shuffleBoardUpdateCooldown = 100;
   long configChangeTimer = 0;
@@ -72,6 +72,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Climber m_climber = new Climber();
   private final Limelight m_limelight = new Limelight();
+  private static RobotDriveType m_robotDriveType;
   private Robotstate m_robotstate;
   private NetworkTableEntry robotstateNT;
   private NetworkTableEntry singlePlayerNT;;
@@ -83,17 +84,29 @@ public class RobotContainer {
     SHOOT_LOW
   }
 
+  public enum RobotDriveType {
+    ARCADE,
+    TANK
+  }
+
+  public static RobotDriveType getDriveType() {
+    return m_robotDriveType;
+  }
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_drivetrain.setDefaultCommand(new Tankdrive(m_drivetrain, driveGamepad));
+    m_drivetrain.setDefaultCommand(new Drive(m_drivetrain, driveGamepad, 1));
     m_sorter.setDefaultCommand(new IndexBall(m_sorter, m_shooter, m_intake));
     m_shooter.setDefaultCommand(new ShooterIdle(m_shooter, m_intake));
     robotstateNT = Constants.PRIMARY_TAB.add("Robot state", "").withPosition(0, 4).getEntry();
     singlePlayerNT = Constants.PRIMARY_TAB.add("Single player", false).withPosition(0, 5).getEntry();
+
+    m_robotstate = Robotstate.INTAKE;
+    m_robotDriveType = RobotDriveType.TANK;
   }
 
   /**
@@ -112,6 +125,9 @@ public class RobotContainer {
     retractClimber.whileActiveOnce(new RetractClimber(m_climber));
     extendIntake.whenActive(new ExtendIntake(m_intake));
     retractIntake.whenActive(new RetractIntake(m_intake));
+
+    r2.whileActiveOnce(new Drive(m_drivetrain, driveGamepad, 0.5));
+    l2.whileActiveOnce(new DriveStraight(m_drivetrain, driveGamepad, 1));
   }
 
   /**
@@ -125,7 +141,7 @@ public class RobotContainer {
   }
 
   public void changeNumberOfOperators() {
-    if (share.get() && options.get() && configChangeTimer < System.currentTimeMillis()) {
+    if (options.get() && configChangeTimer < System.currentTimeMillis()) {
       singlePlayer = !singlePlayer;
       configChangeTimer = System.currentTimeMillis() + configChangeCooldown;
     }
@@ -133,7 +149,11 @@ public class RobotContainer {
 
   public void changeDriveMode() {
     if (share.get() && configChangeTimer < System.currentTimeMillis()) {
-      tankDrive = !tankDrive;
+      if (RobotDriveType.TANK == getDriveType()) {
+        m_robotDriveType = RobotDriveType.ARCADE;
+      } else if (RobotDriveType.ARCADE == getDriveType()) {
+        m_robotDriveType = RobotDriveType.TANK;
+      }
       configChangeTimer = System.currentTimeMillis() + configChangeCooldown;
     }
   }
