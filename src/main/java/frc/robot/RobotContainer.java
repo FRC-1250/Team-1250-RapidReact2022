@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Climber.ExtendClimber;
+import frc.robot.commands.Climber.ExtendClimberWithPosition;
 import frc.robot.commands.Climber.RetractClimber;
 import frc.robot.commands.Drivetrain.MoveToTarget;
 import frc.robot.commands.Drivetrain.Tankdrive;
@@ -29,6 +30,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Diagnostic;
 import frc.robot.subsystems.Sorter;
+import frc.robot.subsystems.Climber.ClimbHeight;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -109,6 +111,7 @@ public class RobotContainer {
     track.whileActiveOnce(new MoveToTarget(m_limelight, m_drivetrain));
     shootLow.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, 7500, true));
     extendClimber.whileActiveOnce(new ExtendClimber(m_climber));
+    extendClimberToLow.whileActiveOnce(new ExtendClimberWithPosition(m_climber, ClimbHeight.CLIMB_MID_RUNG));
     retractClimber.whileActiveOnce(new RetractClimber(m_climber));
     extendIntake.whenActive(new ExtendIntake(m_intake));
     retractIntake.whenActive(new RetractIntake(m_intake));
@@ -165,14 +168,15 @@ public class RobotContainer {
   }
 
   public void updateShuffleBoard() {
-    if (shuffleBoardUpdateTimer < System.currentTimeMillis())
+    if (shuffleBoardUpdateTimer < System.currentTimeMillis()) {
       m_climber.updateShuffleBoard();
-    m_drivetrain.updateShuffleBoard();
-    m_shooter.updateShuffleBoard();
-    m_intake.updateShuffleBoard();
-    robotstateNT.setString(m_robotstate.toString());
-    singlePlayerNT.setBoolean(singlePlayer);
-    shuffleBoardUpdateTimer = System.currentTimeMillis() + shuffleBoardUpdateCooldown;
+      m_drivetrain.updateShuffleBoard();
+      m_shooter.updateShuffleBoard();
+      m_intake.updateShuffleBoard();
+      robotstateNT.setString(m_robotstate.toString());
+      singlePlayerNT.setBoolean(singlePlayer);
+      shuffleBoardUpdateTimer = System.currentTimeMillis() + shuffleBoardUpdateCooldown;
+    }
   }
 
   // Shoot high mode
@@ -218,6 +222,13 @@ public class RobotContainer {
     @Override
     public boolean get() {
       return Robotstate.CLIMB == m_robotstate && l1.get();
+    }
+  };
+
+  Trigger extendClimberToLow = new Trigger() {
+    @Override
+    public boolean get() {
+      return Robotstate.CLIMB == m_robotstate && l2.get();
     }
   };
 
