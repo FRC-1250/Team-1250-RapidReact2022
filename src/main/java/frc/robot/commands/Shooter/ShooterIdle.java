@@ -32,9 +32,9 @@ public class ShooterIdle extends CommandBase {
       }
     }
 
-    if (RobotContainer.m_robotstate == RobotContainer.Robotstate.SHOOT_HIGH) {
+    if (RobotContainer.getRobotState() == RobotContainer.Robotstate.SHOOT_HIGH) {
       shooter.setShooterRpm(ShooterHeight.SHOOT_HIGH.rpmInTicks);
-    } else if (RobotContainer.m_robotstate == RobotContainer.Robotstate.SHOOT_LOW) {
+    } else if (RobotContainer.getRobotState() == RobotContainer.Robotstate.SHOOT_LOW) {
       shooter.setShooterRpm(ShooterHeight.SHOOT_LOW.rpmInTicks);
     } else {
       shooter.setShooterRpm(0);

@@ -74,7 +74,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Climber m_climber = new Climber();
   private final Limelight m_limelight = new Limelight();
-  public static Robotstate m_robotstate;
+  private static Robotstate m_robotstate;
   private NetworkTableEntry robotstateNT;
   private NetworkTableEntry singlePlayerNT;;
 
@@ -138,6 +138,10 @@ public class RobotContainer {
       tankDrive = !tankDrive;
       configChangeTimer = System.currentTimeMillis() + configChangeCooldown;
     }
+  }
+
+  public static Robotstate getRobotState() {
+    return m_robotstate;
   }
 
   public void setRobotState() {
