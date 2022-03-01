@@ -21,24 +21,24 @@ public class RetractIntake extends CommandBase {
 
   @Override
   public void initialize() {
-    start = intake.getIntakeDeployRightPosition();
+    start = intake.getIntakePosition();
     end = 0;
   }
 
   @Override
   public void execute() {
     intake.SetIntakeRollerspeed(0);
-    progress = RobotHelper.calculateProgress(start, end, intake.getIntakeDeployRightPosition());
+    progress = RobotHelper.calculateProgress(start, end, intake.getIntakePosition());
     if (progress > 0.9) {
-      intake.setIntakeDeploySpeed(-0.2);
+      intake.setIntakeSpeed(-0.2);
     } else {
-      intake.setIntakeDeploySpeed(-1);
+      intake.setIntakeSpeed(-1);
     }
   }
 
   @Override
   public void end(boolean interrupted) {
-    intake.setIntakeDeploySpeed(0);
+    intake.setIntakeSpeed(0);
   }
 
   @Override

@@ -35,19 +35,19 @@ public class IndexBall extends CommandBase {
   @Override
   public void execute() {
     proximity = sorter.getColorSensorProxmity();
-    if (proximity > 225) {
-      sorter.Setsortercollectspeed(0);
+    if (proximity > 250) {
+      sorter.setLateralConveyorSpeed(0);
       if (shooter.isUptakeSensorTripped()) {
-        sorter.Setsorterspeed(0);
+        sorter.setSortWheelSpeed(0);
       } else {
-        sorter.Setsorterspeed(-1);
+        sorter.setSortWheelSpeed(-1);
       }
     } else {
-      sorter.Setsorterspeed(0);
+      sorter.setSortWheelSpeed(0);
       if (intake.isReverseLimitSwitchPressed()) {
-        sorter.Setsortercollectspeed(0);
+        sorter.setLateralConveyorSpeed(0);
       } else {
-        sorter.Setsortercollectspeed(1);
+        sorter.setLateralConveyorSpeed(1);
       }
     }
   }
@@ -55,7 +55,7 @@ public class IndexBall extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    sorter.Setsorterspeed(0);
-    sorter.Setsortercollectspeed(0);
+    sorter.setSortWheelSpeed(0);
+    sorter.setLateralConveyorSpeed(0);
   }
 }
