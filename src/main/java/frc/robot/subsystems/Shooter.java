@@ -10,6 +10,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -111,6 +114,7 @@ public class Shooter extends SubsystemBase {
     return shooterRear.getSelectedSensorVelocity();
   }
 
+  
   @Override
   public void periodic() {
   }

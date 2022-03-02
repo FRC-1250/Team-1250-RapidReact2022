@@ -8,7 +8,10 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -96,8 +99,38 @@ public class Drivetrain extends SubsystemBase {
   public double getTemperatue(WPI_TalonFX talonFX) {
     return talonFX.getTemperature();
   }
+  public NetworkTable table;
+  NetworkTableEntry tableTx;
+  double tx;
+
+  public void table(){
+     table = NetworkTableInstance.getDefault().getTable("limelight");
+     tableTx = table.getEntry("tx");
+     tx = tableTx.getDouble(-1);
+  }
+
+  public double Kp = -1;
+  public double minCommand = 0.3;
+  public double heading_error;
+  public double xCube = tx;
+  public double track(){
+    heading_error = -xCube;
+    double steering_adjust = 0.0;
+
+    if(xCube > 1){
+      steering_adjust = Kp * heading_error + minCommand;
+    }
+    if(xCube < 1){
+      steering_adjust = Kp * heading_error - minCommand;
+    }
+    return(steering_adjust);
+
+  }
+
+
 
   @Override
   public void periodic() {
+    table();
   }
 }

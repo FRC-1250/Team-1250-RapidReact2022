@@ -14,19 +14,26 @@ public class Drive extends CommandBase {
   private final PS4Controller e_Dualshock4;
   private final double e_driveThrottle;
 
+  public double zLimelight;
   public Drive(Drivetrain drivetrain, PS4Controller Dualshock4, double driveThrottle) {
     addRequirements(drivetrain);
     e_Drivetrain = drivetrain;
     e_Dualshock4 = Dualshock4;
     e_driveThrottle = driveThrottle;
+    zLimelight = e_Drivetrain.track();
   }
 
   @Override
   public void execute() {
+    if(e_Dualshock4.getR2Button() == true){
+      e_Drivetrain.driveArcade(e_Dualshock4.getLeftY() * e_driveThrottle, -zLimelight);
+    }
+    else{
     if (RobotContainer.RobotDriveType.TANK == RobotContainer.getDriveType()) {
       e_Drivetrain.driveTank(e_Dualshock4.getLeftY() * e_driveThrottle, e_Dualshock4.getRightY() * e_driveThrottle);
     } else if (RobotContainer.RobotDriveType.ARCADE == RobotContainer.getDriveType()) {
       e_Drivetrain.driveArcade(e_Dualshock4.getLeftY() * e_driveThrottle, e_Dualshock4.getRightX() * e_driveThrottle);
     }
   }
+}
 }
