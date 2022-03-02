@@ -13,6 +13,7 @@ public class DriveStraight extends CommandBase {
   private final Drivetrain e_Drivetrain;
   private final PS4Controller e_Dualshock4;
   private final double e_driveThrottle;
+  private final double gyroAdjustKp = 0.03;
 
   public DriveStraight(Drivetrain drivetrain, PS4Controller Dualshock4, double driveThrottle) {
     addRequirements(drivetrain);
@@ -28,7 +29,7 @@ public class DriveStraight extends CommandBase {
 
   @Override
   public void execute() {
-    e_Drivetrain.driveArcade(e_Dualshock4.getLeftY() * e_driveThrottle, 0);
-    // TODO: Why is the gyro so sensitive?
+    e_Drivetrain.driveArcade(e_Dualshock4.getLeftY() * e_driveThrottle,
+        Math.min(-(e_Drivetrain.getHeading() * gyroAdjustKp), 0.2));
   }
 }
