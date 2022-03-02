@@ -16,6 +16,7 @@ import frc.robot.utility.RobotHelper;
 public class DriveToPosition extends PIDCommand {
 
   private final Drivetrain m_drivetrain;
+  private final static double gyroAdjustKp = 0.03;
 
   /** Creates a new DriveToPos. */
   public DriveToPosition(Drivetrain drivetrain, double distance) {
@@ -25,10 +26,10 @@ public class DriveToPosition extends PIDCommand {
         // This should return the measurement
         drivetrain::getEncoderPosition,
         // This should return the setpoint (can also be a constant)
-        RobotHelper.ConvertInchesToMotorTicks(Constants.DRIVETRAIN_GEAR_RATIO, distance, 3, 2048,false),
+        RobotHelper.ConvertInchesToMotorTicks(Constants.DRIVETRAIN_GEAR_RATIO, distance, 3, 2048, false),
         // This uses the output
         output -> {
-          drivetrain.driveArcade(output, -drivetrain.getHeading());
+          drivetrain.driveArcade(output, Math.min(-(drivetrain.getHeading() * gyroAdjustKp), 0.2));
         },
         drivetrain);
     m_drivetrain = drivetrain;
