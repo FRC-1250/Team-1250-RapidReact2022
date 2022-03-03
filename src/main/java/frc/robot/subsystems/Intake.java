@@ -59,6 +59,10 @@ public class Intake extends SubsystemBase {
     return intake.getEncoder().getPosition();
   }
 
+  public boolean isIntakeBeyondBumpers() {
+    return getIntakePosition() > Constants.INTAKE_PASSED_BUMPER_REVOLUTION_DISTANCE;
+  }
+
   public boolean isReverseLimitSwitchPressed() {
     return RightreverseLimitSwitch.get() || LeftreverseLimtiSwitch.get();
   }
