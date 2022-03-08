@@ -8,10 +8,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -79,7 +76,7 @@ public class RobotContainer {
   private final Climber m_climber = new Climber();
   private final Limelight m_limelight = new Limelight();
   private static RobotDriveType m_robotDriveType;
-  private Robotstate m_robotstate;
+  private static Robotstate m_robotstate;
   private NetworkTableEntry robotstateNT;
   private NetworkTableEntry singlePlayerNT;;
 
@@ -93,10 +90,6 @@ public class RobotContainer {
   public enum RobotDriveType {
     ARCADE,
     TANK
-  }
-
-  public static RobotDriveType getDriveType() {
-    return m_robotDriveType;
   }
 
   /**
@@ -147,6 +140,14 @@ public class RobotContainer {
     return null;
   }
 
+  public static RobotDriveType getDriveType() {
+    return m_robotDriveType;
+  }
+
+  public static Robotstate getRobotState() {
+    return m_robotstate;
+  }
+
   public void changeNumberOfOperators() {
     if (options.get() && configChangeTimer < System.currentTimeMillis()) {
       singlePlayer = !singlePlayer;
@@ -163,10 +164,6 @@ public class RobotContainer {
       }
       configChangeTimer = System.currentTimeMillis() + configChangeCooldown;
     }
-  }
-
-  public static Robotstate getRobotState() {
-    return m_robotstate;
   }
 
   public void setRobotState() {
