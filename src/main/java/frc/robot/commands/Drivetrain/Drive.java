@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivetrain;
 public class Drive extends CommandBase {
   private final Drivetrain e_Drivetrain;
   private final PS4Controller e_Dualshock4;
-  private final double e_driveThrottle;
+  private double e_driveThrottle;
 
   public Drive(Drivetrain drivetrain, PS4Controller Dualshock4, double driveThrottle) {
     addRequirements(drivetrain);
@@ -23,6 +23,7 @@ public class Drive extends CommandBase {
 
   @Override
   public void execute() {
+    e_driveThrottle = Math.max(1 - e_Dualshock4.getR2Axis(), 0.5);
     if (RobotContainer.RobotDriveType.TANK == RobotContainer.getDriveType()) {
       e_Drivetrain.driveTank(e_Dualshock4.getLeftY() * e_driveThrottle, e_Dualshock4.getRightY() * e_driveThrottle);
     } else if (RobotContainer.RobotDriveType.ARCADE == RobotContainer.getDriveType()) {

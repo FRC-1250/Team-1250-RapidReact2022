@@ -12,14 +12,14 @@ public class DriveStraight extends CommandBase {
 
   private final Drivetrain e_Drivetrain;
   private final PS4Controller e_Dualshock4;
-  private final double e_driveThrottle;
+  private double e_driveThrottle;
+  private double e_angleAdjust;
   private final double gyroAdjustKp = 0.03;
 
-  public DriveStraight(Drivetrain drivetrain, PS4Controller Dualshock4, double driveThrottle) {
+  public DriveStraight(Drivetrain drivetrain, PS4Controller Dualshock4) {
     addRequirements(drivetrain);
     e_Drivetrain = drivetrain;
     e_Dualshock4 = Dualshock4;
-    e_driveThrottle = driveThrottle;
   }
 
   @Override
@@ -29,7 +29,8 @@ public class DriveStraight extends CommandBase {
 
   @Override
   public void execute() {
-    e_Drivetrain.driveArcade(e_Dualshock4.getLeftY() * e_driveThrottle,
-        Math.min(-(e_Drivetrain.getHeading() * gyroAdjustKp), 0.2));
+    e_driveThrottle = e_Dualshock4.getLeftY() * Math.max(1 - e_Dualshock4.getR2Axis(), 0.5);
+    e_angleAdjust = Math.min(-(e_Drivetrain.getHeading() * gyroAdjustKp), 0.2);
+    e_Drivetrain.driveArcade(e_driveThrottle, e_angleAdjust);
   }
 }

@@ -55,6 +55,7 @@ public class RobotContainer {
   JoystickButton square = new JoystickButton(driveGamepad, PS4Controller.Button.kSquare.value);
   JoystickButton options = new JoystickButton(driveGamepad, PS4Controller.Button.kOptions.value);
   JoystickButton share = new JoystickButton(driveGamepad, PS4Controller.Button.kShare.value);
+  JoystickButton touchpad = new JoystickButton(driveGamepad, PS4Controller.Button.kTouchpad.value);
 
   Joystick operatorGamepad = new Joystick(1);
   JoystickButton Y = new JoystickButton(operatorGamepad, 4);
@@ -117,17 +118,25 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    shootHigh.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_FRONT));
+    // Shooting
+    shootHigh.whileActiveOnce(
+        new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_FRONT));
     track.whileActiveOnce(new MoveToTarget(m_limelight, m_drivetrain));
-    shootLow.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_FRONT));
+    shootLow.whileActiveOnce(
+        new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_FRONT));
+
+    // Climbing
     extendClimber.whileActiveOnce(new ExtendClimber(m_climber));
     extendClimberToLow.whileActiveOnce(new ExtendClimberWithPosition(m_climber, ClimbHeight.CLIMB_MID_RUNG));
     retractClimber.whileActiveOnce(new RetractClimber(m_climber, m_systemMonitor));
+
+    // Intaking
     extendIntake.whenActive(new ExtendIntake(m_intake));
     retractIntake.whenActive(new RetractIntake(m_intake));
 
-    r2.whileActiveOnce(new Drive(m_drivetrain, driveGamepad, 0.5));
-    l2.whileActiveOnce(new DriveStraight(m_drivetrain, driveGamepad, 1));
+    // Drive mods
+    // Driver R2 is attached to normal driving and driving straight as a throttle input!
+    touchpad.whileActiveOnce(new DriveStraight(m_drivetrain, driveGamepad));
   }
 
   /**
