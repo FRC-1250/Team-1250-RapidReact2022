@@ -13,6 +13,7 @@ public class ExtendIntake extends CommandBase {
   private final double intakeRollerSpeed;
   private double start;
   private double end;
+  private double progress = 0;
 
   public ExtendIntake(Intake m_intake) {
     intake = m_intake;
@@ -28,23 +29,27 @@ public class ExtendIntake extends CommandBase {
 
   @Override
   public void initialize() {
-    start = intake.getIntakeDeployRightPosition();
+    start = intake.getIntakePosition();
     end = 85; // CHANGE ME
   }
 
   @Override
   public void execute() {
-    intake.SetIntakeRollerspeed(intakeRollerSpeed);
-    
-    if (RobotHelper.isDoneTraveling(start, end, intake.getIntakeDeployRightPosition())) {
-      intake.setIntakeDeploySpeed(0);
+    progress = RobotHelper.calculateProgress(start, end, intake.getIntakePosition());
+
+    if (progress > 0.30) {
+      intake.SetIntakeRollerspeed(intakeRollerSpeed);
+    }
+
+    if (progress > 0.90) {
+      intake.setIntakeSpeed(0);
     } else {
-      intake.setIntakeDeploySpeed(1);
+      intake.setIntakeSpeed(1);
     }
   }
 
   @Override
   public void end(boolean interrupted) {
-    intake.setIntakeDeploySpeed(0);
+    intake.setIntakeSpeed(0);
   }
 }

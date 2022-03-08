@@ -17,21 +17,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-
   WPI_TalonFX intakeRoller = new WPI_TalonFX(Constants.intakeRoller_CAN_ID);
-  CANSparkMax intakeDeployRight = new CANSparkMax(Constants.intakeDeployRight_CAN_ID, MotorType.kBrushless);
+  CANSparkMax intake = new CANSparkMax(Constants.intakeDeployRight_CAN_ID, MotorType.kBrushless);
   DigitalInput RightreverseLimitSwitch = new DigitalInput(Constants.INTAKE_RIGHT_REVERSE_LIMITSWITCH_DIO_ID);
   DigitalInput LeftreverseLimtiSwitch = new DigitalInput(Constants.INTAKE_LEFT_REVERSE_LIMITSWITCH_DIO_ID);
-
-  
   private NetworkTableEntry ReverseLimitSwitch;
   private NetworkTableEntry IntakePosition;
-  /** Creates a new Intake. */
+
   public Intake() {
     configureShuffleBoard();
-    configureSparkMax(intakeDeployRight, true);
-
-    
+    configureSparkMax(intake, true);
   }
 
   private void configureSparkMax(CANSparkMax canSparkMax, boolean inverted) {
@@ -44,37 +39,38 @@ public class Intake extends SubsystemBase {
     ShuffleboardLayout layout = Constants.PRIMARY_TAB.getLayout("Intake", BuiltInLayouts.kList).withSize(2, 3);
     layout.add("Intake command", this);
     ReverseLimitSwitch = layout.add("RE Limit switch", false).getEntry();
-    IntakePosition = layout.add("IntakePosition",0).getEntry();
+    IntakePosition = layout.add("IntakePosition", 0).getEntry();
   }
 
   public void updateShuffleBoard() {
-   ReverseLimitSwitch.setBoolean(isReverseLimitSwitchPressed());
-   IntakePosition.setNumber(getIntakeDeployRightPosition());
+    ReverseLimitSwitch.setBoolean(isReverseLimitSwitchPressed());
+    IntakePosition.setNumber(getIntakePosition());
   }
 
   public void SetIntakeRollerspeed(double speed) {
     intakeRoller.set(speed);
   }
 
-  public void setIntakeDeploySpeed(double speed) {
-    intakeDeployRight.set(speed);
+  public void setIntakeSpeed(double speed) {
+    intake.set(speed);
   }
 
-  public double getIntakeDeployRightPosition() {
-    return intakeDeployRight.getEncoder().getPosition();
+  public double getIntakePosition() {
+    return intake.getEncoder().getPosition();
   }
+
+  public boolean isIntakeBeyondBumpers() {
+    return getIntakePosition() > Constants.INTAKE_PASSED_BUMPER_REVOLUTION_DISTANCE;
+  }
+
   public boolean isReverseLimitSwitchPressed() {
     return RightreverseLimitSwitch.get() || LeftreverseLimtiSwitch.get();
-    //return intakeDeployLeft.getReverseLimitSwitch(Type.kNormallyClosed).isPressed();
   }
-  
-  
- 
 
   @Override
   public void periodic() {
-    if (isReverseLimitSwitchPressed()){
-      intakeDeployRight.getEncoder().setPosition(0);
+    if (isReverseLimitSwitchPressed()) {
+      intake.getEncoder().setPosition(0);
     }
   }
 }

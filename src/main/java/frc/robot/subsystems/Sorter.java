@@ -24,7 +24,7 @@ import frc.robot.Constants;
 public class Sorter extends SubsystemBase {
 
   private CANSparkMax sorter = new CANSparkMax(Constants.sorter_CAN_ID, MotorType.kBrushless);
-  private CANSparkMax sorterCollect = new CANSparkMax(Constants.sorterCollect_CAN_ID, MotorType.kBrushless);
+  private CANSparkMax lateralConveyor = new CANSparkMax(Constants.sorterCollect_CAN_ID, MotorType.kBrushless);
 
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -64,11 +64,11 @@ public class Sorter extends SubsystemBase {
     miss = Constants.SORTER_TAB.add("Miss", 0).getEntry();
   }
 
-  public void Setsortercollectspeed(double speed) {
-    sorterCollect.set(speed);
+  public void setLateralConveyorSpeed(double speed) {
+    lateralConveyor.set(speed);
   }
 
-  public void Setsorterspeed(double speed) {
+  public void setSortWheelSpeed(double speed) {
     sorter.set(speed);
   }
 

@@ -56,10 +56,10 @@ public class ShootBallVelocityControl extends CommandBase {
 
     if (shooterPrimed && shooter.isUptakeSensorTripped()) {
       shooter.setUptakeConveyorSpeed(1);
-      sorter.Setsorterspeed(0);
+      sorter.setSortWheelSpeed(0);
     } else if (shooterPrimed && !shooter.isUptakeSensorTripped()) {
       shooter.setUptakeConveyorSpeed(0.5);
-      sorter.Setsorterspeed(-0.5);
+      sorter.setSortWheelSpeed(-0.5);
     }
   }
 

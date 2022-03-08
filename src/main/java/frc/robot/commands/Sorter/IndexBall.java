@@ -15,8 +15,6 @@ public class IndexBall extends CommandBase {
   private final Shooter shooter;
   private final Intake intake;
 
-  private double proximity;
-
   public IndexBall(Sorter m_sorter, Shooter m_shooter, Intake m_intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_sorter);
@@ -34,20 +32,19 @@ public class IndexBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    proximity = sorter.getColorSensorProxmity();
-    if (proximity > 225) {
-      sorter.Setsortercollectspeed(0);
+    if (sorter.getColorSensorProxmity() > 250) {
+      sorter.setLateralConveyorSpeed(0);
       if (shooter.isUptakeSensorTripped()) {
-        sorter.Setsorterspeed(0);
+        sorter.setSortWheelSpeed(0);
       } else {
-        sorter.Setsorterspeed(-1);
+        sorter.setSortWheelSpeed(-1);
       }
     } else {
-      sorter.Setsorterspeed(0);
-      if (intake.isReverseLimitSwitchPressed()) {
-        sorter.Setsortercollectspeed(0);
+      sorter.setSortWheelSpeed(0);
+      if (intake.isIntakeBeyondBumpers()) {
+        sorter.setLateralConveyorSpeed(1);
       } else {
-        sorter.Setsortercollectspeed(1);
+        sorter.setLateralConveyorSpeed(0);
       }
     }
   }
@@ -55,7 +52,7 @@ public class IndexBall extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    sorter.Setsorterspeed(0);
-    sorter.Setsortercollectspeed(0);
+    sorter.setSortWheelSpeed(0);
+    sorter.setLateralConveyorSpeed(0);
   }
 }

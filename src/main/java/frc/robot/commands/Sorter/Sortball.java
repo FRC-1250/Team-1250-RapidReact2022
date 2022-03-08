@@ -39,7 +39,7 @@ public class Sortball extends CommandBase {
     matchedColor = sorter.matchColor();
     sorter.sendDetectedColorToShuffleBoard(matchedColor);
     if (proximity > 225){
-      sorter.Setsortercollectspeed(0);
+      sorter.setLateralConveyorSpeed(0);
     }
     if (proximity > 400) {
       
@@ -53,25 +53,25 @@ public class Sortball extends CommandBase {
         sorter.hits.setNumber(hit);
         sorter.miss.setNumber(miss);
         if (shooter.isUptakeSensorTripped()) {
-          sorter.Setsorterspeed(0);
+          sorter.setSortWheelSpeed(0);
         } else {
-          sorter.Setsorterspeed(-1);
+          sorter.setSortWheelSpeed(-1);
         }
         hit = 0;
         miss = 0;
       } else if (miss >= sampleRate) {
         sorter.hits.setNumber(hit);
         sorter.miss.setNumber(miss);
-        sorter.Setsorterspeed(1);
+        sorter.setSortWheelSpeed(1);
         hit = 0;
         miss = 0;
       }
     } else {
       hit = 0;
       miss = 0;
-      sorter.Setsorterspeed(0);
+      sorter.setSortWheelSpeed(0);
       if (!intake.isReverseLimitSwitchPressed()) {
-        sorter.Setsortercollectspeed(.7);
+        sorter.setLateralConveyorSpeed(.7);
       }
     }
   }
@@ -79,7 +79,7 @@ public class Sortball extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    sorter.Setsorterspeed(0);
-    sorter.Setsortercollectspeed(0);
+    sorter.setSortWheelSpeed(0);
+    sorter.setLateralConveyorSpeed(0);
   }
 }

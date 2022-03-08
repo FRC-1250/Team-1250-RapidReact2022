@@ -144,14 +144,26 @@ public class RobotHelper {
         return Math.abs((start - current) / diffTotal);
     }
 
-    public static boolean isDoneTraveling(double start, double end, double current) {
+    /**
+     * @param start               starting position
+     * @param end                 ending position
+     * @param current             current position
+     * @param acceptanceThreshold progress percentage that is acceptable to stop at, number between 0 and 1. 0 = 0%, 1 = 100%.
+     * @return
+     */
+
+    public static boolean isDoneTraveling(double start, double end, double current, double acceptanceThreshold) {
         double progressPercent = calculateProgress(start, end, current);
-        if (progressPercent <= 0.90) {
+        if (progressPercent <= acceptanceThreshold) {
             return false;
         } else {
             return true;
         }
-    // progess percent was changed to 90, Increased dead zone for intake roller
+    }
+
+    public static boolean isDoneTraveling(double start, double end, double current) {
+        return isDoneTraveling(start, end, current, 0.99);
+        // progess percent was changed to 90, Increased dead zone for intake roller
     }
 
     public static double constantMotorController(double speed, double start,
