@@ -39,7 +39,7 @@ public class Intake extends SubsystemBase {
     ShuffleboardLayout layout = Constants.PRIMARY_TAB.getLayout("Intake", BuiltInLayouts.kList).withSize(2, 3);
     layout.add("Intake command", this);
     ReverseLimitSwitch = layout.add("RE Limit switch", false).getEntry();
-    IntakePosition = layout.add("IntakePosition", 0).getEntry();
+    IntakePosition = layout.add("Intake Position", 0).getEntry();
   }
 
   public void updateShuffleBoard() {

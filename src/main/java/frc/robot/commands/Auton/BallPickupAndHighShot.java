@@ -21,10 +21,10 @@ import frc.robot.subsystems.Shooter.ShooterHeight;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class BallPickupAndShoot extends SequentialCommandGroup {
+public class BallPickupAndHighShot extends SequentialCommandGroup {
   /** Creates a new BallPickupAndShoot. */
 
-  public BallPickupAndShoot(Intake cmd_intake, Shooter cmd_Shooter, Drivetrain cmd_drivetrain, Sorter cmd_sorter) {
+  public BallPickupAndHighShot(Intake cmd_intake, Shooter cmd_Shooter, Drivetrain cmd_drivetrain, Sorter cmd_sorter) {
     addCommands(new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_BACK), new ExtendIntake(cmd_intake),
         new DriveToPosition(cmd_drivetrain, -36), new WaitCommand(0.5),
         new DriveToPosition(cmd_drivetrain, 36), new RetractIntake(cmd_intake),
