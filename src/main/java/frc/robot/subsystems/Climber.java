@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -16,6 +17,18 @@ public class Climber extends SubsystemBase {
 
   Servo ratchetServo = new Servo(Constants.ratchetServo_PWM_ID);
   WPI_TalonFX climberHook = new WPI_TalonFX(Constants.climberHook_CAN_ID);
+  private NetworkTableEntry hookPos;
+
+  public enum ClimbHeight {
+    CLIMB_MID_RUNG(-189439),
+    CLIMB_LOW_RUNG(-72141);
+
+    public final double heightInTicks;
+
+    ClimbHeight(double heightInTicks) {
+      this.heightInTicks = heightInTicks;
+    }
+  }
 
   public Climber() {
     configureShuffleBoard();
@@ -24,9 +37,11 @@ public class Climber extends SubsystemBase {
   private void configureShuffleBoard() {
     ShuffleboardLayout layout = Constants.PRIMARY_TAB.getLayout("Climber", BuiltInLayouts.kList).withSize(2, 3);
     layout.add("Climber command", this);
+    hookPos = layout.add("Climber hook pos", 0).getEntry();
   }
 
   public void updateShuffleBoard() {
+    hookPos.setNumber(getClimberHookPosition());
   }
 
   public void setRatchetPosition(double position) {

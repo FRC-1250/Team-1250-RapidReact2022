@@ -6,19 +6,28 @@ package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.SystemMonitor;
 
 public class RetractClimber extends CommandBase {
   private final Climber m_climber;
+  private final SystemMonitor m_systemMonitor;
+  private double amps;
 
-  public RetractClimber(Climber climber) {
+  public RetractClimber(Climber climber, SystemMonitor systemMonitor) {
     m_climber = climber;
+    m_systemMonitor = systemMonitor;
     addRequirements(climber);
   }
 
   @Override
   public void execute() {
     m_climber.setRatchetPosition(0.2);
-    m_climber.setClimberHookSpeed(1);
+    amps = m_systemMonitor.getCurrentByChannel(17);
+    if (amps > 5) {
+      m_climber.setClimberHookSpeed(1);
+    } else if (amps <= 5) {
+      m_climber.setClimberHookSpeed(0.3);
+    }
   }
 
   @Override
