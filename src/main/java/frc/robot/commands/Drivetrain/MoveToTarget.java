@@ -37,21 +37,21 @@ public class MoveToTarget extends CommandBase {
 
   @Override
   public void execute() {
-    // tx = limelight.getXOffset();
-    // ty = limelight.getYOffset();
-    // heading_error = -tx;
-    // distance_error = -ty;
-    // steering_adjust = 0.0;
+    tx = limelight.getXOffset();
+    ty = limelight.getYOffset();
+    heading_error = -tx;
+    distance_error = -ty;
+    steering_adjust = 0.0;
 
-    // if (tx > 1.0) {
-    //   steering_adjust = KpAim * heading_error - min_aim_command;
-    // } else if (tx < 1.0) {
-    //   steering_adjust = KpAim * heading_error + min_aim_command;
-    // }
-    // distance_adjust = KpDistance * distance_error;
-    // left_command += steering_adjust + distance_adjust;
-    // right_command -= steering_adjust + distance_adjust;
-    // drivetrain.driveTank(left_command, right_command);
+    if (tx > 1.0) {
+      steering_adjust = KpAim * heading_error - min_aim_command;
+    } else if (tx < 1.0) {
+      steering_adjust = KpAim * heading_error + min_aim_command;
+    }
+    distance_adjust = KpDistance * distance_error;
+    left_command += steering_adjust + distance_adjust;
+    right_command -= steering_adjust + distance_adjust;
+    drivetrain.driveTank(left_command, right_command);
   }
 
   @Override
