@@ -14,6 +14,8 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Sorter;
+import frc.robot.subsystems.Shooter.ShooterDirection;
+import frc.robot.subsystems.Shooter.ShooterHeight;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -24,6 +26,7 @@ public class BallPickupAndShoot extends SequentialCommandGroup {
   public BallPickupAndShoot(Intake cmd_intake, Shooter cmd_Shooter, Drivetrain cmd_drivetrain, Sorter cmd_sorter) {
     addCommands(new ExtendIntake(cmd_intake), new DriveToPosition(cmd_drivetrain, -36), new WaitCommand(0.5),
         new DriveToPosition(cmd_drivetrain, 36), new RetractIntake(cmd_intake),
-        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, 21500, false));
+        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_BACK,
+            5000));
   }
 }

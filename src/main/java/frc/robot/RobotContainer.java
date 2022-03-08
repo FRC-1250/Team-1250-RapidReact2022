@@ -34,6 +34,8 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.SystemMonitor;
 import frc.robot.subsystems.Sorter;
 import frc.robot.subsystems.Climber.ClimbHeight;
+import frc.robot.subsystems.Shooter.ShooterDirection;
+import frc.robot.subsystems.Shooter.ShooterHeight;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -81,7 +83,7 @@ public class RobotContainer {
   private NetworkTableEntry robotstateNT;
   private NetworkTableEntry singlePlayerNT;;
 
-  private enum Robotstate {
+  public enum Robotstate {
     INTAKE,
     CLIMB,
     SHOOT_HIGH,
@@ -122,9 +124,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    shootHigh.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, 21500, true));
+    shootHigh.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_FRONT));
     track.whileActiveOnce(new MoveToTarget(m_limelight, m_drivetrain));
-    shootLow.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, 7500, true));
+    shootLow.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_FRONT));
     extendClimber.whileActiveOnce(new ExtendClimber(m_climber));
     extendClimberToLow.whileActiveOnce(new ExtendClimberWithPosition(m_climber, ClimbHeight.CLIMB_MID_RUNG));
     retractClimber.whileActiveOnce(new RetractClimber(m_climber, m_systemMonitor));
@@ -161,6 +163,10 @@ public class RobotContainer {
       }
       configChangeTimer = System.currentTimeMillis() + configChangeCooldown;
     }
+  }
+
+  public static Robotstate getRobotState() {
+    return m_robotstate;
   }
 
   public void setRobotState() {
