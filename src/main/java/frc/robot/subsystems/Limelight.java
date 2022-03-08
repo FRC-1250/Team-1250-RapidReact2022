@@ -21,7 +21,6 @@ public class Limelight extends SubsystemBase {
   private double tx, ty, tv, ta = -1;
 
   public Limelight() {
-    setLEDMode(1);
   }
 
   public double getXOffset() {
@@ -35,6 +34,14 @@ public class Limelight extends SubsystemBase {
   public double getTargetAreaPercent() {
     return ta;
   }
+
+  /**
+   * ledMode Sets limelight’s LED state
+   * 0 use the LED Mode set in the current pipeline
+   * 1 force off
+   * 2 force blink
+   * 3 force on
+   */
 
   public void setLEDMode(int value) {
     if (value > 3 || value < 0)
