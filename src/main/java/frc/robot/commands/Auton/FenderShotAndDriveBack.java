@@ -6,6 +6,7 @@ package frc.robot.commands.Auton;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Drivetrain.DriveToPosition;
+import frc.robot.commands.Shooter.MoveServoToPosition;
 import frc.robot.commands.Shooter.ShootBallVelocityControl;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
@@ -22,8 +23,8 @@ public class FenderShotAndDriveBack extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_BACK,
-            5000),
+      new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_BACK),
+        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH,5000),
         new DriveToPosition(cmd_drivetrain, -36));
   }
 }

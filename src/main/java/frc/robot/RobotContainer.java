@@ -31,7 +31,6 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.SystemMonitor;
 import frc.robot.subsystems.Sorter;
 import frc.robot.subsystems.Climber.ClimbHeight;
-import frc.robot.subsystems.Shooter.ShooterDirection;
 import frc.robot.subsystems.Shooter.ShooterHeight;
 
 /**
@@ -62,6 +61,8 @@ public class RobotContainer {
   JoystickButton B = new JoystickButton(operatorGamepad, 3);
   JoystickButton A = new JoystickButton(operatorGamepad, 2);
   JoystickButton X = new JoystickButton(operatorGamepad, 1);
+  JoystickButton LB = new JoystickButton(operatorGamepad, 5);
+  JoystickButton RB = new JoystickButton(operatorGamepad, 6);
 
   boolean singlePlayer = false;
   long shuffleBoardUpdateTimer = 0;
@@ -84,7 +85,11 @@ public class RobotContainer {
   public enum Robotstate {
     INTAKE,
     CLIMB,
+    SHOOT_HIGH_BACK,
+    SHOOT_HIGH_FENDER_BACK,
+    SHOOT_LOW_BACK,
     SHOOT_HIGH,
+    SHOOT_HIGH_FENDER,
     SHOOT_LOW
   }
 
@@ -119,11 +124,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Shooting
-    shootHigh.whileActiveOnce(
-        new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_FRONT));
+    shootHigh.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH));
     track.whileActiveOnce(new MoveToTarget(m_limelight, m_drivetrain));
-    shootLow.whileActiveOnce(
-        new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_FRONT));
+    shootHighFender.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_HIGH_FENDER));
+    shootLow.whileActiveOnce(new ShootBallVelocityControl(m_shooter, m_sorter, ShooterHeight.SHOOT_LOW));
 
     // Climbing
     extendClimber.whileActiveOnce(new ExtendClimber(m_climber));
@@ -135,7 +139,8 @@ public class RobotContainer {
     retractIntake.whenActive(new RetractIntake(m_intake));
 
     // Drive mods
-    // Driver R2 is attached to normal driving and driving straight as a throttle input!
+    // Driver R2 is attached to normal driving and driving straight as a throttle
+    // input!
     touchpad.whileActiveOnce(new DriveStraight(m_drivetrain, driveGamepad));
   }
 
@@ -176,6 +181,8 @@ public class RobotContainer {
   }
 
   public void setRobotState() {
+    boolean isShootBackButtonPressed = false;
+    boolean isShootHighFenderButtonPressed = false;
     boolean isShootHighModeButtonPressed = false;
     boolean isShootLowModeButtonPressed = false;
     boolean isClimbModeButtonPressed = false;
@@ -188,10 +195,20 @@ public class RobotContainer {
       isShootHighModeButtonPressed = Y.get();
       isShootLowModeButtonPressed = A.get();
       isClimbModeButtonPressed = X.get();
+      isShootHighFenderButtonPressed = B.get();
+      isShootBackButtonPressed = RB.get();
     }
 
-    if (isShootHighModeButtonPressed) {
+    if (isShootBackButtonPressed && isShootHighModeButtonPressed) {
+      m_robotstate = Robotstate.SHOOT_HIGH_BACK;
+    } else if (isShootBackButtonPressed && isShootHighFenderButtonPressed) {
+      m_robotstate = Robotstate.SHOOT_HIGH_FENDER_BACK;
+    } else if (isShootBackButtonPressed && isShootLowModeButtonPressed) {
+      m_robotstate = Robotstate.SHOOT_LOW_BACK;
+    } else if (isShootHighModeButtonPressed) {
       m_robotstate = Robotstate.SHOOT_HIGH;
+    } else if (isShootHighFenderButtonPressed) {
+      m_robotstate = Robotstate.SHOOT_HIGH_FENDER_BACK;
     } else if (isShootLowModeButtonPressed) {
       m_robotstate = Robotstate.SHOOT_LOW;
     } else if (isClimbModeButtonPressed) {
@@ -218,7 +235,7 @@ public class RobotContainer {
   Trigger shootHigh = new Trigger() {
     @Override
     public boolean get() {
-      return Robotstate.SHOOT_HIGH == m_robotstate && r1.get();
+      return (Robotstate.SHOOT_HIGH == m_robotstate || Robotstate.SHOOT_HIGH_BACK == m_robotstate) && r1.get();
     }
   };
 
@@ -233,7 +250,16 @@ public class RobotContainer {
   Trigger shootLow = new Trigger() {
     @Override
     public boolean get() {
-      return Robotstate.SHOOT_LOW == m_robotstate && r1.get();
+      return (Robotstate.SHOOT_LOW == m_robotstate || Robotstate.SHOOT_LOW_BACK == m_robotstate) && r1.get();
+    }
+  };
+
+  // Shoot high fender
+  Trigger shootHighFender = new Trigger() {
+    @Override
+    public boolean get() {
+      return (Robotstate.SHOOT_HIGH_FENDER == m_robotstate || Robotstate.SHOOT_HIGH_FENDER_BACK == m_robotstate)
+          && r1.get();
     }
   };
 

@@ -32,6 +32,8 @@ public class Shooter extends SubsystemBase {
 
   public enum ShooterDirection {
     SHOOT_FRONT(0.25),
+    SHOOT_FRONT_FENDER(0.35),
+    SHOOT_BACK_FEDNER(0.65),
     SHOOT_BACK(0.75);
 
     public final double servoPosition;
@@ -43,6 +45,7 @@ public class Shooter extends SubsystemBase {
 
   public enum ShooterHeight {
     SHOOT_HIGH(21000),
+    SHOOT_HIGH_FENDER(18000),
     SHOOT_LOW(7500);
 
     public final double rpmInTicks;

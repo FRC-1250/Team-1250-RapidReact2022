@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Drivetrain.DriveToPosition;
 import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.RetractIntake;
+import frc.robot.commands.Shooter.MoveServoToPosition;
 import frc.robot.commands.Shooter.ShootBallVelocityControl;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -24,9 +25,10 @@ public class BallPickupAndShoot extends SequentialCommandGroup {
   /** Creates a new BallPickupAndShoot. */
 
   public BallPickupAndShoot(Intake cmd_intake, Shooter cmd_Shooter, Drivetrain cmd_drivetrain, Sorter cmd_sorter) {
-    addCommands(new ExtendIntake(cmd_intake), new DriveToPosition(cmd_drivetrain, -36), new WaitCommand(0.5),
+    addCommands(new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_BACK), new ExtendIntake(cmd_intake),
+        new DriveToPosition(cmd_drivetrain, -36), new WaitCommand(0.5),
         new DriveToPosition(cmd_drivetrain, 36), new RetractIntake(cmd_intake),
-        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, ShooterDirection.SHOOT_BACK,
+        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH,
             5000));
   }
 }

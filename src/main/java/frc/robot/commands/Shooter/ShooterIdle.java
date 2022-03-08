@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.ShooterDirection;
 import frc.robot.subsystems.Shooter.ShooterHeight;
 
 public class ShooterIdle extends CommandBase {
@@ -32,12 +33,34 @@ public class ShooterIdle extends CommandBase {
       }
     }
 
-    if (RobotContainer.getRobotState() == RobotContainer.Robotstate.SHOOT_HIGH) {
-      shooter.setShooterRpm(ShooterHeight.SHOOT_HIGH.rpmInTicks);
-    } else if (RobotContainer.getRobotState() == RobotContainer.Robotstate.SHOOT_LOW) {
-      shooter.setShooterRpm(ShooterHeight.SHOOT_LOW.rpmInTicks);
-    } else {
-      shooter.setShooterRpm(0);
+    switch (RobotContainer.getRobotState()) {
+      case SHOOT_HIGH_BACK:
+        shooter.setShooterRpm(ShooterHeight.SHOOT_HIGH.rpmInTicks);
+        shooter.setShooterServoPosition(ShooterDirection.SHOOT_BACK.servoPosition);
+        break;
+      case SHOOT_HIGH_FENDER_BACK:
+        shooter.setShooterRpm(ShooterHeight.SHOOT_HIGH_FENDER.rpmInTicks);
+        shooter.setShooterServoPosition(ShooterDirection.SHOOT_BACK_FEDNER.servoPosition);
+        break;
+      case SHOOT_LOW_BACK:
+        shooter.setShooterRpm(ShooterHeight.SHOOT_LOW.rpmInTicks);
+        shooter.setShooterServoPosition(ShooterDirection.SHOOT_BACK.servoPosition);
+        break;
+      case SHOOT_HIGH:
+        shooter.setShooterRpm(ShooterHeight.SHOOT_HIGH.rpmInTicks);
+        shooter.setShooterServoPosition(ShooterDirection.SHOOT_FRONT.servoPosition);
+        break;
+      case SHOOT_HIGH_FENDER:
+        shooter.setShooterRpm(ShooterHeight.SHOOT_HIGH_FENDER.rpmInTicks);
+        shooter.setShooterServoPosition(ShooterDirection.SHOOT_FRONT_FENDER.servoPosition);
+        break;
+      case SHOOT_LOW:
+        shooter.setShooterRpm(ShooterHeight.SHOOT_LOW.rpmInTicks);
+        shooter.setShooterServoPosition(ShooterDirection.SHOOT_FRONT.servoPosition);
+        break;
+      default:
+        shooter.setShooterRpm(0);
+        break;
     }
   }
 }
