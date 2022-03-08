@@ -17,7 +17,6 @@ public class Climber extends SubsystemBase {
 
   Servo ratchetServo = new Servo(Constants.ratchetServo_PWM_ID);
   WPI_TalonFX climberHook = new WPI_TalonFX(Constants.climberHook_CAN_ID);
-  private NetworkTableEntry hookCurrentDraw;
   private NetworkTableEntry hookPos;
 
   public enum ClimbHeight {
@@ -38,12 +37,10 @@ public class Climber extends SubsystemBase {
   private void configureShuffleBoard() {
     ShuffleboardLayout layout = Constants.PRIMARY_TAB.getLayout("Climber", BuiltInLayouts.kList).withSize(2, 3);
     layout.add("Climber command", this);
-    hookCurrentDraw = layout.add("Climber hook current", 0).getEntry();
     hookPos = layout.add("Climber hook pos", 0).getEntry();
   }
 
   public void updateShuffleBoard() {
-    hookCurrentDraw.setNumber(getClimberHookCurrent());
     hookPos.setNumber(getClimberHookPosition());
   }
 
@@ -53,10 +50,6 @@ public class Climber extends SubsystemBase {
 
   public void setClimberHookSpeed(double speed) {
     climberHook.set(speed);
-  }
-
-  public double getClimberHookCurrent() {
-    return climberHook.getOutputCurrent();
   }
 
   public void resetClimberHookPositon() {
