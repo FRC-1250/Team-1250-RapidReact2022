@@ -27,6 +27,8 @@ public class Intake extends SubsystemBase {
   public Intake() {
     configureShuffleBoard();
     configureSparkMax(intake, true);
+    SystemMonitor.getInstance().registerDevice(intakeRoller);
+    SystemMonitor.getInstance().registerDevice(intake);
   }
 
   private void configureSparkMax(CANSparkMax canSparkMax, boolean inverted) {

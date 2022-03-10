@@ -71,7 +71,7 @@ public class RobotContainer {
   long configChangeCooldown = 250;
 
   private final Sorter m_sorter = new Sorter();
-  private final SystemMonitor m_systemMonitor = new SystemMonitor();
+  private final SystemMonitor m_systemMonitor = SystemMonitor.getInstance();
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Shooter m_shooter = new Shooter();
   private final Intake m_intake = new Intake();
