@@ -9,9 +9,13 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Auton.BallPickupAndHighShot;
+import frc.robot.commands.Auton.HighShotAndDriveBack;
+import frc.robot.commands.Auton.LowShotAndDriveBack;
 import frc.robot.commands.Climber.ExtendClimber;
 import frc.robot.commands.Climber.ExtendClimberWithPosition;
 import frc.robot.commands.Climber.RetractClimber;
@@ -77,6 +81,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Climber m_climber = new Climber();
   private final Limelight m_limelight = new Limelight();
+  private SendableChooser<Command> m_chooser = new SendableChooser<>();
   private static RobotDriveType m_robotDriveType;
   private static Robotstate m_robotstate;
   private NetworkTableEntry robotstateNT;
@@ -107,9 +112,19 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(new Drive(m_drivetrain, driveGamepad, 1));
     m_sorter.setDefaultCommand(new IndexBall(m_sorter, m_shooter, m_intake));
     m_shooter.setDefaultCommand(new ShooterIdle(m_shooter, m_intake));
-    robotstateNT = Constants.PRIMARY_TAB.add("Robot state", "").withPosition(0, 4).getEntry();
-    singlePlayerNT = Constants.PRIMARY_TAB.add("Single player", false).withPosition(0, 5).getEntry();
+    robotstateNT = Constants.PRIMARY_TAB.add("Robot state", "").withPosition(8, 2).getEntry();
+    singlePlayerNT = Constants.PRIMARY_TAB.add("Single player", false).withPosition(9, 2).getEntry();
 
+    m_chooser.setDefaultOption("High shot + taxi", new HighShotAndDriveBack(m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("2 High shot + taxi", new BallPickupAndHighShot(m_intake, m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("Low shot + taxi", new LowShotAndDriveBack(m_shooter, m_drivetrain, m_sorter));
+    Constants.PRIMARY_TAB.add("Auto", m_chooser).withSize(2, 1).withPosition(8, 1);
+
+    Constants.PRIMARY_TAB.add("Drivetrain", m_drivetrain).withSize(2, 1).withPosition(0, 0);
+    Constants.PRIMARY_TAB.add("Climber", m_climber).withSize(2, 1).withPosition(2, 0);
+    Constants.PRIMARY_TAB.add("Intake", m_intake).withSize(2, 1).withPosition(4, 0);
+    Constants.PRIMARY_TAB.add("Shooter", m_shooter).withSize(2, 1).withPosition(6, 0);
+    Constants.PRIMARY_TAB.add("Sorter", m_sorter).withSize(2, 1).withPosition(8, 0);
     m_robotstate = Robotstate.INTAKE;
     m_robotDriveType = RobotDriveType.TANK;
   }
@@ -151,7 +166,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return m_chooser.getSelected();
   }
 
   public static RobotDriveType getDriveType() {

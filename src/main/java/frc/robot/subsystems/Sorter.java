@@ -14,9 +14,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -54,14 +52,9 @@ public class Sorter extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    ShuffleboardLayout layout = Constants.PRIMARY_TAB.getLayout("Sorter", BuiltInLayouts.kList).withSize(2, 3);
-    layout.add("Sorter command", this);
-    proximityNT = layout.add("Ball proximity", 0).getEntry();
-    detectedColorNT = layout.add("Detected color", "").getEntry();
-
-    detectedColorGraphNT = Constants.SORTER_TAB.add("DetectedColorGraph", 0).withWidget(BuiltInWidgets.kGraph).getEntry();
-    hits = Constants.SORTER_TAB.add("Hit", 0).getEntry();
-    miss = Constants.SORTER_TAB.add("Miss", 0).getEntry();
+    proximityNT = Constants.SYSTEM_MONITOR_TAB.add("Ball proximity", 0).withSize(2, 1).withPosition(8, 0).getEntry();
+    detectedColorNT = Constants.SYSTEM_MONITOR_TAB.add("Detected color", "").withSize(2, 1).withPosition(8, 1).getEntry();
+    detectedColorGraphNT = Constants.SYSTEM_MONITOR_TAB.add("Detected color graph", 0).withSize(2, 2).withPosition(8, 2).withWidget(BuiltInWidgets.kGraph).getEntry();
   }
 
   public void setLateralConveyorSpeed(double speed) {

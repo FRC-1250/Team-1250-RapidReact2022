@@ -10,9 +10,7 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -51,13 +49,11 @@ public class Drivetrain extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    ShuffleboardLayout layout = Constants.PRIMARY_TAB.getLayout("Drivetrain", BuiltInLayouts.kList).withSize(2, 3);
-    layout.add("Drivetrain command", this);
-    rightFrontMotorTemp = layout.add("FR Motor temp", 0).getEntry();
-    rightBackMotorTemp = layout.add("BR Motor temp", 0).getEntry();
-    leftFrontMotorTemp = layout.add("FL Motor temp", 0).getEntry();
-    leftBackMotorTemp = layout.add("BL Motor temp", 0).getEntry();
-    pigeonHeadingNT = layout.add("Heading", 0).withWidget(BuiltInWidgets.kGyro).getEntry();
+    leftFrontMotorTemp = Constants.SYSTEM_MONITOR_TAB.add("FL Motor temp", 0).withSize(1, 1).withPosition(0, 0).getEntry();
+    rightFrontMotorTemp = Constants.SYSTEM_MONITOR_TAB.add("FR Motor temp", 0).withSize(1, 1).withPosition(1, 0).getEntry();
+    leftBackMotorTemp = Constants.SYSTEM_MONITOR_TAB.add("BL Motor temp", 0).withSize(1, 1).withPosition(0, 1).getEntry();
+    rightBackMotorTemp = Constants.SYSTEM_MONITOR_TAB.add("BR Motor temp", 0).withSize(1, 1).withPosition(1, 1).getEntry();
+    pigeonHeadingNT = Constants.SYSTEM_MONITOR_TAB.add("Heading", 0).withSize(2, 2).withPosition(0,2).withWidget(BuiltInWidgets.kGyro).getEntry();
   }
 
   public void updateShuffleBoard() {

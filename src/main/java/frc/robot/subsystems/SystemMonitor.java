@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.led.*;
 import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,7 +17,6 @@ public class SystemMonitor extends SubsystemBase {
   private final CANdle candle = new CANdle(Constants.CANDLE_CAN_ID);
   private final PowerDistribution pdp = new PowerDistribution(Constants.POWER_DISTRIBUTION_BOARD_CAN_ID,
       ModuleType.kRev);
-  private NetworkTableEntry channelCurrent;
 
   public SystemMonitor() {
     CANdleConfiguration configAll = new CANdleConfiguration();
@@ -30,11 +28,9 @@ public class SystemMonitor extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    channelCurrent = Constants.SYSTEM_MONITOR_TAB.add("Climber current", 0).getEntry();
   }
 
   public void updateShuffleBoard() {
-    channelCurrent.setNumber(getCurrentByChannel(17));
   }
 
   public double getCurrentByChannel(int channel) {

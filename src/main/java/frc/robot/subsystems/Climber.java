@@ -8,8 +8,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -35,9 +33,7 @@ public class Climber extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    ShuffleboardLayout layout = Constants.PRIMARY_TAB.getLayout("Climber", BuiltInLayouts.kList).withSize(2, 3);
-    layout.add("Climber command", this);
-    hookPos = layout.add("Climber hook pos", 0).getEntry();
+    hookPos = Constants.SYSTEM_MONITOR_TAB.add("Climber pos", 0).withSize(2, 1).withPosition(2, 0).getEntry();
   }
 
   public void updateShuffleBoard() {
