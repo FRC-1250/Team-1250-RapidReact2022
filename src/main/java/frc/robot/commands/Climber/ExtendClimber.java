@@ -23,7 +23,7 @@ public class ExtendClimber extends CommandBase {
 
   @Override
   public void execute() {
-    m_climber.setRatchetPosition(0.4);
+    m_climber.setRatchetPosition(0.75);
     if (unjamServoTimer > System.currentTimeMillis()) {
       m_climber.setClimberHookSpeed(0.1);
     } else {
