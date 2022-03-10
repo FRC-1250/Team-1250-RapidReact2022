@@ -23,7 +23,7 @@ public class ShooterIdle extends CommandBase {
 
   @Override
   public void execute() {
-    if (intake.isReverseLimitSwitchPressed()) {
+    if (intake.isIntakeBeyondBumpers()) {
       shooter.setUptakeConveyorSpeed(0);
     } else {
       if (shooter.isUptakeSensorTripped()) {

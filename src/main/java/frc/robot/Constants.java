@@ -42,7 +42,7 @@ public final class Constants {
     public static final double INTAKE_DEPLOY_GEAR_RATIO = 1 / 7;
     public static final int INTAKE_RIGHT_REVERSE_LIMITSWITCH_DIO_ID = 1;
     public static final int INTAKE_LEFT_REVERSE_LIMITSWITCH_DIO_ID = 2;
-    public static final double INTAKE_PASSED_BUMPER_REVOLUTION_DISTANCE = 30;
+    public static final double INTAKE_PASSED_BUMPER_REVOLUTION_DISTANCE = 1;
 
     // Climber
     public static final int climberHook_CAN_ID = 35;
