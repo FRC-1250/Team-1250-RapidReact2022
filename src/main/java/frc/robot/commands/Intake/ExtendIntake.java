@@ -30,7 +30,7 @@ public class ExtendIntake extends CommandBase {
   @Override
   public void initialize() {
     start = intake.getIntakePosition();
-    end = 85; // CHANGE ME
+    end = 3; // CHANGE ME
   }
 
   @Override
@@ -41,7 +41,7 @@ public class ExtendIntake extends CommandBase {
       intake.SetIntakeRollerspeed(intakeRollerSpeed);
     }
 
-    if (progress > 0.90) {
+    if (progress > 0.80) {
       intake.setIntakeSpeed(0);
     } else {
       intake.setIntakeSpeed(1);
