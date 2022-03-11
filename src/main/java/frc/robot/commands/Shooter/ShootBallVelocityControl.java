@@ -13,7 +13,7 @@ public class ShootBallVelocityControl extends CommandBase {
   private final Shooter shooter;
   private final ShooterHeight shooterHeight;
   private final Sorter sorter;
-  private double acceptancePercentage = 0.05;
+  private double acceptancePercentage = 0.03;
   private boolean shooterPrimed = false;
   private long shotTimerInMs = 0;
 
