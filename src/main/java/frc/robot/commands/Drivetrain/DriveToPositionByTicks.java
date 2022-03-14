@@ -30,7 +30,7 @@ public class DriveToPositionByTicks extends CommandBase {
   @Override
   public void execute() {
     m_drivetrain.driveArcade(
-        RobotHelper.piecewiseMotorController(0.5, 0.2, start, end, m_drivetrain.getEncoderPosition()),
+        RobotHelper.piecewiseMotorController(0.5, 0.2, start, end, m_drivetrain.getEncoderPosition(), true),
         Math.min(-(m_drivetrain.getHeading() * gyroAdjustKp), 0.2));
   }
 
