@@ -28,6 +28,8 @@ public class Drivetrain extends SubsystemBase {
   private NetworkTableEntry leftFrontMotorTemp;
   private NetworkTableEntry leftBackMotorTemp;
   private NetworkTableEntry pigeonHeadingNT;
+  private NetworkTableEntry leftFrontTicks;
+  private NetworkTableEntry rightFrontTicks;
 
   public Drivetrain() {
     configureDriveMotor(leftFrontDriveMotor, true);
@@ -49,11 +51,14 @@ public class Drivetrain extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    leftFrontMotorTemp = Constants.SYSTEM_MONITOR_TAB.add("FL Motor temp", 0).withSize(1, 1).withPosition(0, 0).getEntry();
-    rightFrontMotorTemp = Constants.SYSTEM_MONITOR_TAB.add("FR Motor temp", 0).withSize(1, 1).withPosition(1, 0).getEntry();
-    leftBackMotorTemp = Constants.SYSTEM_MONITOR_TAB.add("BL Motor temp", 0).withSize(1, 1).withPosition(0, 1).getEntry();
-    rightBackMotorTemp = Constants.SYSTEM_MONITOR_TAB.add("BR Motor temp", 0).withSize(1, 1).withPosition(1, 1).getEntry();
-    pigeonHeadingNT = Constants.SYSTEM_MONITOR_TAB.add("Heading", 0).withSize(2, 2).withPosition(0,2).withWidget(BuiltInWidgets.kGyro).getEntry();
+    leftFrontMotorTemp = Constants.DRIVETRAIN_TAB.add("FL Motor temp", 0).withSize(1, 1).withPosition(0, 0).getEntry();
+    rightFrontMotorTemp = Constants.DRIVETRAIN_TAB.add("FR Motor temp", 0).withSize(1, 1).withPosition(1, 0).getEntry();
+    leftBackMotorTemp = Constants.DRIVETRAIN_TAB.add("BL Motor temp", 0).withSize(1, 1).withPosition(0, 1).getEntry();
+    rightBackMotorTemp = Constants.DRIVETRAIN_TAB.add("BR Motor temp", 0).withSize(1, 1).withPosition(1, 1).getEntry();
+    rightFrontTicks = Constants.DRIVETRAIN_TAB.add("FR motor ticks", 0).withSize(1, 1).getEntry();
+    leftFrontTicks = Constants.DRIVETRAIN_TAB.add("FL motor ticks", 0).withSize(1, 1).getEntry();
+    pigeonHeadingNT = Constants.DRIVETRAIN_TAB.add("Heading", 0).withSize(2, 2).withPosition(0, 2)
+        .withWidget(BuiltInWidgets.kGyro).getEntry();
   }
 
   public void updateShuffleBoard() {
@@ -61,6 +66,8 @@ public class Drivetrain extends SubsystemBase {
     rightBackMotorTemp.setDouble(getTemperatue(rightBackDriveMotor));
     leftFrontMotorTemp.setDouble(getTemperatue(leftFrontDriveMotor));
     leftBackMotorTemp.setDouble(getTemperatue(leftBackDriveMotor));
+    rightFrontTicks.setDouble(rightFrontDriveMotor.getSelectedSensorPosition());
+    leftFrontTicks.setDouble(leftFrontDriveMotor.getSelectedSensorPosition());
     pigeonHeadingNT.setDouble(getHeading());
   }
 

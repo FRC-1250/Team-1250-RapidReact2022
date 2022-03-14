@@ -34,8 +34,8 @@ public class Intake extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    ReverseLimitSwitch = Constants.SYSTEM_MONITOR_TAB.add("Limit switch", false).withSize(2, 1).withPosition(4, 0).getEntry();
-    IntakePosition = Constants.SYSTEM_MONITOR_TAB.add("Intake position", 0).withSize(2, 1).withPosition(4, 1).getEntry();
+    ReverseLimitSwitch = Constants.INTAKE_SORT_TAB.add("Limit switch", false).withSize(2, 1).withPosition(4, 0).getEntry();
+    IntakePosition = Constants.INTAKE_SORT_TAB.add("Intake position", 0).withSize(2, 1).withPosition(4, 1).getEntry();
   }
 
   public void updateShuffleBoard() {

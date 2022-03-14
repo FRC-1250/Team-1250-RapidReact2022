@@ -14,10 +14,13 @@ public class DriveToPositionByTicks extends CommandBase {
   private final static double gyroAdjustKp = 0.03;
   private double start;
   private double end;
+  private double m_distance;
 
   public DriveToPositionByTicks(Drivetrain drivetrain, double distance) {
     m_drivetrain = drivetrain;
+    m_distance = distance;
     end = distance;
+    addRequirements(m_drivetrain);
   }
 
   @Override
@@ -25,13 +28,20 @@ public class DriveToPositionByTicks extends CommandBase {
     m_drivetrain.resetEncoders();
     m_drivetrain.resetHeading();
     start = m_drivetrain.getEncoderPosition();
+    end = start - (m_distance * 1163);
   }
 
   @Override
   public void execute() {
-    m_drivetrain.driveArcade(
-        RobotHelper.piecewiseMotorController(0.5, 0.2, start, end, m_drivetrain.getEncoderPosition(), true),
-        Math.min(-(m_drivetrain.getHeading() * gyroAdjustKp), 0.2));
+    if (Math.signum(end) == -1) {
+      m_drivetrain.driveArcade(
+          RobotHelper.piecewiseMotorController(-0.5, -0.2, start, end, m_drivetrain.getEncoderPosition(), true),
+          Math.min(-(m_drivetrain.getHeading() * gyroAdjustKp), 0.2));
+    } else {
+      m_drivetrain.driveArcade(
+          RobotHelper.piecewiseMotorController(0.5, 0.2, start, end, m_drivetrain.getEncoderPosition(), true),
+          Math.min(-(m_drivetrain.getHeading() * gyroAdjustKp), 0.2));
+    }
   }
 
   @Override
