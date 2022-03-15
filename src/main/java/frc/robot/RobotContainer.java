@@ -324,14 +324,14 @@ public class RobotContainer {
   Trigger extendClimberToLow = new Trigger() {
     @Override
     public boolean get() {
-      return Robotstate.CLIMB_LOW == m_robotstate && l2.get();
+      return Robotstate.CLIMB_LOW == m_robotstate && l1.get();
     }
   };
 
   Trigger extendClimberToMid = new Trigger() {
     @Override
     public boolean get() {
-      return Robotstate.CLIMB_MID == m_robotstate && l2.get();
+      return Robotstate.CLIMB_MID == m_robotstate && l1.get();
     }
   };
 
