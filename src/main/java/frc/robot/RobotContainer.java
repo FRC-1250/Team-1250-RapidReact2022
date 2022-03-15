@@ -68,7 +68,10 @@ public class RobotContainer {
   JoystickButton X = new JoystickButton(operatorGamepad, 1);
   JoystickButton LB = new JoystickButton(operatorGamepad, 5);
   JoystickButton RB = new JoystickButton(operatorGamepad, 6);
-
+  int dpadleft = 270;
+  int dpadright = 90;
+  int dpaddown = 180;
+  int dpadup = 0;
   boolean singlePlayer = false;
   long shuffleBoardUpdateTimer = 0;
   long shuffleBoardUpdateCooldown = 100;
@@ -91,6 +94,8 @@ public class RobotContainer {
   public enum Robotstate {
     INTAKE,
     CLIMB,
+    CLIMB_MID,
+    CLIMB_LOW,
     SHOOT_HIGH_BACK,
     SHOOT_HIGH_FENDER_BACK,
     SHOOT_LOW_BACK,
@@ -148,7 +153,8 @@ public class RobotContainer {
 
     // Climbing
     extendClimber.whileActiveOnce(new ExtendClimber(m_climber));
-    extendClimberToLow.whileActiveOnce(new ExtendClimberWithPosition(m_climber, ClimbHeight.CLIMB_MID_RUNG));
+    extendClimberToLow.whenActive(new ExtendClimberWithPosition(m_climber, ClimbHeight.CLIMB_LOW_RUNG));
+    extendClimberToMid.whenActive(new ExtendClimberWithPosition(m_climber, ClimbHeight.CLIMB_MID_RUNG));
     retractClimber.whileActiveOnce(new RetractClimber(m_climber, m_systemMonitor));
 
     // Intaking
@@ -203,15 +209,22 @@ public class RobotContainer {
     boolean isShootHighModeButtonPressed = false;
     boolean isShootLowModeButtonPressed = false;
     boolean isClimbModeButtonPressed = false;
+    boolean isClimbMidPressed = false;
+    boolean isClimbLowPressed = false;
 
     if (singlePlayer) {
+      isClimbMidPressed = driveGamepad.getPOV() == dpadup;
+      isClimbLowPressed = driveGamepad.getPOV() == dpaddown;
+      isClimbModeButtonPressed = driveGamepad.getPOV() == dpadleft;
       isShootHighModeButtonPressed = triangle.get();
       isShootLowModeButtonPressed = cross.get();
-      isClimbModeButtonPressed = square.get();
+      isShootHighFenderButtonPressed = circle.get();
     } else {
+      isClimbMidPressed = operatorGamepad.getPOV() == dpadup;
+      isClimbLowPressed = operatorGamepad.getPOV() == dpaddown;
+      isClimbModeButtonPressed = operatorGamepad.getPOV() == dpadleft;
       isShootHighModeButtonPressed = Y.get();
       isShootLowModeButtonPressed = A.get();
-      isClimbModeButtonPressed = X.get();
       isShootHighFenderButtonPressed = B.get();
       isShootBackButtonPressed = RB.get();
     }
@@ -230,6 +243,10 @@ public class RobotContainer {
       m_robotstate = Robotstate.SHOOT_LOW;
     } else if (isClimbModeButtonPressed) {
       m_robotstate = Robotstate.CLIMB;
+    } else if (isClimbMidPressed) {
+      m_robotstate = Robotstate.CLIMB_MID;
+    } else if (isClimbLowPressed) {
+      m_robotstate = Robotstate.CLIMB_LOW;
     } else {
       m_robotstate = Robotstate.INTAKE;
     }
@@ -306,14 +323,22 @@ public class RobotContainer {
   Trigger extendClimberToLow = new Trigger() {
     @Override
     public boolean get() {
-      return Robotstate.CLIMB == m_robotstate && l2.get();
+      return Robotstate.CLIMB_LOW == m_robotstate && l2.get();
+    }
+  };
+
+  Trigger extendClimberToMid = new Trigger() {
+    @Override
+    public boolean get() {
+      return Robotstate.CLIMB_MID == m_robotstate && l2.get();
     }
   };
 
   Trigger retractClimber = new Trigger() {
     @Override
     public boolean get() {
-      return Robotstate.CLIMB == m_robotstate && r1.get();
+      return (Robotstate.CLIMB == m_robotstate || Robotstate.CLIMB_LOW == m_robotstate
+          || Robotstate.CLIMB_MID == m_robotstate) && r1.get();
     }
   };
 }

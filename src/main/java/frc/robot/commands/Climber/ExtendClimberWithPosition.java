@@ -35,16 +35,17 @@ public class ExtendClimberWithPosition extends CommandBase {
     if (unjamServoTimer > System.currentTimeMillis()) {
       m_climber.setClimberHookSpeed(0.1);
     } else {
-      if (RobotHelper.isDoneTraveling(start, end, m_climber.getClimberHookPosition())) {
-        m_climber.setClimberHookSpeed(0);
-      } else {
-        m_climber.setClimberHookSpeed(-0.5);
-      }
+      m_climber.setClimberHookSpeed(-0.5);
     }
   }
 
   @Override
   public void end(boolean interrupted) {
     m_climber.setClimberHookSpeed(0);
+  }
+
+  @Override
+  public boolean isFinished() {
+    return RobotHelper.isDoneTraveling(start, end, m_climber.getClimberHookPosition());
   }
 }
