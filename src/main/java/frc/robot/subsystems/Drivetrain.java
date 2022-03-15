@@ -45,7 +45,7 @@ public class Drivetrain extends SubsystemBase {
 
   private void configureDriveMotor(WPI_TalonFX talon, boolean inverted) {
     talon.setInverted(inverted);
-    talon.setNeutralMode(NeutralMode.Coast);
+    talon.setNeutralMode(NeutralMode.Brake);
     talon.configOpenloopRamp(0.8);
     talon.configClosedloopRamp(0.8);
   }
