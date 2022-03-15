@@ -72,9 +72,9 @@ public class Shooter extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    uptakeSensorNT = Constants.SYSTEM_MONITOR_TAB.add("Uptake sensor", false).withSize(2, 1).withPosition(6, 0).getEntry();
-    shooterCurrentRpmNT = Constants.SYSTEM_MONITOR_TAB.add("Current shooter RPM", 0).withSize(2, 1).withPosition(6, 1).getEntry();
-    shooterTargetRpmNT = Constants.SYSTEM_MONITOR_TAB.add("Target shooter RPM", 0).withSize(2, 1).withPosition(6, 2).getEntry();
+    uptakeSensorNT = Constants.SHOOTER_TAB.add("Uptake sensor", false).withSize(2, 1).withPosition(6, 0).getEntry();
+    shooterCurrentRpmNT = Constants.SHOOTER_TAB.add("Current shooter RPM", 0).withSize(2, 1).withPosition(6, 1).getEntry();
+    shooterTargetRpmNT = Constants.SHOOTER_TAB.add("Target shooter RPM", 0).withSize(2, 1).withPosition(6, 2).getEntry();
   }
 
   public void updateShuffleBoard() {

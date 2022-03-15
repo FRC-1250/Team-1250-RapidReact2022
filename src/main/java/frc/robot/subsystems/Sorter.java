@@ -52,9 +52,9 @@ public class Sorter extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    proximityNT = Constants.SYSTEM_MONITOR_TAB.add("Ball proximity", 0).withSize(2, 1).withPosition(8, 0).getEntry();
-    detectedColorNT = Constants.SYSTEM_MONITOR_TAB.add("Detected color", "").withSize(2, 1).withPosition(8, 1).getEntry();
-    detectedColorGraphNT = Constants.SYSTEM_MONITOR_TAB.add("Detected color graph", 0).withSize(2, 2).withPosition(8, 2).withWidget(BuiltInWidgets.kGraph).getEntry();
+    proximityNT = Constants.INTAKE_SORT_TAB.add("Ball proximity", 0).withSize(2, 1).withPosition(8, 0).getEntry();
+    detectedColorNT = Constants.INTAKE_SORT_TAB.add("Detected color", "").withSize(2, 1).withPosition(8, 1).getEntry();
+    detectedColorGraphNT = Constants.INTAKE_SORT_TAB.add("Detected color graph", 0).withSize(2, 2).withPosition(8, 2).withWidget(BuiltInWidgets.kGraph).getEntry();
   }
 
   public void setLateralConveyorSpeed(double speed) {

@@ -33,7 +33,7 @@ public class Climber extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    hookPos = Constants.SYSTEM_MONITOR_TAB.add("Climber pos", 0).withSize(2, 1).withPosition(2, 0).getEntry();
+    hookPos = Constants.CLIMBER_TAB.add("Climber pos", 0).withSize(2, 1).withPosition(2, 0).getEntry();
   }
 
   public void updateShuffleBoard() {
