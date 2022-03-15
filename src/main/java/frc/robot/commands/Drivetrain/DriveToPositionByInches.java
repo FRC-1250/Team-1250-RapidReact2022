@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utility.RobotHelper;
 
-public class DriveToPositionByTicks extends CommandBase {
+public class DriveToPositionByInches extends CommandBase {
 
   private final Drivetrain m_drivetrain;
   private final static double gyroAdjustKp = 0.03;
@@ -16,7 +16,7 @@ public class DriveToPositionByTicks extends CommandBase {
   private double end;
   private double m_distance;
 
-  public DriveToPositionByTicks(Drivetrain drivetrain, double distance) {
+  public DriveToPositionByInches(Drivetrain drivetrain, double distance) {
     m_drivetrain = drivetrain;
     m_distance = distance;
     end = distance;

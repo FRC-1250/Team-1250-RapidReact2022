@@ -5,7 +5,7 @@
 package frc.robot.commands.Auton;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.Drivetrain.DriveToPositionByTicks;
+import frc.robot.commands.Drivetrain.DriveToPositionByInches;
 import frc.robot.commands.Shooter.MoveServoToPosition;
 import frc.robot.commands.Shooter.ShootBallVelocityControl;
 import frc.robot.subsystems.Drivetrain;
@@ -20,6 +20,6 @@ public class LowShotAndDriveBack extends SequentialCommandGroup {
     addCommands(
         new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_BACK),
         new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_LOW, 5000),
-        new DriveToPositionByTicks(cmd_drivetrain, -85));
+        new DriveToPositionByInches(cmd_drivetrain, -85));
   }
 }

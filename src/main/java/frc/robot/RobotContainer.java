@@ -21,7 +21,7 @@ import frc.robot.commands.Climber.ExtendClimberWithPosition;
 import frc.robot.commands.Climber.RetractClimber;
 import frc.robot.commands.Drivetrain.Drive;
 import frc.robot.commands.Drivetrain.DriveStraight;
-import frc.robot.commands.Drivetrain.DriveToPositionByTicks;
+import frc.robot.commands.Drivetrain.DriveToPositionByInches;
 import frc.robot.commands.Drivetrain.MoveToTarget;
 import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.RetractIntake;
@@ -124,7 +124,7 @@ public class RobotContainer {
     m_chooser.setDefaultOption("High shot + taxi", new HighShotAndDriveBack(m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("2 High shot + taxi", new BallPickupAndHighShot(m_intake, m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("Low shot + taxi", new LowShotAndDriveBack(m_shooter, m_drivetrain, m_sorter));
-    m_chooser.addOption("taxi", new DriveToPositionByTicks(m_drivetrain, -24));
+    m_chooser.addOption("taxi", new DriveToPositionByInches(m_drivetrain, -24));
     Constants.PRIMARY_TAB.add("Auto", m_chooser).withSize(2, 1).withPosition(8, 1);
 
     Constants.PRIMARY_TAB.add("Drivetrain", m_drivetrain).withSize(2, 1).withPosition(0, 0);
