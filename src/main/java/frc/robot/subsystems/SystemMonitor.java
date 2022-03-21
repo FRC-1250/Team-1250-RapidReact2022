@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import com.ctre.phoenix.ErrorCode;
@@ -20,6 +21,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -138,9 +140,17 @@ public class SystemMonitor extends SubsystemBase {
     candle.setLEDs(r, g, b, 0, startIdx, count);
   }
 
+  public void pushHealthToShuffleboard() {
+    ShuffleboardLayout layout = Constants.SYSTEM_MONITOR_TAB.getLayout("Diag");
+    for (Map.Entry<Integer, CANDeviceHealth> entry : healthList.entrySet()) {
+      layout.add("CAN ID: " + entry.getKey(), entry.getValue().getDeviceHealth().toString());
+    }
+  }
+
   @Override
   public void periodic() {
-    // This should be in its own thread, catch all exceptions so we don't fail due to monitoring
+    // This should be in its own thread, catch all exceptions so we don't fail due
+    // to monitoring
     Long currentTime = System.currentTimeMillis();
     DeviceHealth deviceHealth;
 
@@ -150,6 +160,7 @@ public class SystemMonitor extends SubsystemBase {
         testSparkHealth();
         testTalonHealth();
         testPdp();
+        pushHealthToShuffleboard();
       } catch (Exception e) {
         System.out.println(e.getStackTrace());
       }
@@ -159,17 +170,16 @@ public class SystemMonitor extends SubsystemBase {
     if (System.currentTimeMillis() > LEDUpdateTimer && !healthList.isEmpty()) {
       LEDCycleLenth = healthList.size() / Constants.CANDLE_LED_COUNT;
       try {
-
         if (LEDCycle == LEDCycleLenth) {
           for (int i = 0 + (LEDCycle * Constants.CANDLE_LED_COUNT); i < healthList.size(); i++) {
             deviceHealth = healthList.get(i).getDeviceHealth();
             switch (deviceHealth) {
               case GREEN:
-                setLEDs(0, 255, 0, i, 1);
+                setLEDs(0, 255, 0, i % Constants.CANDLE_LED_COUNT, 1);
               case YELLOW:
-                setLEDs(255, 255, 0, i, 1);
+                setLEDs(255, 255, 0, i % Constants.CANDLE_LED_COUNT, 1);
               case RED:
-                setLEDs(255, 0, 0, i, 1);
+                setLEDs(255, 0, 0, i % Constants.CANDLE_LED_COUNT, 1);
             }
           }
           LEDCycle = 0;
@@ -179,11 +189,11 @@ public class SystemMonitor extends SubsystemBase {
             deviceHealth = healthList.get(i).getDeviceHealth();
             switch (deviceHealth) {
               case GREEN:
-                setLEDs(0, 255, 0, i, 1);
+                setLEDs(0, 255, 0, i % Constants.CANDLE_LED_COUNT, 1);
               case YELLOW:
-                setLEDs(255, 255, 0, i, 1);
+                setLEDs(255, 255, 0, i % Constants.CANDLE_LED_COUNT, 1);
               case RED:
-                setLEDs(255, 0, 0, i, 1);
+                setLEDs(255, 0, 0, i % Constants.CANDLE_LED_COUNT, 1);
             }
           }
           LEDCycle++;
