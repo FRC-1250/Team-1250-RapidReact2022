@@ -20,6 +20,6 @@ public class HighShotAndDriveBack extends SequentialCommandGroup {
     addCommands(
         new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_BACK),
         new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 5000),
-        new DriveToPositionByInches(cmd_drivetrain, -24));
+        new DriveToPositionByInches(cmd_drivetrain, -48));
   }
 }

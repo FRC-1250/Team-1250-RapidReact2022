@@ -12,22 +12,34 @@ import frc.robot.subsystems.Drivetrain;
 public class Drive extends CommandBase {
   private final Drivetrain e_Drivetrain;
   private final PS4Controller e_Dualshock4;
-  private double e_driveThrottle;
+  private final double e_driveReduction = 0.8;
+  private final double e_maxDriveThrottlePercent = 0.65;
 
-  public Drive(Drivetrain drivetrain, PS4Controller Dualshock4, double driveThrottle) {
+  public Drive(Drivetrain drivetrain, PS4Controller Dualshock4) {
     addRequirements(drivetrain);
     e_Drivetrain = drivetrain;
     e_Dualshock4 = Dualshock4;
-    e_driveThrottle = driveThrottle;
   }
 
+  /**
+   * e_driveTriggerThrottle is a value that scales from 1 to the
+   * e_maxDriveThrottlePercent value and is then
+   * multipled by the driver input.
+   * 
+   * e_driveReduction is a innate drive speed reduction that is always in place.
+   * Sacrifaces some speed for control.
+   */
   @Override
   public void execute() {
-    e_driveThrottle = Math.max(1 - e_Dualshock4.getR2Axis(), 0.5);
+    double e_driveTriggerThrottle = Math.max(1 - e_Dualshock4.getR2Axis(), e_maxDriveThrottlePercent);
     if (RobotContainer.RobotDriveType.TANK == RobotContainer.getDriveType()) {
-      e_Drivetrain.driveTank(e_Dualshock4.getLeftY() * e_driveThrottle, e_Dualshock4.getRightY() * e_driveThrottle);
+      double inputLeft = e_Dualshock4.getLeftY() * e_driveReduction * e_driveTriggerThrottle;
+      double inputRight = e_Dualshock4.getRightY() * e_driveReduction * e_driveTriggerThrottle;
+      e_Drivetrain.driveTank(inputLeft, inputRight);
     } else if (RobotContainer.RobotDriveType.ARCADE == RobotContainer.getDriveType()) {
-      e_Drivetrain.driveArcade(e_Dualshock4.getLeftY() * e_driveThrottle, e_Dualshock4.getRightX() * e_driveThrottle);
+      double inputY = e_Dualshock4.getLeftY() * e_driveReduction * e_driveTriggerThrottle;
+      double inputX = e_Dualshock4.getRightX() * e_driveReduction * e_driveTriggerThrottle;
+      e_Drivetrain.driveArcade(inputY, inputX);
     }
   }
 }
