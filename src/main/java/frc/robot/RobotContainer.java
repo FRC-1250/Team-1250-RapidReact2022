@@ -115,7 +115,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_drivetrain.setDefaultCommand(new Drive(m_drivetrain, driveGamepad, 1));
+    m_drivetrain.setDefaultCommand(new Drive(m_drivetrain, driveGamepad));
     m_sorter.setDefaultCommand(new IndexBall(m_sorter, m_shooter, m_intake));
     m_shooter.setDefaultCommand(new ShooterIdle(m_shooter, m_intake));
     robotstateNT = Constants.PRIMARY_TAB.add("Robot state", "").withPosition(8, 2).getEntry();
@@ -126,7 +126,6 @@ public class RobotContainer {
     m_chooser.addOption("Low shot + taxi", new LowShotAndDriveBack(m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("taxi", new DriveToPositionByInches(m_drivetrain, -24));
     Constants.PRIMARY_TAB.add("Auto", m_chooser).withSize(2, 1).withPosition(8, 1);
-
     Constants.PRIMARY_TAB.add("Drivetrain", m_drivetrain).withSize(2, 1).withPosition(0, 0);
     Constants.PRIMARY_TAB.add("Climber", m_climber).withSize(2, 1).withPosition(2, 0);
     Constants.PRIMARY_TAB.add("Intake", m_intake).withSize(2, 1).withPosition(4, 0);
