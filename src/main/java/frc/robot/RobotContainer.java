@@ -131,7 +131,8 @@ public class RobotContainer {
     Constants.PRIMARY_TAB.add("Intake", m_intake).withSize(2, 1).withPosition(4, 0);
     Constants.PRIMARY_TAB.add("Shooter", m_shooter).withSize(2, 1).withPosition(6, 0);
     Constants.PRIMARY_TAB.add("Sorter", m_sorter).withSize(2, 1).withPosition(8, 0);
-    Constants.PRIMARY_TAB.addCamera("Limelight", "Limelight", "http://10.12.50.11:5800").withSize(4, 3).withPosition(0, 2);
+    Constants.PRIMARY_TAB.addCamera("Limelight", "Limelight", "http://10.12.50.11:5800").withSize(4, 3).withPosition(0,
+        2);
     m_robotstate = Robotstate.INTAKE;
     m_robotDriveType = RobotDriveType.TANK;
   }
@@ -175,6 +176,14 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_chooser.getSelected();
+  }
+
+  public void setCoast() {
+    m_drivetrain.configureCoast();
+  }
+
+  public void setBrake() {
+    m_drivetrain.configureBrake();
   }
 
   public static RobotDriveType getDriveType() {

@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     DriverStation.silenceJoystickConnectionWarning(false);
+    m_robotContainer.setCoast();
   }
 
   @Override
@@ -85,6 +86,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    m_robotContainer.setBrake();
+
   }
 
   /** This function is called periodically during autonomous. */
@@ -102,6 +105,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     DriverStation.silenceJoystickConnectionWarning(true);
+    m_robotContainer.setBrake();
   }
 
   /** This function is called periodically during operator control. */

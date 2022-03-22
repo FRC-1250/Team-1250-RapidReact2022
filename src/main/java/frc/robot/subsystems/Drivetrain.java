@@ -50,6 +50,20 @@ public class Drivetrain extends SubsystemBase {
     talon.configClosedloopRamp(0.8);
   }
 
+  public void configureBrake() {
+    leftFrontDriveMotor.setNeutralMode(NeutralMode.Brake);
+    leftBackDriveMotor.setNeutralMode(NeutralMode.Brake);
+    rightFrontDriveMotor.setNeutralMode(NeutralMode.Brake);
+    rightBackDriveMotor.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void configureCoast() {
+    leftFrontDriveMotor.setNeutralMode(NeutralMode.Coast);
+    leftBackDriveMotor.setNeutralMode(NeutralMode.Coast);
+    rightFrontDriveMotor.setNeutralMode(NeutralMode.Coast);
+    rightBackDriveMotor.setNeutralMode(NeutralMode.Coast);
+  }
+
   private void configureShuffleBoard() {
     leftFrontMotorTemp = Constants.DRIVETRAIN_TAB.add("FL Motor temp", 0).withSize(1, 1).withPosition(0, 0).getEntry();
     rightFrontMotorTemp = Constants.DRIVETRAIN_TAB.add("FR Motor temp", 0).withSize(1, 1).withPosition(1, 0).getEntry();

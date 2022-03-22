@@ -52,4 +52,9 @@ public class ExtendIntake extends CommandBase {
   public void end(boolean interrupted) {
     intake.setIntakeSpeed(0);
   }
+
+  @Override
+  public boolean isFinished() {
+    return progress > 0.90;
+  }
 }

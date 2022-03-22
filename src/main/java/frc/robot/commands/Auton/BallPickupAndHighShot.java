@@ -4,6 +4,8 @@
 
 package frc.robot.commands.Auton;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Drivetrain.DriveToPositionByInches;
@@ -26,12 +28,12 @@ public class BallPickupAndHighShot extends SequentialCommandGroup {
 
   public BallPickupAndHighShot(Intake cmd_intake, Shooter cmd_Shooter, Drivetrain cmd_drivetrain, Sorter cmd_sorter) {
     addCommands(
-      new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_BACK), 
-      new ExtendIntake(cmd_intake),
-      new DriveToPositionByInches(cmd_drivetrain, -48), 
-      new WaitCommand(0.5),
-      new RetractIntake(cmd_intake),
-      new DriveToPositionByInches(cmd_drivetrain, 48),
-      new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 5000));
+        new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_BACK),
+        new ExtendIntake(cmd_intake),
+        new DriveToPositionByInches(cmd_drivetrain, -48),
+        new WaitCommand(2),
+        new RetractIntake(cmd_intake), 
+        new DriveToPositionByInches(cmd_drivetrain, 48),
+        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 5000));
   }
 }
