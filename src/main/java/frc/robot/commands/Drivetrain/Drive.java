@@ -23,11 +23,13 @@ public class Drive extends CommandBase {
 
   @Override
   public void execute() {
-    e_driveThrottle = Math.max(1 - e_Dualshock4.getR2Axis(), 0.5);
+    e_driveThrottle = Math.max(1 - e_Dualshock4.getR2Axis(), 0.65);
     if (RobotContainer.RobotDriveType.TANK == RobotContainer.getDriveType()) {
-      e_Drivetrain.driveTank(e_Dualshock4.getLeftY() * e_driveThrottle, e_Dualshock4.getRightY() * e_driveThrottle);
+      e_Drivetrain.driveTank((e_Dualshock4.getLeftY() * 0.8) * e_driveThrottle,
+          (e_Dualshock4.getRightY() * 0.8) * e_driveThrottle);
     } else if (RobotContainer.RobotDriveType.ARCADE == RobotContainer.getDriveType()) {
-      e_Drivetrain.driveArcade(e_Dualshock4.getLeftY() * e_driveThrottle, e_Dualshock4.getRightX() * e_driveThrottle);
+      e_Drivetrain.driveArcade((e_Dualshock4.getLeftY() * 0.8) * e_driveThrottle,
+          e_Dualshock4.getRightX() * e_driveThrottle);
     }
   }
 }

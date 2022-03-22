@@ -165,7 +165,7 @@ public class RobotContainer {
     // Drive mods
     // Driver R2 is attached to normal driving and driving straight as a throttle
     // input!
-    touchpad.whileActiveOnce(new DriveStraight(m_drivetrain, driveGamepad));
+    l2.whileActiveOnce(new DriveStraight(m_drivetrain, driveGamepad));
   }
 
   /**
