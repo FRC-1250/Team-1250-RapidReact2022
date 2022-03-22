@@ -17,6 +17,8 @@ public class Climber extends SubsystemBase {
   WPI_TalonFX climberHook = new WPI_TalonFX(Constants.climberHook_CAN_ID);
   private NetworkTableEntry hookPos;
 
+  public boolean extendClimberHasMoved = false;
+
   public enum ClimbHeight {
     CLIMB_MID_RUNG(-189439),
     CLIMB_LOW_RUNG(-72141);
@@ -27,6 +29,7 @@ public class Climber extends SubsystemBase {
       this.heightInTicks = heightInTicks;
     }
   }
+
 
   public Climber() {
     configureShuffleBoard();
@@ -55,6 +58,7 @@ public class Climber extends SubsystemBase {
   public double getClimberHookPosition() {
     return climberHook.getSelectedSensorPosition();
   }
+  
 
   @Override
   public void periodic() {

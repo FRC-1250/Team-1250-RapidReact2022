@@ -42,6 +42,7 @@ public class ExtendClimberWithPosition extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_climber.setClimberHookSpeed(0);
+    m_climber.extendClimberHasMoved = true;
   }
 
   @Override
