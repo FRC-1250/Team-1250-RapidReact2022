@@ -30,10 +30,10 @@ public class BallPickupAndHighShot extends SequentialCommandGroup {
     addCommands(
         new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_BACK),
         new ExtendIntake(cmd_intake),
-        new DriveToPositionByInches(cmd_drivetrain, -48),
+        new DriveToPositionByInches(cmd_drivetrain, 48),
         new WaitCommand(2),
         new RetractIntake(cmd_intake), 
-        new DriveToPositionByInches(cmd_drivetrain, 48),
+        new DriveToPositionByInches(cmd_drivetrain, -48),
         new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 5000));
   }
 }

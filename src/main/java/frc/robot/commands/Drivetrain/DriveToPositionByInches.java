@@ -25,15 +25,16 @@ public class DriveToPositionByInches extends CommandBase {
 
   @Override
   public void initialize() {
-    m_drivetrain.resetEncoders();
     m_drivetrain.resetHeading();
     start = m_drivetrain.getEncoderPosition();
-    end = start - (m_distance * 1163);
+    end = start + (m_distance * 1163);
+    System.out.println(start);
+    System.out.println(end);
   }
 
   @Override
   public void execute() {
-    if (Math.signum(end) == -1) {
+    if (Math.signum(start - end) == 1) {
       m_drivetrain.driveArcade(
           RobotHelper.piecewiseMotorController(-0.8, -0.5, start, end, m_drivetrain.getEncoderPosition(), true),
           Math.min(-(m_drivetrain.getHeading() * gyroAdjustKp), 0.2));

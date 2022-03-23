@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    DriverStation.silenceJoystickConnectionWarning(true);
   }
 
   /**
@@ -64,7 +65,6 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    DriverStation.silenceJoystickConnectionWarning(false);
     m_robotContainer.setCoast();
   }
 
@@ -104,7 +104,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    DriverStation.silenceJoystickConnectionWarning(true);
     m_robotContainer.setBrake();
   }
 

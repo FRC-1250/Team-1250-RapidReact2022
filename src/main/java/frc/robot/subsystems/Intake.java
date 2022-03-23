@@ -34,7 +34,8 @@ public class Intake extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    ReverseLimitSwitch = Constants.INTAKE_SORT_TAB.add("Limit switch", false).withSize(2, 1).withPosition(4, 0).getEntry();
+    ReverseLimitSwitch = Constants.INTAKE_SORT_TAB.add("Limit switch", false).withSize(2, 1).withPosition(4, 0)
+        .getEntry();
     IntakePosition = Constants.INTAKE_SORT_TAB.add("Intake position", 0).withSize(2, 1).withPosition(4, 1).getEntry();
   }
 
@@ -51,6 +52,10 @@ public class Intake extends SubsystemBase {
     intake.set(speed);
   }
 
+  public void setIntakPosition(double position) {
+    intake.getEncoder().setPosition(0);
+  }
+
   public double getIntakePosition() {
     return intake.getEncoder().getPosition();
   }
@@ -65,8 +70,6 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (isReverseLimitSwitchPressed()) {
-      intake.getEncoder().setPosition(0);
-    }
+
   }
 }
