@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivetrain;
 public class Drive extends CommandBase {
   private final Drivetrain e_Drivetrain;
   private final PS4Controller e_Dualshock4;
-  private final double e_driveReduction = 0.8;
+  private final double e_driveReduction = 0.6;
   private final double e_maxDriveThrottlePercent = 0.65;
 
   public Drive(Drivetrain drivetrain, PS4Controller Dualshock4) {
