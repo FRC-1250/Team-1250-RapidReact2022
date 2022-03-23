@@ -16,18 +16,15 @@ public class MoveToTarget extends CommandBase {
    * Example and values from
    * https://docs.limelightvision.io/en/latest/cs_aimandrange.html
    */
-  double KpAim = -0.1;
-  double KpDistance = -0.1;
-  double min_aim_command = 0.05;
+  double KpAim = 0.075;
+  double KpDistance = 0.075;
   double tx = 0;
   double ty = 0;
   double tv = 0;
   double heading_error = 0;
   double distance_error = 0;
-  double steering_adjust = 0;
-  double distance_adjust = 0;
-  double left_command = 0;
-  double right_command = 0;
+  double y_adjust = 0;
+  double x_adjust = 0;
 
   public MoveToTarget(Limelight m_limelight, Drivetrain m_drivetrain) {
     limelight = m_limelight;
@@ -41,21 +38,27 @@ public class MoveToTarget extends CommandBase {
     ty = limelight.getYOffset();
     heading_error = -tx;
     distance_error = -ty;
-    steering_adjust = 0.0;
+    y_adjust = 0;
+    x_adjust = 0;
 
-    if (tx > 1.0) {
-      steering_adjust = KpAim * heading_error - min_aim_command;
-    } else if (tx < 1.0) {
-      steering_adjust = KpAim * heading_error + min_aim_command;
+    if (limelight.isTargetSeen()) {
+      if (tx > 1.0 || tx < -1.0) {
+        x_adjust = KpAim * heading_error;
+      } else {
+        x_adjust = 0;
+      }
+
+      if (ty > 1.0 || ty < -1.0) {
+        y_adjust = KpDistance * distance_error;
+      } else {
+        y_adjust = 0;
+      }
     }
-    distance_adjust = KpDistance * distance_error;
-    left_command += steering_adjust + distance_adjust;
-    right_command -= steering_adjust + distance_adjust;
-    drivetrain.driveTank(left_command, right_command);
+    drivetrain.driveArcade(-y_adjust, x_adjust);
   }
 
   @Override
   public void end(boolean interrupted) {
-    drivetrain.driveTank(0, 0);
+    drivetrain.driveArcade(0, 0);
   }
 }
