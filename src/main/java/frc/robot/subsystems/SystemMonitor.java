@@ -17,7 +17,6 @@ import com.ctre.phoenix.sensors.Pigeon2;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -60,7 +59,6 @@ public class SystemMonitor extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    channelCurrent = Constants.SYSTEM_MONITOR_TAB.add("Climber current", 0).getEntry();
   }
 
   private void registerDevice(PowerDistribution pdp) {
@@ -121,7 +119,6 @@ public class SystemMonitor extends SubsystemBase {
   }
 
   public void updateShuffleBoard() {
-    channelCurrent.setNumber(getCurrentByChannel(17));
   }
 
   public double getCurrentByChannel(int channel) {

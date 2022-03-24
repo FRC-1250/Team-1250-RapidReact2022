@@ -24,13 +24,13 @@ public class ShooterIdle extends CommandBase {
   @Override
   public void execute() {
     if (intake.isIntakeBeyondBumpers()) {
-      shooter.setUptakeConveyorSpeed(0);
-    } else {
       if (shooter.isUptakeSensorTripped()) {
         shooter.setUptakeConveyorSpeed(0);
       } else {
         shooter.setUptakeConveyorSpeed(0.5);
       }
+    } else {
+      shooter.setUptakeConveyorSpeed(0);
     }
 
     switch (RobotContainer.getRobotState()) {

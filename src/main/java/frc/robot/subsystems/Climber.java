@@ -8,8 +8,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -18,6 +16,8 @@ public class Climber extends SubsystemBase {
   Servo ratchetServo = new Servo(Constants.ratchetServo_PWM_ID);
   WPI_TalonFX climberHook = new WPI_TalonFX(Constants.climberHook_CAN_ID);
   private NetworkTableEntry hookPos;
+
+  public boolean extendClimberHasMoved = false;
 
   public enum ClimbHeight {
     CLIMB_MID_RUNG(-189439),
@@ -30,14 +30,13 @@ public class Climber extends SubsystemBase {
     }
   }
 
+
   public Climber() {
     configureShuffleBoard();
   }
 
   private void configureShuffleBoard() {
-    ShuffleboardLayout layout = Constants.PRIMARY_TAB.getLayout("Climber", BuiltInLayouts.kList).withSize(2, 3);
-    layout.add("Climber command", this);
-    hookPos = layout.add("Climber hook pos", 0).getEntry();
+    hookPos = Constants.CLIMBER_TAB.add("Climber pos", 0).withSize(2, 1).withPosition(2, 0).getEntry();
   }
 
   public void updateShuffleBoard() {
@@ -59,6 +58,7 @@ public class Climber extends SubsystemBase {
   public double getClimberHookPosition() {
     return climberHook.getSelectedSensorPosition();
   }
+  
 
   @Override
   public void periodic() {
