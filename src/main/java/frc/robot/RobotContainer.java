@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Auton.BallPickupAndHighShot;
+import frc.robot.commands.Auton.BallPickupAndHighShot2Ball;
 import frc.robot.commands.Auton.HighShotAndDriveBack;
 import frc.robot.commands.Auton.LowShotAndDriveBack;
 import frc.robot.commands.Climber.ExtendClimber;
@@ -122,7 +123,8 @@ public class RobotContainer {
     singlePlayerNT = Constants.PRIMARY_TAB.add("Single player", false).withPosition(9, 2).getEntry();
 
     m_chooser.setDefaultOption("High shot + taxi", new HighShotAndDriveBack(m_shooter, m_drivetrain, m_sorter));
-    m_chooser.addOption("2 High shot + taxi", new BallPickupAndHighShot(m_intake, m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("2 Ball High Shot", new BallPickupAndHighShot2Ball(m_intake, m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("3 Ball Right Side High Shot", new BallPickupAndHighShot(m_intake, m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("Low shot + taxi", new LowShotAndDriveBack(m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("taxi", new DriveToPositionByInches(m_drivetrain, 24));
     Constants.PRIMARY_TAB.add("Auto", m_chooser).withSize(2, 1).withPosition(8, 1);
