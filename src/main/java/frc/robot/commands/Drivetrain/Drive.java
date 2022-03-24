@@ -13,7 +13,7 @@ public class Drive extends CommandBase {
   private final Drivetrain e_Drivetrain;
   private final PS4Controller e_Dualshock4;
   private final double e_driveReduction = 0.6;
-  private final double e_maxDriveThrottlePercent = 1.666;
+  double e_fullSendVal = 0.0;
 
   public Drive(Drivetrain drivetrain, PS4Controller Dualshock4) {
     addRequirements(drivetrain);
@@ -22,23 +22,24 @@ public class Drive extends CommandBase {
   }
 
   /**
-   * e_driveTriggerThrottle is a value that scales from 1 to the
-   * e_maxDriveThrottlePercent value and is then
-   * multipled by the driver input.
-   * 
    * e_driveReduction is a innate drive speed reduction that is always in place.
    * Sacrifaces some speed for control.
    */
   @Override
   public void execute() {
-    double e_driveTriggerThrottle = Math.max(1 + e_Dualshock4.getR2Axis(), e_maxDriveThrottlePercent);
+    //Logic to remove  all drive throttles 
+    if(e_Dualshock4.getR2Axis() > 0.3){
+      e_fullSendVal = 1.0 - e_driveReduction;
+    } else{
+      e_fullSendVal = 0.0;
+    }
     if (RobotContainer.RobotDriveType.TANK == RobotContainer.getDriveType()) {
-      double inputLeft = e_Dualshock4.getLeftY() * e_driveReduction * e_driveTriggerThrottle;
-      double inputRight = e_Dualshock4.getRightY() * e_driveReduction * e_driveTriggerThrottle;
+      double inputLeft = e_Dualshock4.getLeftY() * (e_driveReduction + e_fullSendVal);
+      double inputRight = e_Dualshock4.getRightY() * (e_driveReduction + e_fullSendVal);
       e_Drivetrain.driveTank(inputLeft, inputRight);
     } else if (RobotContainer.RobotDriveType.ARCADE == RobotContainer.getDriveType()) {
-      double inputY = e_Dualshock4.getLeftY() * e_driveReduction * e_driveTriggerThrottle;
-      double inputX = e_Dualshock4.getRightX() * e_driveReduction * e_driveTriggerThrottle;
+      double inputY = e_Dualshock4.getLeftY() * (e_driveReduction + e_fullSendVal);
+      double inputX = e_Dualshock4.getRightX() * (e_driveReduction + e_fullSendVal);
       e_Drivetrain.driveArcade(inputY, inputX);
     }
   }
