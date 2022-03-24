@@ -27,8 +27,16 @@ public class TurnDegrees extends CommandBase {
 
   @Override
   public void execute() {
-    m_drivetrain.driveArcade(0,
+
+    if (Math.signum(start - end) == 1) {
+        m_drivetrain.driveArcade(0,
+        RobotHelper.piecewiseMotorController(-0.5, -0.2, start, end, m_drivetrain.getHeading(), true));
+    } else {
+        m_drivetrain.driveArcade(0,
         RobotHelper.piecewiseMotorController(0.5, 0.2, start, end, m_drivetrain.getHeading(), true));
+    }
+    // m_drivetrain.driveArcade(0,
+    //     RobotHelper.piecewiseMotorController(0.5, 0.2, start, end, m_drivetrain.getHeading(), true));
   }
 
   @Override

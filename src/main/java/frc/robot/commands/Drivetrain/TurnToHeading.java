@@ -17,7 +17,7 @@ public class TurnToHeading extends PIDCommand {
   public TurnToHeading(Drivetrain drivetrain, double degrees) {
     super(
         // The controller that the command will use
-        new PIDController(4, 0, 0),
+        new PIDController(0.5, 0, 0),
         // This should return the measurement
         drivetrain::getHeading,
         // This should return the setpoint (can also be a constant)

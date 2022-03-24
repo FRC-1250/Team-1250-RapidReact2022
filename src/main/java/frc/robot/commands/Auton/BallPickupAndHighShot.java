@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Drivetrain.DriveToPositionByInches;
-import frc.robot.commands.Drivetrain.TurnToHeading;
+import frc.robot.commands.Drivetrain.TurnDegrees;
 import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.commands.Shooter.MoveServoToPosition;
@@ -33,47 +33,51 @@ public class BallPickupAndHighShot extends SequentialCommandGroup {
         new ParallelCommandGroup(
             new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake),
             new SequentialCommandGroup(
-                new DriveToPositionByInches(cmd_drivetrain, 48),
-                new WaitCommand(2),
+                new DriveToPositionByInches(cmd_drivetrain, 16),
+                new WaitCommand(1),
                 new RetractIntake(cmd_intake))),
-        new DriveToPositionByInches(cmd_drivetrain, -21),
+        new DriveToPositionByInches(cmd_drivetrain, -15),
         new ParallelCommandGroup(new WaitCommand(1),new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake)),
-        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 5000),
+        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 3000),
         //UNCHARTED WATERS
         //First Turn
-        new TurnToHeading(cmd_drivetrain, 90),
+        new TurnDegrees(cmd_drivetrain, 78),
         new WaitCommand(0.5),
         //Drive 100 + collect
         new ExtendIntake(cmd_intake),
         new ParallelCommandGroup(
             new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake),
             new SequentialCommandGroup(
-                new DriveToPositionByInches(cmd_drivetrain, 100),
-                new WaitCommand(2),
+                new DriveToPositionByInches(cmd_drivetrain, 105),
+                new WaitCommand(1),
                 new RetractIntake(cmd_intake))),
         //Turn To goal
-        new TurnToHeading(cmd_drivetrain, -90),
+        new TurnDegrees(cmd_drivetrain, -20),
+        new WaitCommand(0.5),
+        new DriveToPositionByInches(cmd_drivetrain, -8),
+        new WaitCommand(0.2),
         new ParallelCommandGroup(new WaitCommand(1),new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake)),
         //Shoot Further
-        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 6000),               
-        new WaitCommand(1),
-        //Turn to next balls
-        new TurnToHeading(cmd_drivetrain, 45),
-        //Drive 150 + collect
-        new ExtendIntake(cmd_intake),
-        new ParallelCommandGroup(
-            new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake),
-            new SequentialCommandGroup(
-                new DriveToPositionByInches(cmd_drivetrain, 150),
-                new WaitCommand(2),
-                new RetractIntake(cmd_intake))),
-        //drive back, turn to target
-        new DriveToPositionByInches(cmd_drivetrain, -150),
-        new TurnToHeading(cmd_drivetrain, -45),
-        new WaitCommand(1),
-        new ParallelCommandGroup(new WaitCommand(1),new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake)),
-        //Shoot Further
-        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 6000)   
+        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 3000)   
+
+        //5 ball experimental     
+        // //Turn to next balls
+        // new TurnDegrees(cmd_drivetrain, 20),
+        // //Drive 150 + collect
+        // new ExtendIntake(cmd_intake),
+        // new ParallelCommandGroup(
+        //     new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake),
+        //     new SequentialCommandGroup(
+        //         new DriveToPositionByInches(cmd_drivetrain, 80),
+        //         new WaitCommand(1),
+        //         new RetractIntake(cmd_intake))),
+        // //drive back, turn to target
+        // new DriveToPositionByInches(cmd_drivetrain, -50),
+        // new TurnDegrees(cmd_drivetrain, -20),
+        // new WaitCommand(1),
+        // new ParallelCommandGroup(new WaitCommand(1),new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake)),
+        // //Shoot Further
+        // new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 6000)   
         );
 
   }

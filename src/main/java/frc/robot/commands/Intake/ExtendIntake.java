@@ -30,7 +30,7 @@ public class ExtendIntake extends CommandBase {
   @Override
   public void initialize() {
     start = intake.getIntakePosition();
-    end = 13;
+    end = 12;
   }
 
   @Override
