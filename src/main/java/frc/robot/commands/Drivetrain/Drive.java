@@ -13,7 +13,7 @@ public class Drive extends CommandBase {
   private final Drivetrain e_Drivetrain;
   private final PS4Controller e_Dualshock4;
   private final double e_driveReduction = 0.6;
-  private final double e_maxDriveThrottlePercent = 0.65;
+  private final double e_maxDriveThrottlePercent = 1.666;
 
   public Drive(Drivetrain drivetrain, PS4Controller Dualshock4) {
     addRequirements(drivetrain);
@@ -31,7 +31,7 @@ public class Drive extends CommandBase {
    */
   @Override
   public void execute() {
-    double e_driveTriggerThrottle = Math.max(1 - e_Dualshock4.getR2Axis(), e_maxDriveThrottlePercent);
+    double e_driveTriggerThrottle = Math.max(1 + e_Dualshock4.getR2Axis(), e_maxDriveThrottlePercent);
     if (RobotContainer.RobotDriveType.TANK == RobotContainer.getDriveType()) {
       double inputLeft = e_Dualshock4.getLeftY() * e_driveReduction * e_driveTriggerThrottle;
       double inputRight = e_Dualshock4.getRightY() * e_driveReduction * e_driveTriggerThrottle;
