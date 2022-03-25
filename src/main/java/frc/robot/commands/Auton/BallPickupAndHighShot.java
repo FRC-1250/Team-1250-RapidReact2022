@@ -36,7 +36,7 @@ public class BallPickupAndHighShot extends SequentialCommandGroup {
                 new DriveToPositionByInches(cmd_drivetrain, 16),
                 new WaitCommand(1),
                 new RetractIntake(cmd_intake))),
-        new DriveToPositionByInches(cmd_drivetrain, -19),
+        new DriveToPositionByInches(cmd_drivetrain, -17),
         new ParallelCommandGroup(new WaitCommand(1),new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake)),
         new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 3000),
         //UNCHARTED WATERS
