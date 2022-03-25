@@ -70,10 +70,10 @@ public final class Constants {
 
     // Shuffleboard
     public static final ShuffleboardTab PRIMARY_TAB = Shuffleboard.getTab("Primary");
-    public static final ShuffleboardTab DRIVETRAIN_TAB = Shuffleboard.getTab("Drivetrain");
-    public static final ShuffleboardTab CLIMBER_TAB = Shuffleboard.getTab("Climber");
-    public static final ShuffleboardTab INTAKE_SORT_TAB = Shuffleboard.getTab("Intake-Sort");
-    public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard.getTab("Shooter");
+    // public static final ShuffleboardTab DRIVETRAIN_TAB = Shuffleboard.getTab("Drivetrain");
+    // public static final ShuffleboardTab CLIMBER_TAB = Shuffleboard.getTab("Climber");
+    // public static final ShuffleboardTab INTAKE_SORT_TAB = Shuffleboard.getTab("Intake-Sort");
+    // public static final ShuffleboardTab SHOOTER_TAB = Shuffleboard.getTab("Shooter");
     public static final ShuffleboardTab SYSTEM_MONITOR_TAB = Shuffleboard.getTab("System");
 
 }

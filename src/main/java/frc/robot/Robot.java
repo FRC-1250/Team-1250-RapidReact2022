@@ -70,8 +70,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    m_robotContainer.changeDriveMode();
-    m_robotContainer.changeNumberOfOperators();
+
   }
 
   /**
