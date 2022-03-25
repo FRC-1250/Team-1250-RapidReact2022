@@ -41,8 +41,8 @@ public class ExtendIntake extends CommandBase {
       intake.SetIntakeRollerspeed(intakeRollerSpeed);
     }
 
-    if (progress > 0.90) {
-      intake.setIntakeSpeed(0);
+    if (progress > 0.70) {
+      intake.setIntakeSpeed(0.4);
     } else {
       intake.setIntakeSpeed(0.8);
     }

@@ -30,7 +30,7 @@ public class RetractIntake extends CommandBase {
     intake.SetIntakeRollerspeed(0);
     progress = RobotHelper.calculateProgress(start, end, intake.getIntakePosition());
     
-    if (progress > 0.80) {
+    if (progress > 0.70) {
       intake.setIntakeSpeed(-0.2);
     } else {
       intake.setIntakeSpeed(-0.8);
