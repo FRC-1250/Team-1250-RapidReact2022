@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -43,6 +44,9 @@ public class Sorter extends SubsystemBase {
   /** Creates a new Sorter. */
   public Sorter() {
     alliance = DriverStation.getAlliance();
+    sorter.setIdleMode(IdleMode.kBrake);
+    lateralConveyor.setIdleMode(IdleMode.kBrake);
+    
     configureColorMatcher();
     configureShuffleBoard();
   }
