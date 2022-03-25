@@ -23,7 +23,7 @@ public class Climber extends SubsystemBase {
   public boolean extendClimberHasMoved = false;
 
   public enum ClimbHeight {
-    CLIMB_MID_RUNG(-189439),
+    CLIMB_MID_RUNG(-285000),
     CLIMB_LOW_RUNG(-72141);
 
     public final double heightInTicks;
