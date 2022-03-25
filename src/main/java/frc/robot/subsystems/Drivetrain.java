@@ -10,7 +10,9 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -65,14 +67,15 @@ public class Drivetrain extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    leftFrontMotorTemp = Constants.DRIVETRAIN_TAB.add("FL Motor temp", 0).withSize(1, 1).withPosition(0, 0).getEntry();
-    rightFrontMotorTemp = Constants.DRIVETRAIN_TAB.add("FR Motor temp", 0).withSize(1, 1).withPosition(1, 0).getEntry();
-    leftBackMotorTemp = Constants.DRIVETRAIN_TAB.add("BL Motor temp", 0).withSize(1, 1).withPosition(0, 1).getEntry();
-    rightBackMotorTemp = Constants.DRIVETRAIN_TAB.add("BR Motor temp", 0).withSize(1, 1).withPosition(1, 1).getEntry();
-    rightFrontTicks = Constants.DRIVETRAIN_TAB.add("FR motor ticks", 0).withSize(1, 1).getEntry();
-    leftFrontTicks = Constants.DRIVETRAIN_TAB.add("FL motor ticks", 0).withSize(1, 1).getEntry();
-    pigeonHeadingNT = Constants.DRIVETRAIN_TAB.add("Heading", 0).withSize(2, 2).withPosition(0, 2)
-        .withWidget(BuiltInWidgets.kGyro).getEntry();
+    ShuffleboardLayout layout = Constants.SYSTEM_MONITOR_TAB.getLayout("Drivetrain", BuiltInLayouts.kList);
+    layout.add(this);
+    leftFrontMotorTemp = layout.add("FL Motor temp", 0).getEntry();
+    rightFrontMotorTemp = layout.add("FR Motor temp", 0).getEntry();
+    leftBackMotorTemp = layout.add("BL Motor temp", 0).getEntry();
+    rightBackMotorTemp = layout.add("BR Motor temp", 0).getEntry();
+    rightFrontTicks = layout.add("FR motor ticks", 0).getEntry();
+    leftFrontTicks = layout.add("FL motor ticks", 0).getEntry();
+    pigeonHeadingNT = layout.add("Heading", 0).withWidget(BuiltInWidgets.kGyro).getEntry();
   }
 
   public void updateShuffleBoard() {

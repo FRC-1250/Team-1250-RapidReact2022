@@ -11,6 +11,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -34,9 +36,10 @@ public class Intake extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    ReverseLimitSwitch = Constants.INTAKE_SORT_TAB.add("Limit switch", false).withSize(2, 1).withPosition(4, 0)
-        .getEntry();
-    IntakePosition = Constants.INTAKE_SORT_TAB.add("Intake position", 0).withSize(2, 1).withPosition(4, 1).getEntry();
+    ShuffleboardLayout layout = Constants.SYSTEM_MONITOR_TAB.getLayout("Intake-Sort", BuiltInLayouts.kList);
+    layout.add(this);
+    ReverseLimitSwitch = layout.add("Limit switch", false).getEntry();
+    IntakePosition = layout.add("Intake position", 0).getEntry();
   }
 
   public void updateShuffleBoard() {
