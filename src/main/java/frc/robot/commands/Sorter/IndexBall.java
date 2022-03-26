@@ -14,6 +14,7 @@ public class IndexBall extends CommandBase {
   private final Sorter sorter;
   private final Shooter shooter;
   private final Intake intake;
+  private boolean sensorTrippedPreviously = false;
 
   public IndexBall(Sorter m_sorter, Shooter m_shooter, Intake m_intake) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -33,6 +34,10 @@ public class IndexBall extends CommandBase {
   @Override
   public void execute() {
     if (sorter.getColorSensorProxmity() > 250) {
+      if (sensorTrippedPreviously == false) {
+        sensorTrippedPreviously = true;
+        sorter.setSortWheelSpeed(0);
+      }
       sorter.setLateralConveyorSpeed(0);
       if (shooter.isUptakeSensorTripped()) {
         sorter.setSortWheelSpeed(0);
@@ -40,11 +45,13 @@ public class IndexBall extends CommandBase {
         sorter.setSortWheelSpeed(-1);
       }
     } else {
-      sorter.setSortWheelSpeed(0);
+      sensorTrippedPreviously = false;
       if (intake.isIntakeBeyondBumpers()) {
         sorter.setLateralConveyorSpeed(1);
+        sorter.setSortWheelSpeed(0.4);
       } else {
         sorter.setLateralConveyorSpeed(0);
+        sorter.setSortWheelSpeed(0);
       }
     }
   }
