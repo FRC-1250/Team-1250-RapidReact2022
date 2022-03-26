@@ -46,7 +46,7 @@ public class Shooter extends SubsystemBase {
   public enum ShooterHeight {
     SHOOT_HIGH(21000),
     SHOOT_HIGH_FENDER(18000),
-    SHOOT_LOW(7500);
+    SHOOT_LOW(9000);
 
     public final double rpmInTicks;
 
