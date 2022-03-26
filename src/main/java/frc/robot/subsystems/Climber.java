@@ -24,7 +24,7 @@ public class Climber extends SubsystemBase {
 
   public enum ClimbHeight {
     CLIMB_MID_RUNG(-285000),
-    CLIMB_LOW_RUNG(-72141);
+    CLIMB_LOW_RUNG(-114532);
 
     public final double heightInTicks;
 
