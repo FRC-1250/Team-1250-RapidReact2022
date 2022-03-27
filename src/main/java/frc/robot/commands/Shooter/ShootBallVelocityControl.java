@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Sorter;
@@ -16,6 +17,8 @@ public class ShootBallVelocityControl extends CommandBase {
   private double acceptancePercentage = 0.03;
   private boolean shooterPrimed = false;
   private long shotTimerInMs = 0;
+  private boolean sensorTrippedPreviously = true;
+  private Timer timer = new Timer();
 
   public ShootBallVelocityControl(Shooter m_shooter, Sorter m_sorter, ShooterHeight m_shooterHeight) {
     shooter = m_shooter;
@@ -35,6 +38,8 @@ public class ShootBallVelocityControl extends CommandBase {
     if (shotTimerInMs > 0) {
       shotTimerInMs += System.currentTimeMillis();
     }
+
+    timer.reset();
   }
 
   @Override
@@ -47,9 +52,19 @@ public class ShootBallVelocityControl extends CommandBase {
     if (shooterPrimed && shooter.isUptakeSensorTripped()) {
       shooter.setUptakeConveyorSpeed(1);
       sorter.setSortWheelSpeed(0);
+      sensorTrippedPreviously = true;
     } else if (shooterPrimed && !shooter.isUptakeSensorTripped()) {
-      shooter.setUptakeConveyorSpeed(0.5);
-      sorter.setSortWheelSpeed(-0.5);
+      if (sensorTrippedPreviously == true) {
+        timer.start();
+        sensorTrippedPreviously = false;
+      }
+
+      if (timer.get() > 0.5) {
+        shooter.setUptakeConveyorSpeed(0.5);
+        sorter.setSortWheelSpeed(-0.5);
+        timer.stop();
+        timer.reset();
+      }
     }
   }
 
