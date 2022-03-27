@@ -8,13 +8,16 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -41,6 +44,9 @@ public class Sorter extends SubsystemBase {
   /** Creates a new Sorter. */
   public Sorter() {
     alliance = DriverStation.getAlliance();
+    sorter.setIdleMode(IdleMode.kBrake);
+    lateralConveyor.setIdleMode(IdleMode.kBrake);
+    
     configureColorMatcher();
     configureShuffleBoard();
   }
@@ -52,9 +58,11 @@ public class Sorter extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    proximityNT = Constants.INTAKE_SORT_TAB.add("Ball proximity", 0).withSize(2, 1).withPosition(8, 0).getEntry();
-    detectedColorNT = Constants.INTAKE_SORT_TAB.add("Detected color", "").withSize(2, 1).withPosition(8, 1).getEntry();
-    detectedColorGraphNT = Constants.INTAKE_SORT_TAB.add("Detected color graph", 0).withSize(2, 2).withPosition(8, 2).withWidget(BuiltInWidgets.kGraph).getEntry();
+    ShuffleboardLayout layout = Constants.SYSTEM_MONITOR_TAB.getLayout("Intake-Sort", BuiltInLayouts.kList);
+    layout.add(this);
+    proximityNT = layout.add("Ball proximity", 0).getEntry();
+    detectedColorNT = layout.add("Detected color", "").getEntry();
+    detectedColorGraphNT = layout.add("Detected color graph", 0).withWidget(BuiltInWidgets.kGraph).getEntry();
   }
 
   public void setLateralConveyorSpeed(double speed) {

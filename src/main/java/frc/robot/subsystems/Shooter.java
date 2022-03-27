@@ -12,6 +12,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -43,8 +45,9 @@ public class Shooter extends SubsystemBase {
 
   public enum ShooterHeight {
     SHOOT_HIGH(21000),
+    SHOOT_HIGH_AUTO(19000),
     SHOOT_HIGH_FENDER(18000),
-    SHOOT_LOW(7500);
+    SHOOT_LOW(9000);
 
     public final double rpmInTicks;
 
@@ -72,9 +75,11 @@ public class Shooter extends SubsystemBase {
   }
 
   private void configureShuffleBoard() {
-    uptakeSensorNT = Constants.SHOOTER_TAB.add("Uptake sensor", false).withSize(2, 1).withPosition(6, 0).getEntry();
-    shooterCurrentRpmNT = Constants.SHOOTER_TAB.add("Current shooter RPM", 0).withSize(2, 1).withPosition(6, 1).getEntry();
-    shooterTargetRpmNT = Constants.SHOOTER_TAB.add("Target shooter RPM", 0).withSize(2, 1).withPosition(6, 2).getEntry();
+    ShuffleboardLayout layout = Constants.SYSTEM_MONITOR_TAB.getLayout("Shooter", BuiltInLayouts.kList);
+    layout.add(this);
+    uptakeSensorNT = layout.add("Uptake sensor", false).getEntry();
+    shooterCurrentRpmNT = layout.add("Current shooter RPM", 0).getEntry();
+    shooterTargetRpmNT = layout.add("Target shooter RPM", 0).getEntry();
   }
 
   public void updateShuffleBoard() {

@@ -18,8 +18,8 @@ public class LowShotAndDriveBack extends SequentialCommandGroup {
   /** Creates a new ShootBallAndDriveBack. */
   public LowShotAndDriveBack(Shooter cmd_Shooter, Drivetrain cmd_drivetrain, Sorter cmd_sorter) {
     addCommands(
-        new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_BACK),
+        new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_FRONT),
         new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_LOW, 5000),
-        new DriveToPositionByInches(cmd_drivetrain, 85));
+        new DriveToPositionByInches(cmd_drivetrain, -85));
   }
 }

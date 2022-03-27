@@ -24,9 +24,9 @@ public class RetractClimber extends CommandBase {
     if(m_climber.extendClimberHasMoved){
     m_climber.setRatchetPosition(0.2);
     amps = m_systemMonitor.getCurrentByChannel(17);
-    if (amps > 5) {
+    if (amps > 8) {
       m_climber.setClimberHookSpeed(1);
-    } else if (amps <= 5) {
+    } else if (amps <= 8) {
       m_climber.setClimberHookSpeed(0.3);
     }
   }

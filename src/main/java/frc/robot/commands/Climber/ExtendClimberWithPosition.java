@@ -26,16 +26,16 @@ public class ExtendClimberWithPosition extends CommandBase {
   public void initialize() {
     unjamServoTimer = System.currentTimeMillis() + 100;
     start = m_climber.getClimberHookPosition();
-    end = m_climber.getClimberHookPosition() + m_climbHeight.heightInTicks;
+    end =  m_climbHeight.heightInTicks;
   }
 
   @Override
   public void execute() {
     m_climber.setRatchetPosition(0.75);
     if (unjamServoTimer > System.currentTimeMillis()) {
-      m_climber.setClimberHookSpeed(0.1);
+      m_climber.setClimberHookSpeed(0.5);
     } else {
-      m_climber.setClimberHookSpeed(-0.5);
+      m_climber.setClimberHookSpeed(-0.75);
     }
   }
 

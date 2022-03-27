@@ -36,11 +36,11 @@ public class DriveToPositionByInches extends CommandBase {
   public void execute() {
     if (Math.signum(start - end) == 1) {
       m_drivetrain.driveArcade(
-          RobotHelper.piecewiseMotorController(-0.8, -0.5, start, end, m_drivetrain.getEncoderPosition(), true),
+          RobotHelper.piecewiseMotorController(-0.8, 0.8, -0.5, 0.8, start, end, m_drivetrain.getEncoderPosition(), true),
           Math.min(-(m_drivetrain.getHeading() * gyroAdjustKp), 0.2));
     } else {
       m_drivetrain.driveArcade(
-          RobotHelper.piecewiseMotorController(0.8, 0.5, start, end, m_drivetrain.getEncoderPosition(), true),
+          RobotHelper.piecewiseMotorController(0.8, 0.8, 0.5, 0.8, start, end, m_drivetrain.getEncoderPosition(), true),
           Math.min(-(m_drivetrain.getHeading() * gyroAdjustKp), 0.2));
     }
   }
