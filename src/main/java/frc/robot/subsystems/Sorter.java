@@ -54,7 +54,6 @@ public class Sorter extends SubsystemBase {
   private void configureColorMatcher() {
     m_colorMatcher.addColorMatch(kBlueTarget);
     m_colorMatcher.addColorMatch(kRedTarget);
-    m_colorMatcher.setConfidenceThreshold(0.85);
   }
 
   private void configureShuffleBoard() {

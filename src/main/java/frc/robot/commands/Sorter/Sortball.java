@@ -15,13 +15,14 @@ public class Sortball extends CommandBase {
   private final Sorter sorter;
   private final Shooter shooter;
   private final Intake intake;
+  private boolean sensorTrippedPreviously = false;
 
   private Color matchedColor;
   private double proximity;
 
   private double hit = 0;
   private double miss = 0;
-  private final double sampleRate = 3;
+  private final double sampleRate = 5;
 
   public Sortball(Sorter m_sorter, Shooter m_shooter, Intake m_intake) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -36,22 +37,37 @@ public class Sortball extends CommandBase {
   public void execute() {
     proximity = sorter.getColorSensorProxmity();
     sorter.sendProximityToShuffleBoard(proximity);
-    matchedColor = sorter.matchColor();
-    sorter.sendDetectedColorToShuffleBoard(matchedColor);
-    if (proximity > 225){
+
+    if (proximity > 250) {
       sorter.setLateralConveyorSpeed(0);
+      if (sensorTrippedPreviously == false) {
+        sensorTrippedPreviously = true;
+        sorter.setSortWheelSpeed(0);
+      }
+    } else {
+      sensorTrippedPreviously = false;
+      hit = 0;
+      miss = 0;
+      if (intake.isIntakeBeyondBumpers()) {
+        sorter.setLateralConveyorSpeed(1);
+        sorter.setSortWheelSpeed(0.4);
+      } else {
+        sorter.setLateralConveyorSpeed(0);
+        sorter.setSortWheelSpeed(0);
+      }
     }
-    if (proximity > 400) {
-      
+
+    if (proximity > 450) {
+      matchedColor = sorter.matchColor();
+      sorter.sendDetectedColorToShuffleBoard(matchedColor);
       if (sorter.isMyAllianceColor(matchedColor)) {
         hit++;
+        System.out.print(String.format("Hit - R: {}, G: {}, B: {}", matchedColor.red, matchedColor.green, matchedColor.blue));
       } else {
         miss++;
+        System.out.print(String.format("Miss - R: {}, G: {}, B: {}", matchedColor.red, matchedColor.green, matchedColor.blue));
       }
-
       if (hit >= sampleRate) {
-        sorter.hits.setNumber(hit);
-        sorter.miss.setNumber(miss);
         if (shooter.isUptakeSensorTripped()) {
           sorter.setSortWheelSpeed(0);
         } else {
@@ -60,18 +76,9 @@ public class Sortball extends CommandBase {
         hit = 0;
         miss = 0;
       } else if (miss >= sampleRate) {
-        sorter.hits.setNumber(hit);
-        sorter.miss.setNumber(miss);
         sorter.setSortWheelSpeed(1);
         hit = 0;
         miss = 0;
-      }
-    } else {
-      hit = 0;
-      miss = 0;
-      sorter.setSortWheelSpeed(0);
-      if (!intake.isReverseLimitSwitchPressed()) {
-        sorter.setLateralConveyorSpeed(.7);
       }
     }
   }
