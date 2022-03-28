@@ -19,9 +19,7 @@ import com.revrobotics.REVLibError;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utility.CANDeviceHealth;
@@ -32,7 +30,6 @@ public class SystemMonitor extends SubsystemBase {
   private final CANdle candle = new CANdle(Constants.CANDLE_CAN_ID);
   private final PowerDistribution pdp = new PowerDistribution(Constants.POWER_DISTRIBUTION_BOARD_CAN_ID,
       ModuleType.kRev);
-  private NetworkTableEntry channelCurrent;
   private List<WPI_TalonFX> talons = new ArrayList<WPI_TalonFX>();
   private List<CANSparkMax> sparkMaxs = new ArrayList<CANSparkMax>();
   private List<Pigeon2> pigeon2s = new ArrayList<Pigeon2>();
@@ -138,7 +135,7 @@ public class SystemMonitor extends SubsystemBase {
   }
 
   public void pushHealthToShuffleboard() {
-    ShuffleboardLayout layout = Constants.SYSTEM_MONITOR_TAB.getLayout("Diag");
+    ShuffleboardLayout layout = Constants.SYSTEM_MONITOR_TAB.getLayout("CAN Diagnostics");
     for (Map.Entry<Integer, CANDeviceHealth> entry : healthList.entrySet()) {
       layout.add("CAN ID: " + entry.getKey(), entry.getValue().getDeviceHealth().toString());
     }
@@ -149,56 +146,47 @@ public class SystemMonitor extends SubsystemBase {
     // This should be in its own thread, catch all exceptions so we don't fail due
     // to monitoring
     Long currentTime = System.currentTimeMillis();
-    DeviceHealth deviceHealth;
 
-    if (System.currentTimeMillis() > healthUpdateTimer && !healthList.isEmpty()) {
-      try {
-        testPigeonHealth();
-        testSparkHealth();
-        testTalonHealth();
-        testPdp();
-        pushHealthToShuffleboard();
-      } catch (Exception e) {
-        System.out.println(e.getStackTrace());
+    if (!healthList.isEmpty()) {
+      LEDCycleLenth = (healthList.size() + Constants.CANDLE_LED_COUNT
+          - (healthList.size() % Constants.CANDLE_LED_COUNT)) / Constants.CANDLE_LED_COUNT;
+
+      if (System.currentTimeMillis() > healthUpdateTimer) {
+        try {
+          testPigeonHealth();
+          testSparkHealth();
+          testTalonHealth();
+          testPdp();
+          pushHealthToShuffleboard();
+        } catch (Exception e) {
+          System.out.println(e.getStackTrace());
+        }
+        healthUpdateTimer = currentTime + 2000 * LEDCycleLenth;
       }
-      healthUpdateTimer = currentTime + 5000;
-    }
 
-    if (System.currentTimeMillis() > LEDUpdateTimer && !healthList.isEmpty()) {
-      LEDCycleLenth = healthList.size() / Constants.CANDLE_LED_COUNT;
-      try {
-        if (LEDCycle == LEDCycleLenth) {
-          for (int i = 0 + (LEDCycle * Constants.CANDLE_LED_COUNT); i < healthList.size(); i++) {
-            deviceHealth = healthList.get(i).getDeviceHealth();
-            switch (deviceHealth) {
-              case GREEN:
-                setLEDs(0, 255, 0, i % Constants.CANDLE_LED_COUNT, 1);
-              case YELLOW:
-                setLEDs(255, 255, 0, i % Constants.CANDLE_LED_COUNT, 1);
-              case RED:
-                setLEDs(255, 0, 0, i % Constants.CANDLE_LED_COUNT, 1);
-            }
-          }
-          LEDCycle = 0;
-        } else {
-          for (int i = 0 + (LEDCycle * Constants.CANDLE_LED_COUNT); i < Constants.CANDLE_LED_COUNT
-              + (LEDCycle * Constants.CANDLE_LED_COUNT); i++) {
-            deviceHealth = healthList.get(i).getDeviceHealth();
-            switch (deviceHealth) {
-              case GREEN:
-                setLEDs(0, 255, 0, i % Constants.CANDLE_LED_COUNT, 1);
-              case YELLOW:
-                setLEDs(255, 255, 0, i % Constants.CANDLE_LED_COUNT, 1);
-              case RED:
-                setLEDs(255, 0, 0, i % Constants.CANDLE_LED_COUNT, 1);
+      if (System.currentTimeMillis() > LEDUpdateTimer) {
+        try {
+          int t = (LEDCycle % LEDCycleLenth) * Constants.CANDLE_LED_COUNT;
+          for (int i = t; i < Constants.CANDLE_LED_COUNT + t; i++) {
+            if (healthList.size() < i) {
+              switch (healthList.get(i).getDeviceHealth()) {
+                case GREEN:
+                  setLEDs(0, 255, 0, i % Constants.CANDLE_LED_COUNT, 1);
+                case YELLOW:
+                  setLEDs(255, 255, 0, i % Constants.CANDLE_LED_COUNT, 1);
+                case RED:
+                  setLEDs(255, 0, 0, i % Constants.CANDLE_LED_COUNT, 1);
+              }
+            } else {
+              setLEDs(0, 0, 0, i % Constants.CANDLE_LED_COUNT, 1);
             }
           }
           LEDCycle++;
+        } catch (Exception e) {
+          System.out.println(e.getStackTrace());
         }
-      } catch (Exception e) {
-        System.out.println(e.getStackTrace());
+        LEDUpdateTimer = currentTime + 2000;
       }
-      LEDUpdateTimer = currentTime + 10000;
     }
   }
 }
