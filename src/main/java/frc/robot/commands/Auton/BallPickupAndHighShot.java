@@ -36,13 +36,13 @@ public class BallPickupAndHighShot extends SequentialCommandGroup {
                 new DriveToPositionByInches(cmd_drivetrain, 16),
                 new WaitCommand(1),
                 new RetractIntake(cmd_intake))),
-        new DriveToPositionByInches(cmd_drivetrain, -17),
-        new ParallelCommandGroup(new WaitCommand(1),new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake)),
-        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 3000),
+        new DriveToPositionByInches(cmd_drivetrain, -15),
+        new ParallelCommandGroup(new WaitCommand(0.5),new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake)),
+        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 2000),
         //UNCHARTED WATERS
         //First Turn
-        new TurnDegrees(cmd_drivetrain, 76),
-        new WaitCommand(0.5),
+        new TurnDegrees(cmd_drivetrain, 78),
+        new WaitCommand(0.1),
         //Drive 100 + collect
         new ExtendIntake(cmd_intake),
         new ParallelCommandGroup(
@@ -53,12 +53,12 @@ public class BallPickupAndHighShot extends SequentialCommandGroup {
                 new RetractIntake(cmd_intake))),
         //Turn To goal
         new TurnDegrees(cmd_drivetrain, -20),
-        new WaitCommand(0.5),
-        new DriveToPositionByInches(cmd_drivetrain, -12),
+        new WaitCommand(0.1),
+        new DriveToPositionByInches(cmd_drivetrain, -8),
         new WaitCommand(0.2),
         new ParallelCommandGroup(new WaitCommand(1),new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake)),
         //Shoot Further
-        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 3000)   
+        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 2000)   
 
         //5 ball experimental     
         // //Turn to next balls
