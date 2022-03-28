@@ -35,6 +35,7 @@ public class Climber extends SubsystemBase {
 
   public Climber() {
     configureShuffleBoard();
+    SystemMonitor.getInstance().registerDevice(climberHook, "Climber");
     climberHook.setNeutralMode(NeutralMode.Brake);
   }
 

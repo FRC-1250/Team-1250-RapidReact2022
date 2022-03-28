@@ -5,9 +5,8 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.led.*;
@@ -19,11 +18,9 @@ import com.revrobotics.REVLibError;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utility.CANDeviceHealth;
-import frc.robot.utility.CANDeviceHealth.DeviceHealth;
 
 public class SystemMonitor extends SubsystemBase {
 
@@ -33,7 +30,7 @@ public class SystemMonitor extends SubsystemBase {
   private List<WPI_TalonFX> talons = new ArrayList<WPI_TalonFX>();
   private List<CANSparkMax> sparkMaxs = new ArrayList<CANSparkMax>();
   private List<Pigeon2> pigeon2s = new ArrayList<Pigeon2>();
-  private TreeMap<Integer, CANDeviceHealth> healthList = new TreeMap<Integer, CANDeviceHealth>();
+  private List<CANDeviceHealth> healthList = new ArrayList<CANDeviceHealth>();
   private static SystemMonitor instance = new SystemMonitor();
 
   private Long healthUpdateTimer = 0L;
@@ -59,59 +56,79 @@ public class SystemMonitor extends SubsystemBase {
   }
 
   private void registerDevice(PowerDistribution pdp) {
-    healthList.put(pdp.getModule(), new CANDeviceHealth());
+    healthList.add(new CANDeviceHealth(pdp.getModule(), "pdp"));
+    Collections.sort(healthList);
   }
 
-  public void registerDevice(Pigeon2 device) {
+  public void registerDevice(Pigeon2 device, String friendlyName) {
     pigeon2s.add(device);
-    healthList.put(device.getDeviceID(), new CANDeviceHealth());
+    healthList.add(new CANDeviceHealth(device.getDeviceID(), friendlyName));
+    Collections.sort(healthList);
   }
 
-  public void registerDevice(WPI_TalonFX device) {
+  public void registerDevice(WPI_TalonFX device, String friendlyName) {
     talons.add(device);
-    healthList.put(device.getDeviceID(), new CANDeviceHealth());
+    healthList.add(new CANDeviceHealth(device.getDeviceID(), friendlyName));
+    Collections.sort(healthList);
   }
 
-  public void registerDevice(CANSparkMax device) {
+  public void registerDevice(CANSparkMax device, String friendlyName) {
     sparkMaxs.add(device);
-    healthList.put(device.getDeviceId(), new CANDeviceHealth());
+    healthList.add(new CANDeviceHealth(device.getDeviceId(), friendlyName));
+    Collections.sort(healthList);
   }
 
   private void testPigeonHealth() {
     for (Pigeon2 device : pigeon2s) {
-      if (ErrorCode.CAN_MSG_NOT_FOUND == device.getLastError()) {
-        healthList.get(device.getDeviceID()).reportDisconnect();
-      } else {
-        healthList.get(device.getDeviceID()).reportOK();
+      for (int i = 0; i < healthList.size(); i++) {
+        if (device.getDeviceID() == healthList.get(i).getCanID()) {
+          if (ErrorCode.CAN_MSG_NOT_FOUND == device.getLastError()) {
+            healthList.get(i).reportDisconnect();
+          } else {
+            healthList.get(i).reportOK();
+          }
+        }
       }
     }
   }
 
   private void testTalonHealth() {
     for (WPI_TalonFX device : talons) {
-      if (ErrorCode.CAN_MSG_NOT_FOUND == device.getLastError()) {
-        healthList.get(device.getDeviceID()).reportDisconnect();
-      } else {
-        healthList.get(device.getDeviceID()).reportOK();
+      for (int i = 0; i < healthList.size(); i++) {
+        if (device.getDeviceID() == healthList.get(i).getCanID()) {
+          if (ErrorCode.CAN_MSG_NOT_FOUND == device.getLastError()) {
+            healthList.get(i).reportDisconnect();
+          } else {
+            healthList.get(i).reportOK();
+          }
+        }
       }
     }
   }
 
   private void testSparkHealth() {
     for (CANSparkMax device : sparkMaxs) {
-      if (REVLibError.kCANDisconnected == device.getLastError()) {
-        healthList.get(device.getDeviceId()).reportDisconnect();
-      } else {
-        healthList.get(device.getDeviceId()).reportOK();
+      for (int i = 0; i < healthList.size(); i++) {
+        if (device.getDeviceId() == healthList.get(i).getCanID()) {
+          if (REVLibError.kCANDisconnected == device.getLastError()) {
+            healthList.get(i).reportDisconnect();
+          } else {
+            healthList.get(i).reportOK();
+          }
+        }
       }
     }
   }
 
   private void testPdp() {
-    if (pdp.getFaults().CanWarning) {
-      healthList.get(pdp.getModule()).reportDisconnect();
-    } else {
-      healthList.get(pdp.getModule()).reportOK();
+    for (int i = 0; i < healthList.size(); i++) {
+      if (pdp.getModule() == healthList.get(i).getCanID()) {
+        if (pdp.getFaults().CanWarning) {
+          healthList.get(i).reportDisconnect();
+        } else {
+          healthList.get(i).reportOK();
+        }
+      }
     }
   }
 
@@ -134,13 +151,6 @@ public class SystemMonitor extends SubsystemBase {
     candle.setLEDs(r, g, b, 0, startIdx, count);
   }
 
-  public void pushHealthToShuffleboard() {
-    ShuffleboardLayout layout = Constants.SYSTEM_MONITOR_TAB.getLayout("CAN Diagnostics");
-    for (Map.Entry<Integer, CANDeviceHealth> entry : healthList.entrySet()) {
-      layout.add("CAN ID: " + entry.getKey(), entry.getValue().getDeviceHealth().toString());
-    }
-  }
-
   @Override
   public void periodic() {
     // This should be in its own thread, catch all exceptions so we don't fail due
@@ -157,7 +167,6 @@ public class SystemMonitor extends SubsystemBase {
           testSparkHealth();
           testTalonHealth();
           testPdp();
-          pushHealthToShuffleboard();
         } catch (Exception e) {
           System.out.println(e.getStackTrace());
         }
@@ -168,7 +177,7 @@ public class SystemMonitor extends SubsystemBase {
         try {
           int t = (LEDCycle % LEDCycleLenth) * Constants.CANDLE_LED_COUNT;
           for (int i = t; i < Constants.CANDLE_LED_COUNT + t; i++) {
-            if (healthList.size() < i) {
+            if (healthList.size() > i) {
               switch (healthList.get(i).getDeviceHealth()) {
                 case GREEN:
                   setLEDs(0, 255, 0, i % Constants.CANDLE_LED_COUNT, 1);

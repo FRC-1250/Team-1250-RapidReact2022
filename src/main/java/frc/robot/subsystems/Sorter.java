@@ -46,9 +46,11 @@ public class Sorter extends SubsystemBase {
     alliance = DriverStation.getAlliance();
     sorter.setIdleMode(IdleMode.kBrake);
     lateralConveyor.setIdleMode(IdleMode.kBrake);
-    
+
     configureColorMatcher();
     configureShuffleBoard();
+    SystemMonitor.getInstance().registerDevice(sorter, "sort wheel");
+    SystemMonitor.getInstance().registerDevice(lateralConveyor, "lateralConveyor");
   }
 
   private void configureColorMatcher() {

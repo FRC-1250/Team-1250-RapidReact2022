@@ -42,6 +42,12 @@ public class Drivetrain extends SubsystemBase {
     rightBackDriveMotor.follow(rightFrontDriveMotor);
     leftBackDriveMotor.follow(leftFrontDriveMotor);
 
+    SystemMonitor.getInstance().registerDevice(leftFrontDriveMotor, "leftFrontDriveMotor");
+    SystemMonitor.getInstance().registerDevice(leftBackDriveMotor, "leftBackDriveMotor");
+    SystemMonitor.getInstance().registerDevice(rightBackDriveMotor, "rightBackDriveMotor");
+    SystemMonitor.getInstance().registerDevice(rightFrontDriveMotor, "rightFrontDriveMotor");
+    SystemMonitor.getInstance().registerDevice(pigeonGyro, "pigeonGyro");
+
     configureShuffleBoard();
   }
 

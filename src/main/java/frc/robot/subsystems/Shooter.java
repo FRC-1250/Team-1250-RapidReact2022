@@ -62,6 +62,9 @@ public class Shooter extends SubsystemBase {
     configureTalon(shooterRear, false);
     shooterFront.follow(shooterRear);
     configureShuffleBoard();
+    SystemMonitor.getInstance().registerDevice(shooterFront, "shooterFront");
+    SystemMonitor.getInstance().registerDevice(shooterRear, "shooterRear");
+    SystemMonitor.getInstance().registerDevice(UptakeConveyor, "UptakeConveyor");
   }
 
   private void configureTalon(WPI_TalonFX talon, boolean inverted) {
