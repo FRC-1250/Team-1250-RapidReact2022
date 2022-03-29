@@ -27,7 +27,7 @@ public class ShooterIdle extends CommandBase {
       if (shooter.isUptakeSensorTripped()) {
         shooter.setUptakeConveyorSpeed(0);
       } else {
-        shooter.setUptakeConveyorSpeed(0.5);
+        shooter.setUptakeConveyorSpeed(0.25);
       }
     } else {
       shooter.setUptakeConveyorSpeed(0);
