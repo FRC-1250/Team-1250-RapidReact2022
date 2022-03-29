@@ -30,6 +30,7 @@ import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.commands.Shooter.ShootBallVelocityControl;
 import frc.robot.commands.Shooter.ShooterIdle;
 import frc.robot.commands.Sorter.IndexBall;
+import frc.robot.commands.Sorter.Sortball;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -118,7 +119,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     m_drivetrain.setDefaultCommand(new Drive(m_drivetrain, driveGamepad));
-    m_sorter.setDefaultCommand(new IndexBall(m_sorter, m_shooter, m_intake));
+    m_sorter.setDefaultCommand(new Sortball(m_sorter, m_shooter, m_intake));
     m_shooter.setDefaultCommand(new ShooterIdle(m_shooter, m_intake));
     m_chooser.setDefaultOption("High shot + taxi", new HighShotAndDriveBack(m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("2 Ball High Shot - hangar side", new BallPickupAndHighShot2Ball(m_intake, m_shooter, m_drivetrain, m_sorter));
