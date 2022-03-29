@@ -25,11 +25,11 @@ public class CANDeviceHealth implements Comparable<CANDeviceHealth> {
         disconnects = 0;
         deviceHealth = DeviceHealth.GREEN;
         layout = Constants.SYSTEM_MONITOR_TAB.getLayout("CAN Diagnostics", BuiltInLayouts.kList);
-        deviceHealthNT = layout.add(friendlyName, "").getEntry();
+        deviceHealthNT = layout.add(String.format("%s - %s", canID, friendlyName), "").getEntry();
     }
 
     public void reportOK() {
-        if (disconnects < 1) {
+        if (disconnects < 5) {
             deviceHealth = DeviceHealth.GREEN;
             deviceHealthNT.setString(DeviceHealth.GREEN.toString());
         } else {
@@ -38,10 +38,26 @@ public class CANDeviceHealth implements Comparable<CANDeviceHealth> {
         }
     }
 
+    public void reportOK(String error) {
+        if (disconnects < 5) {
+            deviceHealth = DeviceHealth.GREEN;
+            deviceHealthNT.setString(String.format("%s - %s", DeviceHealth.GREEN.toString(), error));
+        } else {
+            deviceHealth = DeviceHealth.YELLOW;
+            deviceHealthNT.setString(String.format("%s - %s", DeviceHealth.YELLOW.toString(), error));
+        }
+    }
+
     public void reportDisconnect() {
         disconnects++;
         deviceHealth = DeviceHealth.RED;
         deviceHealthNT.setString(DeviceHealth.RED.toString());
+    }
+
+    public void reportDisconnect(String error) {
+        disconnects++;
+        deviceHealth = DeviceHealth.RED;
+        deviceHealthNT.setString(String.format("%s - %s", DeviceHealth.RED.toString(), error));
     }
 
     public DeviceHealth getDeviceHealth() {
