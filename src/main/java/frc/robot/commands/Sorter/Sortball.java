@@ -57,15 +57,13 @@ public class Sortball extends CommandBase {
       }
     }
 
-    if (proximity > 450) {
+    if (proximity > 375) {
       matchedColor = sorter.matchColor();
       sorter.sendDetectedColorToShuffleBoard(matchedColor);
       if (sorter.isMyAllianceColor(matchedColor)) {
         hit++;
-        System.out.print(String.format("Hit - R: %s, G: %s, B: %s", matchedColor.red, matchedColor.green, matchedColor.blue));
       } else {
         miss++;
-        System.out.print(String.format("Miss - R: %s, G: %s, B: %s", matchedColor.red, matchedColor.green, matchedColor.blue));
       }
       if (hit >= sampleRate) {
         if (shooter.isUptakeSensorTripped()) {
