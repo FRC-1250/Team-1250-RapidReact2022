@@ -62,10 +62,10 @@ public class Sortball extends CommandBase {
       sorter.sendDetectedColorToShuffleBoard(matchedColor);
       if (sorter.isMyAllianceColor(matchedColor)) {
         hit++;
-        System.out.print(String.format("Hit - R: {}, G: {}, B: {}", matchedColor.red, matchedColor.green, matchedColor.blue));
+        System.out.print(String.format("Hit - R: %s, G: %s, B: %s", matchedColor.red, matchedColor.green, matchedColor.blue));
       } else {
         miss++;
-        System.out.print(String.format("Miss - R: {}, G: {}, B: {}", matchedColor.red, matchedColor.green, matchedColor.blue));
+        System.out.print(String.format("Miss - R: %s, G: %s, B: %s", matchedColor.red, matchedColor.green, matchedColor.blue));
       }
       if (hit >= sampleRate) {
         if (shooter.isUptakeSensorTripped()) {
