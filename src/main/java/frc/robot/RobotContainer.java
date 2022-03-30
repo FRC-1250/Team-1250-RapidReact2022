@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Auton.BallPickupAndHighShot;
-import frc.robot.commands.Auton.BallPickupAndHighShot2Ball;
-import frc.robot.commands.Auton.BallPickupAndHighShotTerminalSide;
-import frc.robot.commands.Auton.HighShotAndDriveBack;
-import frc.robot.commands.Auton.LowShotAndDriveBack;
+import frc.robot.commands.Auton.ThreeBallHigh;
+import frc.robot.commands.Auton.TwoBallHighHangarSide;
+import frc.robot.commands.Auton.TwoBallHighTerminalSIde;
+import frc.robot.commands.Auton.OneBallHigh;
+import frc.robot.commands.Auton.OneBallLow;
 import frc.robot.commands.Climber.ExtendClimber;
 import frc.robot.commands.Climber.ExtendClimberWithPosition;
 import frc.robot.commands.Climber.RetractClimber;
@@ -25,6 +25,7 @@ import frc.robot.commands.Drivetrain.Drive;
 import frc.robot.commands.Drivetrain.DriveStraight;
 import frc.robot.commands.Drivetrain.DriveToPositionByInches;
 import frc.robot.commands.Drivetrain.MoveToTarget;
+import frc.robot.commands.Drivetrain.TurnDegrees;
 import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.commands.Shooter.ShootBallVelocityControl;
@@ -92,7 +93,7 @@ public class RobotContainer {
   private static RobotDriveType m_robotDriveType;
   private static Robotstate m_robotstate;
   private NetworkTableEntry robotstateNT;
-  private NetworkTableEntry singlePlayerNT;;
+  private NetworkTableEntry singlePlayerNT;
 
   public enum Robotstate {
     INTAKE,
@@ -119,12 +120,12 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     m_drivetrain.setDefaultCommand(new Drive(m_drivetrain, driveGamepad));
-    m_sorter.setDefaultCommand(new Sortball(m_sorter, m_shooter, m_intake));
+    m_sorter.setDefaultCommand(new IndexBall(m_sorter, m_shooter, m_intake));
     m_shooter.setDefaultCommand(new ShooterIdle(m_shooter, m_intake));
-    m_chooser.setDefaultOption("High shot + taxi", new HighShotAndDriveBack(m_shooter, m_drivetrain, m_sorter));
-    m_chooser.addOption("2 Ball High Shot - hangar side", new BallPickupAndHighShot2Ball(m_intake, m_shooter, m_drivetrain, m_sorter));
-    m_chooser.addOption("2 Ball High shot - terminal side", new BallPickupAndHighShotTerminalSide(m_intake, m_shooter, m_drivetrain, m_sorter));
-    m_chooser.addOption("Low shot + taxi", new LowShotAndDriveBack(m_shooter, m_drivetrain, m_sorter));
+    m_chooser.setDefaultOption("High shot + taxi", new OneBallHigh(m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("2 Ball High Shot - hangar side", new TwoBallHighHangarSide(m_intake, m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("2 Ball High shot - terminal side", new TwoBallHighTerminalSIde(m_intake, m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("Low shot + taxi", new OneBallLow(m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("taxi", new DriveToPositionByInches(m_drivetrain, 24));
     Constants.PRIMARY_TAB.add("Auto", m_chooser).withSize(2, 1).withPosition(7, 0);
     Constants.PRIMARY_TAB.addCamera("Limelight", "Limelight", "http://10.12.50.11:5800").withSize(6, 4).withPosition(0,0);

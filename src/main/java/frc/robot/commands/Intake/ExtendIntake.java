@@ -30,7 +30,7 @@ public class ExtendIntake extends CommandBase {
   @Override
   public void initialize() {
     start = intake.getIntakePosition();
-    end = 12;
+    end = 12.5;
   }
 
   @Override
@@ -42,7 +42,7 @@ public class ExtendIntake extends CommandBase {
     }
 
     if (progress > 0.70) {
-      intake.setIntakeSpeed(0.4);
+      intake.setIntakeSpeed(0.2);
     } else {
       intake.setIntakeSpeed(0.8);
     }

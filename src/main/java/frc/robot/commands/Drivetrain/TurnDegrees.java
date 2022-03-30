@@ -12,31 +12,29 @@ public class TurnDegrees extends CommandBase {
   private final Drivetrain m_drivetrain;
   private double start;
   private double end;
+  private double degrees;
 
   public TurnDegrees(Drivetrain drivetrain, double degrees) {
     m_drivetrain = drivetrain;
-    end = degrees;
+    this.degrees = degrees;
+    addRequirements(drivetrain);
   }
 
   @Override
   public void initialize() {
-    m_drivetrain.resetEncoders();
-    m_drivetrain.resetHeading();
     start = m_drivetrain.getHeading();
+    end = start + this.degrees;
   }
 
   @Override
   public void execute() {
-
     if (Math.signum(start - end) == 1) {
-        m_drivetrain.driveArcade(0,
-        RobotHelper.piecewiseMotorController(-0.7, -0.4, start, end, m_drivetrain.getHeading(), true));
+      m_drivetrain.driveArcade(0,
+          RobotHelper.piecewiseMotorController(-0.5, -0.2, start, end, m_drivetrain.getHeading(), true));
     } else {
-        m_drivetrain.driveArcade(0,
-        RobotHelper.piecewiseMotorController(0.7, 0.4, start, end, m_drivetrain.getHeading(), true));
+      m_drivetrain.driveArcade(0,
+          RobotHelper.piecewiseMotorController(0.5, 0.2, start, end, m_drivetrain.getHeading(), true));
     }
-    // m_drivetrain.driveArcade(0,
-    //     RobotHelper.piecewiseMotorController(0.5, 0.2, start, end, m_drivetrain.getHeading(), true));
   }
 
   @Override

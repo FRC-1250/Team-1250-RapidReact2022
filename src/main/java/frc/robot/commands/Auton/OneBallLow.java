@@ -14,12 +14,12 @@ import frc.robot.subsystems.Sorter;
 import frc.robot.subsystems.Shooter.ShooterDirection;
 import frc.robot.subsystems.Shooter.ShooterHeight;
 
-public class LowShotAndDriveBack extends SequentialCommandGroup {
+public class OneBallLow extends SequentialCommandGroup {
   /** Creates a new ShootBallAndDriveBack. */
-  public LowShotAndDriveBack(Shooter cmd_Shooter, Drivetrain cmd_drivetrain, Sorter cmd_sorter) {
+  public OneBallLow(Shooter cmd_Shooter, Drivetrain cmd_drivetrain, Sorter cmd_sorter) {
     addCommands(
-        new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_FRONT),
+        new MoveServoToPosition(cmd_Shooter, ShooterDirection.SHOOT_BACK),
         new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_LOW, 5000),
-        new DriveToPositionByInches(cmd_drivetrain, -85));
+        new DriveToPositionByInches(cmd_drivetrain, 85));
   }
 }

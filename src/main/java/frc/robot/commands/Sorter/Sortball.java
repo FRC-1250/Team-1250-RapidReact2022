@@ -57,7 +57,7 @@ public class Sortball extends CommandBase {
       }
     }
 
-    if (proximity > 375) {
+    if (proximity > 400) {
       matchedColor = sorter.matchColor();
       sorter.sendDetectedColorToShuffleBoard(matchedColor);
       if (sorter.isMyAllianceColor(matchedColor)) {

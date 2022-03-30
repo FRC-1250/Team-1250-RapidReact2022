@@ -19,15 +19,14 @@ public class DriveToPositionByInches extends CommandBase {
   public DriveToPositionByInches(Drivetrain drivetrain, double distance) {
     m_drivetrain = drivetrain;
     m_distance = distance;
-    end = distance;
     addRequirements(m_drivetrain);
   }
 
   @Override
   public void initialize() {
-    m_drivetrain.resetHeading();
     start = m_drivetrain.getEncoderPosition();
     end = start + (m_distance * 1163);
+    m_drivetrain.resetHeading();
     System.out.println(start);
     System.out.println(end);
   }
