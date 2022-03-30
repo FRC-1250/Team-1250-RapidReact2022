@@ -313,7 +313,7 @@ public class RobotContainer {
   Trigger retractIntake = new Trigger() {
     @Override
     public boolean get() {
-      return Robotstate.INTAKE == m_robotstate && r1.get();
+      return (Robotstate.INTAKE == m_robotstate && r1.get()) || m_intake.hasIntakeCollided();
     }
   };
 

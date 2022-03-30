@@ -73,6 +73,19 @@ public class Intake extends SubsystemBase {
     return RightreverseLimitSwitch.get() || LeftreverseLimtiSwitch.get();
   }
 
+  public double intakeCurrent(){
+    return intake.getOutputCurrent();
+  }
+
+
+  double collideThreshold = 5;
+  public boolean hasIntakeCollided(){
+    if(intakeCurrent() > collideThreshold){
+      return true;
+    }else{
+      return false;}
+  }
+
   @Override
   public void periodic() {
 
