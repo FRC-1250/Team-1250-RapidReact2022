@@ -43,7 +43,7 @@ public class IndexBallAuto extends CommandBase {
       if (shooter.isUptakeSensorTripped()) {
         sorter.setSortWheelSpeed(0);
       } else {
-        sorter.setSortWheelSpeed(-1);
+        sorter.setSortWheelSpeed(-0.35);
       }
     } else {
       sorter.setSortWheelSpeed(0);

@@ -33,9 +33,11 @@ public class TwoBallHighHangarSide extends SequentialCommandGroup {
         new ParallelCommandGroup(
             new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake),
             new SequentialCommandGroup(
-                new DriveToPositionByInches(cmd_drivetrain, 45),
                 new WaitCommand(1),
-                new DriveToPositionByInches(cmd_drivetrain, -28),
+                new DriveToPositionByInches(cmd_drivetrain, 36),
+                new WaitCommand(1),
+                new DriveToPositionByInches(cmd_drivetrain, -24),
+                new WaitCommand(0.5),
                 new RetractIntake(cmd_intake))),
         new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 6000)
         );

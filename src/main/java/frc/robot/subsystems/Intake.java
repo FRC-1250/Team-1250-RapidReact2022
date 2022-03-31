@@ -78,12 +78,14 @@ public class Intake extends SubsystemBase {
   }
 
 
-  double collideThreshold = 5;
+  double collideThreshold = 10;
   public boolean hasIntakeCollided(){
-    if(intakeCurrent() > collideThreshold){
+    if((intakeCurrent() > collideThreshold) && getIntakePosition() > 11){
       return true;
-    }else{
-      return false;}
+    }
+    else{
+      return false;
+    }
   }
 
   @Override

@@ -123,8 +123,8 @@ public class RobotContainer {
     m_sorter.setDefaultCommand(new IndexBall(m_sorter, m_shooter, m_intake));
     m_shooter.setDefaultCommand(new ShooterIdle(m_shooter, m_intake));
     m_chooser.setDefaultOption("High shot + taxi", new OneBallHigh(m_shooter, m_drivetrain, m_sorter));
-    m_chooser.addOption("2 Ball High Shot - hangar side", new TwoBallHighHangarSide(m_intake, m_shooter, m_drivetrain, m_sorter));
-    m_chooser.addOption("2 Ball High shot - terminal side", new TwoBallHighTerminalSIde(m_intake, m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("2 Ball High Shot - Close Balls", new TwoBallHighHangarSide(m_intake, m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("2 Ball High shot - Far Right Ball", new TwoBallHighTerminalSIde(m_intake, m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("Low shot + taxi", new OneBallLow(m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("taxi", new DriveToPositionByInches(m_drivetrain, 24));
     Constants.PRIMARY_TAB.add("Auto", m_chooser).withSize(2, 1).withPosition(7, 0);
@@ -313,7 +313,7 @@ public class RobotContainer {
   Trigger retractIntake = new Trigger() {
     @Override
     public boolean get() {
-      return (Robotstate.INTAKE == m_robotstate && r1.get()) || m_intake.hasIntakeCollided();
+      return (Robotstate.INTAKE == m_robotstate && r1.get()) ;
     }
   };
 
