@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -37,6 +38,7 @@ public class Climber extends SubsystemBase {
     configureShuffleBoard();
     SystemMonitor.getInstance().registerDevice(climberHook, "Climber");
     climberHook.setNeutralMode(NeutralMode.Brake);
+    climberHook.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 20, 0.5));
   }
 
   private void configureShuffleBoard() {
