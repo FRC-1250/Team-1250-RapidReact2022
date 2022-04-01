@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -29,6 +30,11 @@ public class Intake extends SubsystemBase {
     configureSparkMax(intake, true);
     SystemMonitor.getInstance().registerDevice(intakeRoller, "intakeRoller");
     SystemMonitor.getInstance().registerDevice(intake, "intake");
+    intakeRoller.setNeutralMode(NeutralMode.Brake);
+
+    if (isReverseLimitSwitchPressed()) {
+      resetIntakePosition();
+    }
   }
 
   private void configureSparkMax(CANSparkMax canSparkMax, boolean inverted) {
@@ -57,7 +63,7 @@ public class Intake extends SubsystemBase {
     intake.set(speed);
   }
 
-  public void setIntakPosition(double position) {
+  public void resetIntakePosition() {
     intake.getEncoder().setPosition(0);
   }
 
@@ -69,21 +75,24 @@ public class Intake extends SubsystemBase {
     return getIntakePosition() > Constants.INTAKE_PASSED_BUMPER_REVOLUTION_DISTANCE;
   }
 
+  public boolean isIntakeBeyondFrame() {
+    return getIntakePosition() > Constants.INTAKE_PASSED_FRAME_REVOLUTION_DISTANCE;
+  }
+
   public boolean isReverseLimitSwitchPressed() {
     return RightreverseLimitSwitch.get() || LeftreverseLimtiSwitch.get();
   }
 
-  public double intakeCurrent(){
+  public double intakeCurrent() {
     return intake.getOutputCurrent();
   }
 
-
   double collideThreshold = 10;
-  public boolean hasIntakeCollided(){
-    if((intakeCurrent() > collideThreshold) && getIntakePosition() > 11){
+
+  public boolean hasIntakeCollided() {
+    if ((intakeCurrent() > collideThreshold) && getIntakePosition() > 11) {
       return true;
-    }
-    else{
+    } else {
       return false;
     }
   }

@@ -30,14 +30,14 @@ public class ExtendIntake extends CommandBase {
   @Override
   public void initialize() {
     start = intake.getIntakePosition();
-    end = 12.5;
+    end = 13;
   }
 
   @Override
   public void execute() {
     progress = RobotHelper.calculateProgress(start, end, intake.getIntakePosition());
 
-    if (progress > 0.30) {
+    if (intake.isIntakeBeyondFrame()) {
       intake.SetIntakeRollerspeed(intakeRollerSpeed);
     }
 

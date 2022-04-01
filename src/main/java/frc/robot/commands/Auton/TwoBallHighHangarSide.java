@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Drivetrain.DriveToPositionByInches;
-import frc.robot.commands.Drivetrain.TurnDegrees;
 import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.commands.Shooter.MoveServoToPosition;
@@ -39,7 +38,6 @@ public class TwoBallHighHangarSide extends SequentialCommandGroup {
                 new DriveToPositionByInches(cmd_drivetrain, -24),
                 new WaitCommand(0.5),
                 new RetractIntake(cmd_intake))),
-        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 6000)
-        );
+        new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 6000));
   }
 }

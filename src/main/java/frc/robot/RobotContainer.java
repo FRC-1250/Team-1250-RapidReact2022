@@ -13,25 +13,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Auton.ThreeBallHigh;
 import frc.robot.commands.Auton.TwoBallHighHangarSide;
 import frc.robot.commands.Auton.TwoBallHighTerminalSIde;
 import frc.robot.commands.Auton.OneBallHigh;
 import frc.robot.commands.Auton.OneBallLow;
 import frc.robot.commands.Climber.ExtendClimber;
 import frc.robot.commands.Climber.ExtendClimberWithPosition;
+import frc.robot.commands.Climber.ResetClimberTicks;
 import frc.robot.commands.Climber.RetractClimber;
 import frc.robot.commands.Drivetrain.Drive;
 import frc.robot.commands.Drivetrain.DriveStraight;
 import frc.robot.commands.Drivetrain.DriveToPositionByInches;
 import frc.robot.commands.Drivetrain.MoveToTarget;
-import frc.robot.commands.Drivetrain.TurnDegrees;
 import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.commands.Shooter.ShootBallVelocityControl;
 import frc.robot.commands.Shooter.ShooterIdle;
 import frc.robot.commands.Sorter.IndexBall;
-import frc.robot.commands.Sorter.Sortball;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -93,7 +91,6 @@ public class RobotContainer {
   private static RobotDriveType m_robotDriveType;
   private static Robotstate m_robotstate;
   private NetworkTableEntry robotstateNT;
-  private NetworkTableEntry singlePlayerNT;
 
   public enum Robotstate {
     INTAKE,
@@ -163,6 +160,7 @@ public class RobotContainer {
     // Driver R2 is attached to normal driving and driving straight as a throttle
     // input!
     l2.whileActiveOnce(new DriveStraight(m_drivetrain, driveGamepad));
+    Constants.SYSTEM_MONITOR_TAB.add(new ResetClimberTicks(m_climber));
   }
 
   /**
