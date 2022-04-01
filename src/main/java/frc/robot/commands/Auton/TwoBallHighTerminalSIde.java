@@ -32,9 +32,9 @@ public class TwoBallHighTerminalSIde extends SequentialCommandGroup {
             new IndexBallAuto(cmd_sorter, cmd_Shooter, cmd_intake),
             new SequentialCommandGroup(
                 new WaitCommand(1),
-                new DriveToPositionByInches(cmd_drivetrain, 36),
+                new DriveToPositionByInches(cmd_drivetrain, 16),
                 new WaitCommand(1),
-                new DriveToPositionByInches(cmd_drivetrain, -24),
+                new DriveToPositionByInches(cmd_drivetrain, -15),
                 new WaitCommand(0.5),
                 new RetractIntake(cmd_intake))),
         new ShootBallVelocityControl(cmd_Shooter, cmd_sorter, ShooterHeight.SHOOT_HIGH, 6000));
