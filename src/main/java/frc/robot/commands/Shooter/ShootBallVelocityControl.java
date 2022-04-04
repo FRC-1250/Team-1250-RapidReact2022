@@ -59,7 +59,7 @@ public class ShootBallVelocityControl extends CommandBase {
         sensorTrippedPreviously = false;
       }
 
-      if (timer.get() > 0.2) {
+      if (timer.get() > 0.3) {
         shooter.setUptakeConveyorSpeed(0.25);
         sorter.setSortWheelSpeed(-0.5);
         timer.stop();
