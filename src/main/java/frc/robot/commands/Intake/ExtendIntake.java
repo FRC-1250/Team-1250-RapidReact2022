@@ -4,7 +4,6 @@
 
 package frc.robot.commands.Intake;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 import frc.robot.utility.RobotHelper;
@@ -15,7 +14,6 @@ public class ExtendIntake extends CommandBase {
   private double start;
   private double end;
   private double progress = 0;
-  private Timer timer = new Timer();
 
   public ExtendIntake(Intake m_intake) {
     intake = m_intake;
@@ -33,8 +31,6 @@ public class ExtendIntake extends CommandBase {
   public void initialize() {
     start = intake.getIntakePosition();
     end = 13;
-    timer.reset();
-    timer.start();
   }
 
   @Override
@@ -55,12 +51,10 @@ public class ExtendIntake extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     intake.setIntakeSpeed(0);
-    timer.stop();
-    timer.reset();
   }
 
   @Override
   public boolean isFinished() {
-    return progress > 0.90 && timer.get() > 0.1;
+    return RobotHelper.isDoneTraveling(start, end, intake.getIntakePosition());
   }
 }

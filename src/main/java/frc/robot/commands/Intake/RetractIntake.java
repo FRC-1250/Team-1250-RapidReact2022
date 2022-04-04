@@ -29,7 +29,7 @@ public class RetractIntake extends CommandBase {
   public void execute() {
     intake.SetIntakeRollerspeed(0);
     progress = RobotHelper.calculateProgress(start, end, intake.getIntakePosition());
-    
+
     if (progress > 0.70) {
       intake.setIntakeSpeed(-0.2);
     } else {
@@ -44,6 +44,6 @@ public class RetractIntake extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return intake.isReverseLimitSwitchPressed();
+    return RobotHelper.isDoneTraveling(start, end, intake.getIntakePosition());
   }
 }
