@@ -5,12 +5,11 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.TreeMap;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.led.*;
-import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.revrobotics.CANSparkMax;
@@ -20,115 +19,97 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.utility.CANDeviceHealth;
-import frc.robot.utility.CANDeviceHealth.DeviceHealth;
+import frc.robot.utility.DeviceHealth;
+import frc.robot.utility.DeviceHealth.DeviceStatus;
 
 public class SystemMonitor extends SubsystemBase {
 
   private final CANdle candle = new CANdle(Constants.CANDLE_CAN_ID);
   private final PowerDistribution pdp = new PowerDistribution(Constants.POWER_DISTRIBUTION_BOARD_CAN_ID,
       ModuleType.kRev);
-  private List<WPI_TalonFX> talons = new ArrayList<WPI_TalonFX>();
-  private List<CANSparkMax> sparkMaxs = new ArrayList<CANSparkMax>();
-  private List<Pigeon2> pigeon2s = new ArrayList<Pigeon2>();
-  private List<CANDeviceHealth> healthList = new ArrayList<CANDeviceHealth>();
+  private List<WPI_TalonFX> registeredTalonFX = new ArrayList<WPI_TalonFX>();
+  private List<CANSparkMax> registedSparkMax = new ArrayList<CANSparkMax>();
+  private List<Pigeon2> registeredPigeon = new ArrayList<Pigeon2>();
+  private TreeMap<Integer, DeviceHealth> deviceHealthMap = new TreeMap<Integer, DeviceHealth>();
   private static SystemMonitor instance = new SystemMonitor();
   private Long healthUpdateTimer = 0L;
+  private Long currentTime = 0L;
 
   public static SystemMonitor getInstance() {
     return instance;
   }
 
   private SystemMonitor() {
-    CANdleConfiguration configAll = new CANdleConfiguration();
-    configAll.disableWhenLOS = false;
-    configAll.brightnessScalar = 0.1;
-    configAll.vBatOutputMode = VBatOutputMode.Modulated;
-    candle.configAllSettings(configAll, 100);
+    candle.configLOSBehavior(true);
+    candle.configStatusLedState(true);
     configureShuffleBoard();
-    registerDevice(pdp);
+    registerDevice(pdp, "pdp");
   }
 
   private void configureShuffleBoard() {
   }
 
-  private void registerDevice(PowerDistribution pdp) {
-    healthList.add(new CANDeviceHealth(pdp.getModule(), "pdp"));
-    Collections.sort(healthList);
+  private void registerDevice(PowerDistribution pdp, String friendlyName) {
+    deviceHealthMap.put(pdp.getModule(), new DeviceHealth("pdp"));
   }
 
   public void registerDevice(Pigeon2 device, String friendlyName) {
-    pigeon2s.add(device);
-    healthList.add(new CANDeviceHealth(device.getDeviceID(), friendlyName));
-    Collections.sort(healthList);
+    registeredPigeon.add(device);
+    deviceHealthMap.put(device.getDeviceID(), new DeviceHealth(friendlyName));
   }
 
   public void registerDevice(WPI_TalonFX device, String friendlyName) {
-    talons.add(device);
-    healthList.add(new CANDeviceHealth(device.getDeviceID(), friendlyName));
-    Collections.sort(healthList);
+    registeredTalonFX.add(device);
+    deviceHealthMap.put(device.getDeviceID(), new DeviceHealth(friendlyName));
+
   }
 
   public void registerDevice(CANSparkMax device, String friendlyName) {
-    sparkMaxs.add(device);
-    healthList.add(new CANDeviceHealth(device.getDeviceId(), friendlyName));
-    Collections.sort(healthList);
+    registedSparkMax.add(device);
+    deviceHealthMap.put(device.getDeviceId(), new DeviceHealth(friendlyName));
   }
 
   private void testPigeonHealth() {
-    for (Pigeon2 device : pigeon2s) {
-      for (int i = 0; i < healthList.size(); i++) {
-        if (device.getDeviceID() == healthList.get(i).getCanID()) {
-          ErrorCode ec = device.getLastError();
-          if (ec.value < 0 && ec.value > -5) {
-            healthList.get(i).reportDisconnect(ec.toString());
-          } else {
-            healthList.get(i).reportOK(ec.toString());
-          }
-        }
+    ErrorCode ec;
+    for (Pigeon2 device : registeredPigeon) {
+      ec = device.getLastError();
+      if (ec.value < 0 && ec.value > -5) {
+        deviceHealthMap.get(device.getDeviceID()).reportError(ec.toString());
+      } else {
+        deviceHealthMap.get(device.getDeviceID()).reportOK(ec.toString());
       }
     }
   }
 
   private void testTalonHealth() {
-    for (WPI_TalonFX device : talons) {
-      for (int i = 0; i < healthList.size(); i++) {
-        if (device.getDeviceID() == healthList.get(i).getCanID()) {
-          ErrorCode ec = device.getLastError();
-          if (ec.value < 0 && ec.value > -5) {
-            healthList.get(i).reportDisconnect(ec.toString());
-          } else {
-            healthList.get(i).reportOK(ec.toString());
-          }
-        }
+    ErrorCode ec;
+    for (WPI_TalonFX device : registeredTalonFX) {
+      ec = device.getLastError();
+      if (ec.value < 0 && ec.value > -5) {
+        deviceHealthMap.get(device.getDeviceID()).reportError(ec.toString());
+      } else {
+        deviceHealthMap.get(device.getDeviceID()).reportOK(ec.toString());
       }
     }
   }
 
   private void testSparkHealth() {
-    for (CANSparkMax device : sparkMaxs) {
-      for (int i = 0; i < healthList.size(); i++) {
-        if (device.getDeviceId() == healthList.get(i).getCanID()) {
-          REVLibError ec = device.getLastError();
-          if (REVLibError.kCANDisconnected == ec || REVLibError.kHALError == ec) {
-            healthList.get(i).reportDisconnect(ec.toString());
-          } else {
-            healthList.get(i).reportOK(ec.toString());
-          }
-        }
+    REVLibError ec;
+    for (CANSparkMax device : registedSparkMax) {
+      ec = device.getLastError();
+      if (REVLibError.kCANDisconnected == ec || REVLibError.kHALError == ec) {
+        deviceHealthMap.get(device.getDeviceId()).reportError(ec.toString());
+      } else {
+        deviceHealthMap.get(device.getDeviceId()).reportOK(ec.toString());
       }
     }
   }
 
   private void testPdp() {
-    for (int i = 0; i < healthList.size(); i++) {
-      if (pdp.getModule() == healthList.get(i).getCanID()) {
-        if (pdp.getFaults().CanWarning) {
-          healthList.get(i).reportDisconnect("CAN warning");
-        } else {
-          healthList.get(i).reportOK("OK");
-        }
-      }
+    if (pdp.getFaults().CanWarning) {
+      deviceHealthMap.get(pdp.getModule()).reportError("CAN warning");
+    } else {
+      deviceHealthMap.get(pdp.getModule()).reportOK("OK");
     }
   }
 
@@ -143,31 +124,23 @@ public class SystemMonitor extends SubsystemBase {
     return pdp.getTotalCurrent();
   }
 
-  public void setLEDs(int r, int g, int b) {
-    candle.setLEDs(r, g, b);
-  }
-
-  public void setLEDs(int r, int g, int b, int startIdx, int count) {
-    candle.setLEDs(r, g, b, 0, startIdx, count);
-  }
-
-  public DeviceHealth checkDevices() {
-    for (CANDeviceHealth canDeviceHealth : healthList) {
-      if (canDeviceHealth.getDeviceHealth() == DeviceHealth.RED) {
-        return DeviceHealth.RED;
-      } else if (canDeviceHealth.getDeviceHealth() == DeviceHealth.YELLOW) {
-        return DeviceHealth.YELLOW;
+  public DeviceStatus checkDevices() {
+    DeviceStatus deviceHealth;
+    for (Integer devicdeId : deviceHealthMap.keySet()) {
+      deviceHealth = deviceHealthMap.get(devicdeId).getDeviceHealth();
+      if (deviceHealth == DeviceStatus.RED) {
+        return DeviceStatus.RED;
+      } else if (deviceHealth == DeviceStatus.YELLOW) {
+        return DeviceStatus.YELLOW;
       }
     }
-    return DeviceHealth.GREEN;
+    return DeviceStatus.GREEN;
   }
 
   @Override
   public void periodic() {
-    // This should be in its own thread, catch all exceptions so we don't fail due
-    // to monitoring
-    Long currentTime = System.currentTimeMillis();
-    if (System.currentTimeMillis() > healthUpdateTimer && !healthList.isEmpty()) {
+    currentTime = System.currentTimeMillis();
+    if (currentTime > healthUpdateTimer && !deviceHealthMap.isEmpty()) {
       try {
         testPigeonHealth();
         testSparkHealth();
@@ -175,13 +148,13 @@ public class SystemMonitor extends SubsystemBase {
         testPdp();
         switch (checkDevices()) {
           case RED:
-            setLEDs(255, 0, 0);
+            candle.setLEDs(255, 0, 0);
             break;
           case YELLOW:
-            setLEDs(255, 255, 0);
+            candle.setLEDs(255, 255, 0);
             break;
           case GREEN:
-            setLEDs(0, 255, 0);
+            candle.setLEDs(0, 255, 0);
             break;
         }
       } catch (Exception e) {
