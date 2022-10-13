@@ -25,6 +25,8 @@ public final class Constants {
     public static final int CANDLE_CAN_ID = 10;
     public static final int CANDLE_LED_COUNT = 8;
     public static final int CANDLE_EXPECTED_DEVICES_COUNT = 15;
+    public static final String TIMESERIES_LOGGER = "ts";
+    public static final String EVENTS_LOGGER = "events";
 
     // Drivetrain
     public static final int DRIVETRAIN_BACK_RIGHT_CAN_ID = 15;

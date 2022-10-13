@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import frc.robot.Constants;
 
 public class DeviceHealth {
-    private String friendlyName;
+    private String deviceFriendlyName;
     private int errorCount;
     private DeviceStatus deviceStatus;
     private NetworkTableEntry deviceHealthNT;
@@ -21,14 +21,14 @@ public class DeviceHealth {
         RED;
     }
 
-    public DeviceHealth(String friendlyName) {
-        this.friendlyName = friendlyName;
+    public DeviceHealth(String deviceFriendlyName) {
+        this.deviceFriendlyName = deviceFriendlyName;
         errorCount = 0;
         deviceStatus = DeviceStatus.GREEN;
         layout = Constants.SYSTEM_MONITOR_TAB.getLayout("CAN Diagnostics", BuiltInLayouts.kList);
-        deviceHealthNT = layout.add(friendlyName, "").getEntry();
+        deviceHealthNT = layout.add(deviceFriendlyName, "").getEntry();
         activeError = false;
-        activeErrorTime.reset();
+        activeErrorTime = new Timer();
     }
 
     public void reportOK(String error) {
@@ -58,6 +58,6 @@ public class DeviceHealth {
     }
 
     public String getFriendlyName() {
-        return friendlyName;
+        return deviceFriendlyName;
     }
 }

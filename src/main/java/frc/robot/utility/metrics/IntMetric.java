@@ -1,0 +1,19 @@
+package frc.robot.utility.metrics;
+
+
+import java.util.function.IntSupplier;
+
+public class IntMetric extends MetricDefinition {
+
+	private IntSupplier intSupplier;
+
+	public IntMetric(String name, IntSupplier intSupplier) {
+		super(name);
+		this.intSupplier = intSupplier;
+	}
+
+	@Override
+	public String getDataAsString() {
+		return String.valueOf(intSupplier.getAsInt());
+	}
+}

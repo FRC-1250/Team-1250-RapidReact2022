@@ -39,6 +39,17 @@ import frc.robot.subsystems.SystemMonitor;
 import frc.robot.subsystems.Sorter;
 import frc.robot.subsystems.Climber.ClimbHeight;
 import frc.robot.subsystems.Shooter.ShooterHeight;
+import java.io.File;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import frc.robot.utility.formatters.CsvFormatter;
+import frc.robot.utility.formatters.EMultiByte;
+import frc.robot.utility.formatters.EventFormatter;
+import frc.robot.utility.metrics.TimeseriesHandler;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -80,6 +91,7 @@ public class RobotContainer {
   long configChangeTimer = 0;
   long configChangeCooldown = 250;
 
+  private final TimeseriesHandler timeseriesHandler = new TimeseriesHandler();
   private final Sorter m_sorter = new Sorter();
   private final SystemMonitor m_systemMonitor = SystemMonitor.getInstance();
   private final Drivetrain m_drivetrain = new Drivetrain();
@@ -114,18 +126,36 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    timeseriesHandler.registerMetric("Intake position", m_intake::getIntakePosition);
+    configureTimeseriesLogging(timeseriesHandler.getMetricNamesCsv());
+    //configureEventLogging();
+
+    ScheduledExecutorService eventSchedule = Executors.newSingleThreadScheduledExecutor();
+    eventSchedule.scheduleAtFixedRate(new Runnable() {
+      Logger timeseries = Logger.getLogger(Constants.TIMESERIES_LOGGER);
+
+      @Override
+      public void run() {
+        timeseries.log(Level.INFO, timeseriesHandler.getMetricDataCsv());
+      }
+    }, 0, 2, TimeUnit.SECONDS);
+
+
     // Configure the button bindings
     configureButtonBindings();
     m_drivetrain.setDefaultCommand(new Drive(m_drivetrain, driveGamepad));
     m_sorter.setDefaultCommand(new IndexBall(m_sorter, m_shooter, m_intake));
     m_shooter.setDefaultCommand(new ShooterIdle(m_shooter, m_intake));
     m_chooser.setDefaultOption("High shot + taxi", new OneBallHigh(m_shooter, m_drivetrain, m_sorter));
-    m_chooser.addOption("2 Ball High Shot - Close Balls", new TwoBallHighHangarSide(m_intake, m_shooter, m_drivetrain, m_sorter));
-    m_chooser.addOption("2 Ball High shot - Far Right Ball", new TwoBallHighTerminalSIde(m_intake, m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("2 Ball High Shot - Close Balls",
+        new TwoBallHighHangarSide(m_intake, m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("2 Ball High shot - Far Right Ball",
+        new TwoBallHighTerminalSIde(m_intake, m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("Low shot + taxi", new OneBallLow(m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("taxi", new DriveToPositionByInches(m_drivetrain, 24));
     Constants.PRIMARY_TAB.add("Auto", m_chooser).withSize(2, 1).withPosition(7, 0);
-    Constants.PRIMARY_TAB.addCamera("Limelight", "Limelight", "http://10.12.50.11:5800").withSize(6, 4).withPosition(0,0);
+    Constants.PRIMARY_TAB.addCamera("Limelight", "Limelight", "http://10.12.50.11:5800").withSize(6, 4).withPosition(0,
+        0);
     robotstateNT = Constants.PRIMARY_TAB.add("Robot state", "").withPosition(7, 1).withSize(2, 1).getEntry();
     m_robotstate = Robotstate.INTAKE;
     m_robotDriveType = RobotDriveType.TANK;
@@ -311,7 +341,7 @@ public class RobotContainer {
   Trigger retractIntake = new Trigger() {
     @Override
     public boolean get() {
-      return (Robotstate.INTAKE == m_robotstate && r1.get()) ;
+      return (Robotstate.INTAKE == m_robotstate && r1.get());
     }
   };
 
@@ -344,4 +374,65 @@ public class RobotContainer {
           || Robotstate.CLIMB_MID == m_robotstate) && r1.get();
     }
   };
+
+  private File createLoggingDirectory() {
+    File loggingDirectory;
+
+    if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+      loggingDirectory = new File(System.getProperty("user.home") + "\\Desktop\\FRC1250");
+    } else {
+      loggingDirectory = new File("/var/log/FRC1250");
+    }
+
+    if (!loggingDirectory.exists()) {
+      loggingDirectory.mkdirs();
+    }
+
+    return loggingDirectory;
+  }
+
+  private void configureEventLogging() {
+    try {
+      File loggingDirectory = createLoggingDirectory();
+      EventFormatter eventFormatter = new EventFormatter();
+      FileHandler eventFileHandler = new FileHandler(loggingDirectory.getPath() + File.separatorChar + "event-%g.log",
+          EMultiByte.KILOBYTE.bytes * 50, 12, false);
+      eventFormatter.setEventFileHeader("----- Team 1250: The Gatorbots | CHARGED UP 2023 -----");
+      eventFileHandler.setFormatter(eventFormatter);
+
+      Logger events = Logger.getLogger(Constants.EVENTS_LOGGER);
+      events.setLevel(Level.ALL);
+      events.setUseParentHandlers(false);
+      events.addHandler(eventFileHandler);
+    } catch (Exception e) {
+      System.out.println("Event logging disabled due to error during the initial setup. Caused by: " + e);
+      Logger events = Logger.getLogger(Constants.EVENTS_LOGGER);
+      events.setLevel(Level.OFF);
+      events.setUseParentHandlers(false);
+    }
+  }
+
+  private void configureTimeseriesLogging(String logHeader) {
+    try {
+      File loggingDirectory = createLoggingDirectory();
+
+      CsvFormatter csvFormatter = new CsvFormatter();
+      FileHandler csvFileHandler = new FileHandler(loggingDirectory.getPath() + File.separatorChar + "timeseries-%g.log",
+          EMultiByte.KILOBYTE.bytes * 50, 12, false);
+      csvFormatter.setCsvFileHeader(logHeader);
+      csvFileHandler.setFormatter(csvFormatter);
+
+      Logger timeseries = Logger.getLogger(Constants.TIMESERIES_LOGGER);
+      timeseries.setLevel(Level.ALL);
+      timeseries.setUseParentHandlers(false);
+      timeseries.addHandler(csvFileHandler);
+
+    } catch (Exception e) {
+      System.out.println("Timeseries logging disabled due to error during the initial setup. Caused by: " + e);
+      Logger timeseries = Logger.getLogger(Constants.TIMESERIES_LOGGER);
+      timeseries.setLevel(Level.OFF);
+      timeseries.setUseParentHandlers(false);
+    }
+
+  }
 }
