@@ -171,4 +171,6 @@ gradle-app.setting
 ### Gradle Patch ###
 **/build/
 
+sim*
+
 # End of https://www.toptal.com/developers/gitignore/api/java,c++,linux,windows,macos,gradle,visualstudiocode
