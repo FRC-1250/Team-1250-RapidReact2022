@@ -9,8 +9,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
-
-  private final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+// Owned by Eli M. and Caleb S.
+  private final NetworkTable table;
 
   /*
    * tv Whether the limelight has any valid targets (0 or 1)
@@ -18,9 +18,14 @@ public class Limelight extends SubsystemBase {
    * ty Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
    * ta Target Area (0% of image to 100% of image)
    */
-  private double tx, ty, tv, ta = -1;
+  private double tx, ty, tv, ta, ts = -1;
 
   public Limelight() {
+    table = NetworkTableInstance.getDefault().getTable("limelight");
+  }
+
+  public Limelight(String LimelightTable) {
+    table = NetworkTableInstance.getDefault().getTable(LimelightTable);
   }
 
   public double getXOffset() {
@@ -33,6 +38,10 @@ public class Limelight extends SubsystemBase {
 
   public double getTargetAreaPercent() {
     return ta;
+  }
+
+  public double getSkew() {
+    return ts;
   }
 
   /**
@@ -62,5 +71,6 @@ public class Limelight extends SubsystemBase {
     tx = table.getEntry("tx").getDouble(-1);
     ty = table.getEntry("ty").getDouble(-1);
     tv = table.getEntry("tv").getDouble(-1);
+    ts = table.getEntry("ts").getDouble(-1);
   }
 }
