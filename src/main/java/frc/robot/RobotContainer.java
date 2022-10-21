@@ -5,12 +5,14 @@
 package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.util.concurrent.Event;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Auton.TwoBallHighHangarSide;
@@ -43,9 +45,12 @@ import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 import frc.robot.utility.formatters.CsvFormatter;
 import frc.robot.utility.formatters.EMultiByte;
 import frc.robot.utility.formatters.EventFormatter;
@@ -126,9 +131,26 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    timeseriesHandler.registerMetric("Intake position", m_intake::getIntakePosition);
+    timeseriesHandler.registerMetric("Shooter Front RPM", m_shooter::getFrontShooterRpm);
+    timeseriesHandler.registerMetric("Shooter Rear RPM", m_shooter::getRearShooterRpm);
+
     configureTimeseriesLogging(timeseriesHandler.getMetricNamesCsv());
-    //configureEventLogging();
+    configureEventLogging();
+    Logger events = Logger.getLogger(Constants.EVENTS_LOGGER);
+
+    CommandScheduler.getInstance().onCommandInitialize(new Consumer<Command>() {
+      @Override
+      public void accept(Command t) {
+        events.log(Level.INFO, String.format("Initializing %s, requirements - %s", t.getName(), t.getRequirements().toString()));
+      }
+    });
+
+    CommandScheduler.getInstance().onCommandFinish(new Consumer<Command>() {
+      @Override
+      public void accept(Command t) {
+        events.log(Level.INFO, "Finishing " + t.getName());
+      }
+    });
 
     ScheduledExecutorService eventSchedule = Executors.newSingleThreadScheduledExecutor();
     eventSchedule.scheduleAtFixedRate(new Runnable() {
@@ -138,8 +160,7 @@ public class RobotContainer {
       public void run() {
         timeseries.log(Level.INFO, timeseriesHandler.getMetricDataCsv());
       }
-    }, 0, 2, TimeUnit.SECONDS);
-
+    }, 0, 1000, TimeUnit.MILLISECONDS);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -417,7 +438,8 @@ public class RobotContainer {
       File loggingDirectory = createLoggingDirectory();
 
       CsvFormatter csvFormatter = new CsvFormatter();
-      FileHandler csvFileHandler = new FileHandler(loggingDirectory.getPath() + File.separatorChar + "timeseries-%g.log",
+      FileHandler csvFileHandler = new FileHandler(
+          loggingDirectory.getPath() + File.separatorChar + "timeseries-%g.csv",
           EMultiByte.KILOBYTE.bytes * 50, 12, false);
       csvFormatter.setCsvFileHeader(logHeader);
       csvFileHandler.setFormatter(csvFormatter);
