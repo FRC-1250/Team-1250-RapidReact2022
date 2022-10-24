@@ -101,7 +101,8 @@ public class Drivetrain extends SubsystemBase {
   public void driveArcade(double xSpeed, double zRotation) {
     drive.arcadeDrive(xSpeed, zRotation);
   }
-
+  public void driveswerve(double x, double y, double rotation){
+  }
   public double getEncoderPosition() {
     return (leftFrontDriveMotor.getSelectedSensorPosition() + rightFrontDriveMotor.getSelectedSensorPosition()) / 2.0;
   }
