@@ -24,6 +24,7 @@ public class Swerve extends CommandBase {
     this.x = x;
     this.rotation = rotation;
     this.drivetrain = drivetrain;
+    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.

@@ -172,3 +172,6 @@ gradle-app.setting
 **/build/
 
 # End of https://www.toptal.com/developers/gitignore/api/java,c++,linux,windows,macos,gradle,visualstudiocode
+simgui.json
+simgui-window.json
+simgui-ds.json
