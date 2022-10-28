@@ -25,6 +25,7 @@ import frc.robot.commands.Drivetrain.Drive;
 import frc.robot.commands.Drivetrain.DriveStraight;
 import frc.robot.commands.Drivetrain.DriveToPositionByInches;
 import frc.robot.commands.Drivetrain.MoveToTarget;
+import frc.robot.commands.Drivetrain.Tank;
 import frc.robot.commands.Intake.ExtendIntake;
 import frc.robot.commands.Intake.RetractIntake;
 import frc.robot.commands.Shooter.ShootBallVelocityControl;
@@ -62,6 +63,12 @@ public class RobotContainer {
   JoystickButton options = new JoystickButton(driveGamepad, PS4Controller.Button.kOptions.value);
   JoystickButton share = new JoystickButton(driveGamepad, PS4Controller.Button.kShare.value);
   JoystickButton touchpad = new JoystickButton(driveGamepad, PS4Controller.Button.kTouchpad.value);
+
+  XboxController driveXbox = new XboxController(2);
+  JoystickButton rbumper = new JoystickButton(driveXbox, XboxController.Button.kRightBumper.value);
+  JoystickButton lbumper = new JoystickButton(driveXbox, XboxController.Button.kLeftBumper.value);
+  
+
 
   Joystick operatorGamepad = new Joystick(1);
   JoystickButton Y = new JoystickButton(operatorGamepad, 4);
@@ -117,6 +124,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     m_drivetrain.setDefaultCommand(new Drive(m_drivetrain, driveGamepad));
+    //m_drivetrain.setDefaultCommand(new Tank(rbumper::get, .4, driveXbox::getLeftY, driveXbox::getRightY, m_drivetrain));
     m_sorter.setDefaultCommand(new IndexBall(m_sorter, m_shooter, m_intake));
     m_shooter.setDefaultCommand(new ShooterIdle(m_shooter, m_intake));
     m_chooser.setDefaultOption("High shot + taxi", new OneBallHigh(m_shooter, m_drivetrain, m_sorter));
