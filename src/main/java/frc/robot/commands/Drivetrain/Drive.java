@@ -6,7 +6,6 @@ package frc.robot.commands.Drivetrain;
 
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
 public class Drive extends CommandBase {
@@ -33,14 +32,9 @@ public class Drive extends CommandBase {
     } else{
       e_fullSendVal = 0.0;
     }
-    if (RobotContainer.RobotDriveType.TANK == RobotContainer.getDriveType()) {
+    
       double inputLeft = e_Dualshock4.getLeftY() * (e_driveReduction + e_fullSendVal);
       double inputRight = e_Dualshock4.getRightY() * (e_driveReduction + e_fullSendVal);
       e_Drivetrain.driveTank(inputLeft, inputRight);
-    } else if (RobotContainer.RobotDriveType.ARCADE == RobotContainer.getDriveType()) {
-      double inputY = e_Dualshock4.getLeftY() * (e_driveReduction + e_fullSendVal);
-      double inputX = e_Dualshock4.getRightX() * (e_driveReduction + e_fullSendVal);
-      e_Drivetrain.driveArcade(inputY, inputX);
-    }
   }
 }
