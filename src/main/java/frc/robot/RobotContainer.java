@@ -141,6 +141,7 @@ public class RobotContainer {
   public RobotContainer() {
     timeseriesHandler.registerMetric("Shooter Front RPM", m_shooter::getFrontShooterRpm);
     timeseriesHandler.registerMetric("Shooter Rear RPM", m_shooter::getRearShooterRpm);
+    timeseriesHandler.registerMetric("Drive heading", m_drivetrain::getHeading);
 
     configureTimeseriesLogging(timeseriesHandler.getMetricNamesCsv());
     configureEventLogging();
@@ -412,7 +413,7 @@ public class RobotContainer {
     if (System.getProperty("os.name").toLowerCase().contains("windows")) {
       loggingDirectory = new File(System.getProperty("user.home") + "\\Desktop\\FRC1250");
     } else {
-      loggingDirectory = new File("/var/log/FRC1250");
+      loggingDirectory = new File("/home/lvuser/log");
     }
 
     if (!loggingDirectory.exists()) {

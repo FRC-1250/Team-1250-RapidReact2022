@@ -1,5 +1,8 @@
 package frc.robot.utility;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -14,6 +17,7 @@ public class DeviceHealth {
     private ShuffleboardLayout layout;
     private Boolean activeError;
     private Timer activeErrorTime;
+    private Logger events = Logger.getLogger(Constants.EVENTS_LOGGER);
 
     public enum DeviceStatus {
         GREEN,
@@ -49,6 +53,7 @@ public class DeviceHealth {
             activeErrorTime.start();
             errorCount++;
             deviceStatus = DeviceStatus.RED;
+            events.log(Level.SEVERE, String.format("%s - %s - %s", this.deviceFriendlyName, DeviceStatus.RED.toString(), error));
             deviceHealthNT.setString(String.format("%s - %s", DeviceStatus.RED.toString(), error));
         }
     }
