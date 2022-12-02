@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.RobotContainer.RobotDriveType;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    public static final RobotDriveType ROBOT_DRIVE_TYPE = RobotDriveType.TANK;
 
     // Diagnostics
     public static final int CANDLE_CAN_ID = 10;

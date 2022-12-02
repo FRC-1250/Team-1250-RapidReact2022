@@ -21,6 +21,7 @@ import frc.robot.commands.Climber.ExtendClimber;
 import frc.robot.commands.Climber.ExtendClimberWithPosition;
 import frc.robot.commands.Climber.ResetClimberTicks;
 import frc.robot.commands.Climber.RetractClimber;
+import frc.robot.commands.Drivetrain.Arcade;
 import frc.robot.commands.Drivetrain.Drive;
 import frc.robot.commands.Drivetrain.DriveStraight;
 import frc.robot.commands.Drivetrain.DriveToPositionByInches;
@@ -68,8 +69,6 @@ public class RobotContainer {
   XboxController driveXbox = new XboxController(2);
   JoystickButton rbumper = new JoystickButton(driveXbox, XboxController.Button.kRightBumper.value);
   JoystickButton lbumper = new JoystickButton(driveXbox, XboxController.Button.kLeftBumper.value);
-  
-
 
   Joystick operatorGamepad = new Joystick(1);
   JoystickButton Y = new JoystickButton(operatorGamepad, 4);
@@ -96,7 +95,6 @@ public class RobotContainer {
   private final Climber m_climber = new Climber();
   private final Limelight m_limelight = new Limelight();
   private SendableChooser<Command> m_chooser = new SendableChooser<>();
-  private static RobotDriveType m_robotDriveType;
   private static Robotstate m_robotstate;
   private NetworkTableEntry robotstateNT;
 
@@ -115,7 +113,9 @@ public class RobotContainer {
 
   public enum RobotDriveType {
     ARCADE,
-    TANK
+    TANK,
+    SWERVE,
+    OLD_TANK
   }
 
   /**
@@ -124,21 +124,39 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_drivetrain.setDefaultCommand(new Drive(m_drivetrain, driveGamepad));
-    //m_drivetrain.setDefaultCommand(new Swerve(r1::get, .4, driveGamepad::getLeftY, driveGamepad::getLeftX, driveGamepad::getRightX,m_drivetrain));
-    //m_drivetrain.setDefaultCommand(new Tank(rbumper::get, .4, driveXbox::getLeftY, driveXbox::getRightY, m_drivetrain));
+
+    switch (Constants.ROBOT_DRIVE_TYPE) {
+      case TANK:
+        m_drivetrain.setDefaultCommand(new Tank(r1::get, .75, driveGamepad::getLeftY, driveGamepad::getRightY,
+            m_drivetrain));
+        break;
+      case SWERVE:
+        m_drivetrain.setDefaultCommand(new Swerve(rbumper::get, 0.75, driveXbox::getLeftY, driveXbox::getLeftX,
+            driveXbox::getRightX, m_drivetrain));
+        break;
+      case ARCADE:
+        m_drivetrain.setDefaultCommand(new Arcade(rbumper::get, 0.75, driveXbox::getLeftY, driveXbox::getRightX,
+            m_drivetrain));
+        break;
+      default:
+        m_drivetrain.setDefaultCommand(new Drive(m_drivetrain, driveGamepad));
+        break;
+    }
+
     m_sorter.setDefaultCommand(new IndexBall(m_sorter, m_shooter, m_intake));
     m_shooter.setDefaultCommand(new ShooterIdle(m_shooter, m_intake));
     m_chooser.setDefaultOption("High shot + taxi", new OneBallHigh(m_shooter, m_drivetrain, m_sorter));
-    m_chooser.addOption("2 Ball High Shot - Close Balls", new TwoBallHighHangarSide(m_intake, m_shooter, m_drivetrain, m_sorter));
-    m_chooser.addOption("2 Ball High shot - Far Right Ball", new TwoBallHighTerminalSIde(m_intake, m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("2 Ball High Shot - Close Balls",
+        new TwoBallHighHangarSide(m_intake, m_shooter, m_drivetrain, m_sorter));
+    m_chooser.addOption("2 Ball High shot - Far Right Ball",
+        new TwoBallHighTerminalSIde(m_intake, m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("Low shot + taxi", new OneBallLow(m_shooter, m_drivetrain, m_sorter));
     m_chooser.addOption("taxi", new DriveToPositionByInches(m_drivetrain, 24));
     Constants.PRIMARY_TAB.add("Auto", m_chooser).withSize(2, 1).withPosition(7, 0);
-    Constants.PRIMARY_TAB.addCamera("Limelight", "Limelight", "http://10.12.50.11:5800").withSize(6, 4).withPosition(0,0);
+    Constants.PRIMARY_TAB.addCamera("Limelight", "Limelight", "http://10.12.50.11:5800").withSize(6, 4).withPosition(0,
+        0);
     robotstateNT = Constants.PRIMARY_TAB.add("Robot state", "").withPosition(7, 1).withSize(2, 1).getEntry();
     m_robotstate = Robotstate.INTAKE;
-    m_robotDriveType = RobotDriveType.TANK;
   }
 
   /**
@@ -191,10 +209,6 @@ public class RobotContainer {
     m_drivetrain.configureBrake();
   }
 
-  public static RobotDriveType getDriveType() {
-    return m_robotDriveType;
-  }
-
   public static Robotstate getRobotState() {
     return m_robotstate;
   }
@@ -202,17 +216,6 @@ public class RobotContainer {
   public void changeNumberOfOperators() {
     if (options.get() && configChangeTimer < System.currentTimeMillis()) {
       singlePlayer = !singlePlayer;
-      configChangeTimer = System.currentTimeMillis() + configChangeCooldown;
-    }
-  }
-
-  public void changeDriveMode() {
-    if (share.get() && configChangeTimer < System.currentTimeMillis()) {
-      if (RobotDriveType.TANK == getDriveType()) {
-        m_robotDriveType = RobotDriveType.ARCADE;
-      } else if (RobotDriveType.ARCADE == getDriveType()) {
-        m_robotDriveType = RobotDriveType.TANK;
-      }
       configChangeTimer = System.currentTimeMillis() + configChangeCooldown;
     }
   }
@@ -321,7 +324,7 @@ public class RobotContainer {
   Trigger retractIntake = new Trigger() {
     @Override
     public boolean get() {
-      return (Robotstate.INTAKE == m_robotstate && r1.get()) ;
+      return (Robotstate.INTAKE == m_robotstate && r1.get());
     }
   };
 
